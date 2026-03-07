@@ -1,0 +1,15 @@
+# Oracle runtime
+.oracle/
+
+# Oracle skills binary
+.oracle-skills/
+
+# Gemini config
+.gemini/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
