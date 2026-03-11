@@ -23,3 +23,9 @@ credentials*.json
 
 # Temp/build artifacts
 *.png
+
+# Cloned repos for study (re-clone as needed)
+ψ/learn/
+
+# Lab projects with heavy deps
+ψ/lab/
