@@ -13,3 +13,13 @@
 
 # OS
 .DS_Store
+
+# Node
+node_modules/
+
+# Credentials & secrets
+credentials*.json
+**/credentials*.json
+
+# Temp/build artifacts
+*.png
