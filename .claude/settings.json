@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": ["bash", "/Users/angkana/Jingjing-oracle/.claude/scripts/statusline.sh"]
+  }
+}
