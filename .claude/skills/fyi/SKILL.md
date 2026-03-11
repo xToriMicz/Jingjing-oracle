@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: fyi
-description: v2.0.8 G-SKLL | Log information for future reference. Use when user says "fyi", "remember this", "note that", "for your info".
+description: v2.0.10 L-SKLL | Log information for future reference. Use when user says "fyi", "remember this", "note that", "for your info".
 ---
 
 # /fyi - Information Log

@@ -1,7 +1,7 @@
 # Oracle Skills
 
-Installed by: **oracle-skills-cli v2.0.8**
-Installed at: 2026-03-07T07:56:17.112Z
+Installed by: **oracle-skills-cli v2.0.10**
+Installed at: 2026-03-10T00:30:07.912Z
 Agent: Claude Code
 Skills: 30
 
@@ -9,44 +9,44 @@ Skills: 30
 
 When asked about skills version, report:
 ```
-oracle-skills-cli v2.0.8
+oracle-skills-cli v2.0.10
 ```
 
 ## Installed Skills
 
-- about-oracle
-- awaken
-- birth
-- deep-research
-- dig
-- feel
-- forward
-- fyi
-- gemini
-- learn
-- merged
-- oracle
-- oracle-family-scan
-- oracle-soul-sync-update
-- oraclenet
-- philosophy
-- physical
-- project
 - recap
-- retrospective
-- rrr
+- birth
 - schedule
+- learn
 - speak
-- standup
-- talk-to
 - trace
-- watch
-- where-we-are
+- gemini
+- physical
+- oracle
+- deep-research
 - who-are-you
 - worktree
+- standup
+- retrospective
+- talk-to
+- where-we-are
+- oraclenet
+- project
+- dig
+- philosophy
+- oracle-family-scan
+- feel
+- awaken
+- watch
+- about-oracle
+- rrr
+- oracle-soul-sync-update
+- fyi
+- forward
+- merged
 
 ## Update Skills
 
 ```bash
-bunx --bun oracle-skills@github:Soul-Brews-Studio/oracle-skills-cli#v2.0.8 install -y -g
+bunx --bun oracle-skills@github:Soul-Brews-Studio/oracle-skills-cli#v2.0.10 install -y -g
 ```

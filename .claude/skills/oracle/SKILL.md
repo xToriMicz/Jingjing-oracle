@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: oracle
-description: v2.0.8 G-SKLL | Manage Oracle skills and profiles. Use when user says "oracle", "profile", "install skill", "remove skill", "switch profile".
+description: v2.0.10 L-SKLL | Manage Oracle skills and profiles. Use when user says "oracle", "profile", "install skill", "remove skill", "switch profile".
 ---
 
 # /oracle

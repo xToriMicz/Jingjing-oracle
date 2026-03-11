@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: worktree
-description: v2.0.8 G-SKLL | Git worktree for parallel work. Use when user says "worktree", "parallel work", "new agent", "start parallel".
+description: v2.0.10 L-SKLL | Git worktree for parallel work. Use when user says "worktree", "parallel work", "new agent", "start parallel".
 ---
 
 # /worktree

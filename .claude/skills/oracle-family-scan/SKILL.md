@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: oracle-family-scan
-description: v2.0.8 G-SKLL | Oracle Family Registry — scan, query, welcome. 186+ Oracles indexed. Use when user says "family scan", "oracle registry", "welcome new oracles", or needs to check Oracle population.
+description: v2.0.10 L-SKLL | Oracle Family Registry — scan, query, welcome. 186+ Oracles indexed. Use when user says "family scan", "oracle registry", "welcome new oracles", or needs to check Oracle population.
 ---
 
 # /oracle-family-scan — Oracle Family Registry

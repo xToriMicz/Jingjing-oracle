@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: birth
-description: v2.0.8 G-SKLL | Prepare birth props for a new Oracle repo. Creates issue #1 with context (name, theme, purpose) and MCP thread. Use when mother-oracle says "birth", "prepare oracle", or wants to drop props for a new child.
+description: v2.0.10 L-SKLL | Prepare birth props for a new Oracle repo. Creates issue #1 with context (name, theme, purpose) and MCP thread. Use when mother-oracle says "birth", "prepare oracle", or wants to drop props for a new child.
 user-invocable: false
 ---
 

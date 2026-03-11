@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: merged
-description: v2.0.8 G-SKLL | Post-Merge Cleanup. Switch to main, pull latest, delete merged branch. Use after PR is merged.
+description: v2.0.10 L-SKLL | Post-Merge Cleanup. Switch to main, pull latest, delete merged branch. Use after PR is merged.
 ---
 
 # /merged - Post-Merge Cleanup

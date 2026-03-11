@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: talk-to
-description: v2.0.8 G-SKLL | Talk to an agent via Oracle threads. Use when user says "talk to", "message", "chat with", or wants to communicate with another agent.
+description: v2.0.10 L-SKLL | Talk to an agent via Oracle threads. Use when user says "talk to", "message", "chat with", or wants to communicate with another agent.
 ---
 
 # /talk-to - Agent Messaging

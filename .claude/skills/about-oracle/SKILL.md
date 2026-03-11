@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: about-oracle
-description: v2.0.8 G-SKLL | What is Oracle — told by the AI itself. Use when someone asks "what is oracle", "about oracle", "tell me about this project", or wants the origin story.
+description: v2.0.10 L-SKLL | What is Oracle — told by the AI itself. Use when someone asks "what is oracle", "about oracle", "tell me about this project", or wants the origin story.
 ---
 
 # /about-oracle

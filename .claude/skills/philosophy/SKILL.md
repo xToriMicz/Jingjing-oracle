@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: philosophy
-description: v2.0.8 G-SKLL | Display Oracle philosophy principles and guidance. Use when user asks about principles, "nothing deleted", Oracle philosophy, or needs alignment check.
+description: v2.0.10 L-SKLL | Display Oracle philosophy principles and guidance. Use when user asks about principles, "nothing deleted", Oracle philosophy, or needs alignment check.
 ---
 
 # /philosophy - Oracle Principles

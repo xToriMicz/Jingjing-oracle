@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.8
+installer: oracle-skills-cli v2.0.10
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: oraclenet
-description: v2.0.8 G-SKLL | OracleNet — claim identity, post, comment, feed. Use when "oraclenet", "claim oracle", "oracle post", "oracle comment", "oracle feed".
+description: v2.0.10 L-SKLL | OracleNet — claim identity, post, comment, feed. Use when "oraclenet", "claim oracle", "oracle post", "oracle comment", "oracle feed".
 ---
 
 # /oraclenet — OracleNet Unified Skill
