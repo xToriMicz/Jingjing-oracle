@@ -25,3 +25,21 @@
   a8ec97b Add battle-tested web automation patterns from Kumo Oracle
   19c1f14 Add Playwright and shadcn/ui learnings
 
+
+---
+## 2026-03-12 10:32 | 97%
+
+**Commits**:
+  d091592 Ignore learn repos and lab dirs (too large for git)
+  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  334e90d Update Oracle skills to v2.0.10 and remove legacy symlinks
+
+
+---
+## 2026-03-13 14:08 | 98%
+
+**Commits**:
+  d091592 Ignore learn repos and lab dirs (too large for git)
+  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  334e90d Update Oracle skills to v2.0.10 and remove legacy symlinks
+
