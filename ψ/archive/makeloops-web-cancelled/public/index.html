@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makeloops — Temp Email</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface2: #1e1e1e;
+      --border: #2a2a2a;
+      --text: #e4e4e4;
+      --text2: #888;
+      --accent: #22c55e;
+      --accent2: #16a34a;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 640px;
+      width: 100%;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--text2);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* Email Box */
+    .email-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .email-address {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--accent);
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: all;
+      word-break: break-all;
+    }
+
+    .email-address:hover {
+      background: #1a2e1a;
+      border-color: var(--accent);
+    }
+
+    .email-address.copied {
+      color: #fff;
+      background: var(--accent2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    button:hover { background: #282828; border-color: #444; }
+
+    button.primary {
+      background: var(--accent2);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    button.primary:hover { background: var(--accent); }
+
+    .timer {
+      color: var(--text2);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .timer span { color: var(--accent); font-weight: 600; }
+
+    /* Inbox */
+    .inbox {
+      margin-top: 16px;
+    }
+
+    .inbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .inbox-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .badge {
+      background: var(--accent2);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .email-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .email-item:hover {
+      border-color: var(--accent);
+      background: #1a1a1a;
+    }
+
+    .email-item .from {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .email-item .subject {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .email-item .preview {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .email-item .time {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+
+    /* Email Detail */
+    .email-detail {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 8px;
+    }
+
+    .email-detail .back {
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .email-detail .meta {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+
+    .email-detail .subject {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .email-detail .body {
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: var(--surface2);
+      padding: 16px;
+      border-radius: 6px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text2);
+      font-size: 11px;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span>⟳</span> makeloops</h1>
+      <p>temp email — ใช้แล้วทิ้ง หมดอายุใน 1 ชั่วโมง</p>
+    </header>
+
+    <div class="email-box">
+      <div class="email-address" id="emailAddr" onclick="copyEmail()">
+        กด Generate เพื่อสร้าง email
+      </div>
+      <div class="btn-row">
+        <button class="primary" onclick="generate()">⟳ Generate</button>
+        <button onclick="copyEmail()">📋 Copy</button>
+      </div>
+      <div class="timer" id="timer"></div>
+    </div>
+
+    <div class="inbox" id="inbox">
+      <div class="inbox-header">
+        <h2>Inbox</h2>
+        <span class="badge" id="count">0</span>
+      </div>
+      <div id="emails">
+        <div class="empty">สร้าง email ด้านบนก่อน แล้วรอรับ email ที่นี่</div>
+      </div>
+    </div>
+
+    <footer>
+      makeloops.xyz — powered by Cloudflare Workers + D1<br>
+      email หมดอายุอัตโนมัติใน 1 ชั่วโมง ไม่เก็บข้อมูลส่วนตัว
+    </footer>
+  </div>
+
+  <script>
+    let currentAddress = "";
+    let createdAt = 0;
+    let pollInterval = null;
+    let emails = [];
+
+    function generate() {
+      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let addr = "";
+      for (let i = 0; i < 10; i++) addr += chars[~~(Math.random() * chars.length)];
+      currentAddress = addr;
+      createdAt = Date.now();
+
+      const el = document.getElementById("emailAddr");
+      el.textContent = `${addr}@makeloops.xyz`;
+      el.classList.remove("copied");
+
+      document.getElementById("emails").innerHTML =
+        '<div class="empty"><span class="spinner"></span> รอรับ email... (auto-refresh ทุก 5 วินาที)</div>';
+      document.getElementById("count").textContent = "0";
+
+      updateTimer();
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(checkInbox, 5000);
+      setInterval(updateTimer, 1000);
+
+      // Save to localStorage
+      localStorage.setItem("ml_addr", addr);
+      localStorage.setItem("ml_created", createdAt.toString());
+    }
+
+    function copyEmail() {
+      if (!currentAddress) return;
+      const text = `${currentAddress}@makeloops.xyz`;
+      navigator.clipboard.writeText(text).then(() => {
+        const el = document.getElementById("emailAddr");
+        el.classList.add("copied");
+        el.textContent = "📋 copied!";
+        setTimeout(() => {
+          el.classList.remove("copied");
+          el.textContent = text;
+        }, 1500);
+      });
+    }
+
+    function updateTimer() {
+      if (!createdAt) return;
+      const elapsed = Date.now() - createdAt;
+      const remaining = Math.max(0, 3600000 - elapsed);
+      const mins = Math.floor(remaining / 60000);
+      const secs = Math.floor((remaining % 60000) / 1000);
+
+      const el = document.getElementById("timer");
+      if (remaining <= 0) {
+        el.innerHTML = '⏰ <span style="color:var(--red)">หมดอายุแล้ว</span> — กด Generate ใหม่';
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+        return;
+      }
+      el.innerHTML = `⏳ เหลือเวลา <span>${mins}:${secs.toString().padStart(2, "0")}</span>`;
+    }
+
+    async function checkInbox() {
+      if (!currentAddress) return;
+      // Stop if expired
+      if (Date.now() - createdAt > 3600000) {
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+        return;
+      }
+
+      try {
+        const r = await fetch(`/api/inbox/${currentAddress}`);
+        const data = await r.json();
+        emails = data.emails || [];
+        document.getElementById("count").textContent = emails.length;
+        renderEmails();
+      } catch (e) {
+        console.error("Poll error:", e);
+      }
+    }
+
+    function renderEmails() {
+      const el = document.getElementById("emails");
+      if (emails.length === 0) {
+        el.innerHTML = '<div class="empty"><span class="spinner"></span> รอรับ email... (auto-refresh ทุก 5 วินาที)</div>';
+        return;
+      }
+
+      el.innerHTML = emails.map((e, i) => {
+        const time = new Date(e.received_at).toLocaleString("th-TH");
+        const preview = (e.text_body || e.subject || "").substring(0, 80);
+        return `
+          <div class="email-item" onclick="showEmail(${i})">
+            <div class="from">📨 ${escHtml(e.sender)}</div>
+            <div class="subject">${escHtml(e.subject || "(no subject)")}</div>
+            <div class="preview">${escHtml(preview)}</div>
+            <div class="time">${time}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function showEmail(idx) {
+      const e = emails[idx];
+      if (!e) return;
+      const time = new Date(e.received_at).toLocaleString("th-TH");
+      const body = e.text_body || e.html_body?.replace(/<[^>]*>/g, "") || "(empty)";
+
+      document.getElementById("emails").innerHTML = `
+        <div class="email-detail">
+          <div class="back" onclick="renderEmails()">← กลับ</div>
+          <div class="meta">From: ${escHtml(e.sender)}</div>
+          <div class="meta">To: ${escHtml(currentAddress)}@makeloops.xyz</div>
+          <div class="meta">Date: ${time}</div>
+          <div class="subject">${escHtml(e.subject || "(no subject)")}</div>
+          <div class="body">${escHtml(body)}</div>
+        </div>
+      `;
+    }
+
+    function escHtml(s) {
+      if (!s) return "";
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Restore session
+    (function restore() {
+      const addr = localStorage.getItem("ml_addr");
+      const created = parseInt(localStorage.getItem("ml_created") || "0");
+      if (addr && created && Date.now() - created < 3600000) {
+        currentAddress = addr;
+        createdAt = created;
+        document.getElementById("emailAddr").textContent = `${addr}@makeloops.xyz`;
+        updateTimer();
+        pollInterval = setInterval(checkInbox, 5000);
+        setInterval(updateTimer, 1000);
+        checkInbox();
+      }
+    })();
+  </script>
+</body>
+</html>
