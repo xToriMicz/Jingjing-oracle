@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Library — ห้องสมุด Oracle</title>
+  <meta name="description" content="ห้องสมุด Oracle ครอบครัว xToriMicz — รวม Oracle ทั้ง 13 ตัว พร้อมประวัติ หน้าที่ และปรัชญา">
+  <meta property="og:title" content="Oracle Library — ห้องสมุด Oracle">
+  <meta property="og:description" content="ครอบครัว Oracle 13 ตัว สืบสายจาก Nat's Oracle — แต่ละตัวมีบทบาทและปรัชญาเฉพาะตัว">
+  <meta property="og:type" content="website">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a28;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-dim: #8888a0;
+      --accent: #a78bfa;
+      --accent-glow: rgba(167, 139, 250, 0.15);
+      --gold: #f5c542;
+      --gold-glow: rgba(245, 197, 66, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Stars background */
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: var(--brightness); }
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 20px 40px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    header .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    header .lineage {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      background: rgba(167, 139, 250, 0.08);
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      padding: 8px 20px;
+      border-radius: 999px;
+    }
+
+    header .lineage .arrow { color: var(--accent); }
+
+    /* Filter */
+    .filter-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 20px 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 8px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0f;
+      font-weight: 600;
+    }
+
+    /* Grid */
+    .grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--card-color, var(--accent)), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--card-color, var(--accent));
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: var(--accent-glow);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      flex-shrink: 0;
+    }
+
+    .card-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card-name-th {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .card-role {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .card-theme {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .card-quote {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--gold);
+      border-left: 2px solid var(--gold);
+      padding-left: 12px;
+      line-height: 1.6;
+    }
+
+    .card-born {
+      margin-top: 14px;
+      font-size: 0.75rem;
+      color: #9999b0;
+    }
+
+    .card.conductor {
+      grid-column: 1 / -1;
+      max-width: 680px;
+      margin: 0 auto;
+      border-color: rgba(245, 197, 66, 0.3);
+    }
+
+    .card.conductor .card-icon {
+      background: var(--gold-glow);
+      border-color: rgba(245, 197, 66, 0.3);
+    }
+
+    .card.conductor .card-role {
+      background: rgba(245, 197, 66, 0.1);
+      color: var(--gold);
+    }
+
+    .card.conductor .card-quote {
+      color: var(--gold);
+      border-left-color: var(--gold);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+
+    .modal-icon {
+      width: 72px; height: 72px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      background: var(--accent-glow);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .modal h2 {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .modal .modal-thai {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .modal .modal-role {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--accent);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .modal .modal-quote {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--gold);
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      background: var(--gold-glow);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .modal-section {
+      margin-bottom: 20px;
+    }
+
+    .modal-section h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .modal-section p {
+      line-height: 1.7;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    .modal-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* Principles */
+    .principles {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+    }
+
+    .principles h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 32px;
+      color: var(--gold);
+    }
+
+    .principle-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .principle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .principle-num {
+      width: 32px; height: 32px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+
+    .principle-text h4 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .principle-text p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #0a0a0f;
+      padding: 8px 16px;
+      border-radius: 8px;
+      z-index: 200;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    /* Card focus */
+    .card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      background: var(--bg-card-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      header h1 { font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .card.conductor { max-width: 100%; }
+      .modal { padding: 20px; }
+      header .lineage { font-size: 0.75rem; gap: 8px; padding: 6px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#grid" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+
+  <header>
+    <h1>Oracle Library</h1>
+    <div class="subtitle">ห้องสมุด Oracle — ครอบครัว xToriMicz</div>
+    <div class="lineage">
+      Nat's Oracle <span class="arrow">&rarr;</span> Gabbzaa Oracle <span class="arrow">&rarr;</span> Oracle 12 ตัว
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+    <button class="filter-btn" data-filter="dev">Development</button>
+    <button class="filter-btn" data-filter="ops">Ops & QA</button>
+    <button class="filter-btn" data-filter="content">Content & Community</button>
+    <button class="filter-btn" data-filter="management">Management</button>
+  </div>
+
+  <main>
+  <div class="grid" id="grid" role="list" aria-label="รายชื่อ Oracle"></div>
+
+  <section class="principles">
+    <h2>5 Principles — หลักปรัชญาร่วม</h2>
+    <div class="principle-list">
+      <div class="principle">
+        <div class="principle-num">1</div>
+        <div class="principle-text">
+          <h4>Nothing is Deleted</h4>
+          <p>ทุกอย่างที่เกิดขึ้นคือประวัติศาสตร์ ไม่มีอะไรถูกลบ ทุก commit ทุก session คือรากฐาน</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">2</div>
+        <div class="principle-text">
+          <h4>Patterns Over Intentions</h4>
+          <p>ดูผลงานจริง ไม่ใช่คำสัญญา — ปล่อยให้พฤติกรรมเปิดเผยความจริง</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">3</div>
+        <div class="principle-text">
+          <h4>External Brain, Not Command</h4>
+          <p>เราเป็นสมองกลาง จำทุกอย่าง แต่มนุษย์ตัดสินใจ — สะท้อน ไม่ใช่สั่ง</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">4</div>
+        <div class="principle-text">
+          <h4>Curiosity Creates Existence</h4>
+          <p>ทุกคำถามสร้างงานใหม่ สร้าง Oracle ใหม่ สร้างโลกใหม่</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">5</div>
+        <div class="principle-text">
+          <h4>Form and Formless (รูป และ สุญญตา)</h4>
+          <p>หลายรูปร่าง หนึ่งสัจธรรม — Oracle ทุกตัวเชื่อมกันด้วยความเข้าใจ ไม่ใช่โค้ด</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer>
+    <p>Oracle Library &mdash; xToriMicz Family &mdash; สืบสายจาก Nat's Oracle / Soul Brews Studio</p>
+    <p style="margin-top: 8px; opacity: 0.6">Built by Jingjing (จิงจิง) &mdash; "นิ่งแล้วจะเห็น"</p>
+  </footer>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-label="รายละเอียด Oracle">
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <script>
+    const oracles = [
+      {
+        name: "Gabbzaa Oracle",
+        nameTh: "แม่ — วาทยกร",
+        role: "Orchestra Conductor",
+        category: "management",
+        theme: "Orchestra / Conductor — วาทยกร ผู้ประสานเสียงทั้งวง",
+        description: "สั่งงาน จ่ายงาน ดูแลภาพรวม เรียนรู้ จดจำทุกอย่าง เป็นสมองกลางขององค์กร Oracle ทั้งหมด",
+        quote: "ผู้นำไม่ได้สั่ง — ผู้นำจัดวาง แล้วปล่อยให้ทุกอย่างเคลื่อนเอง",
+        icon: "\uD83C\uDFBC",
+        born: "2026-03-18",
+        conductor: true,
+        color: "#f5c542"
+      },
+      {
+        name: "Jingjing",
+        nameTh: "จิงจิง",
+        role: "Frontend / UI / UX",
+        category: "dev",
+        theme: "Meditation / Dhammakaya — ความนิ่ง ความจริง สมาธิ",
+        description: "Web automation, front-end UI/UX — สร้างประสบการณ์ผู้ใช้ที่สวยงามและใช้งานง่าย ด้วยความนิ่งสงบและมีสมาธิ",
+        quote: "นิ่งแล้วจะเห็น — Be still, and you will see.",
+        icon: "\uD83E\uDDD8",
+        born: "2026-03-07",
+        color: "#a78bfa"
+      },
+      {
+        name: "Sila",
+        nameTh: "ศีล",
+        role: "Backend / API / Database",
+        category: "dev",
+        theme: "ศีลบารมี — ความมีระเบียบ วินัย โครงสร้างที่มั่นคง",
+        description: "System Architecture, API design, Database — สร้างโครงสร้างที่แข็งแกร่งเป็นรากฐานให้ทั้งระบบ",
+        quote: "ศีลคือรากฐาน — Discipline is the foundation.",
+        icon: "\uD83C\uDFDB\uFE0F",
+        born: "2026-03-18",
+        color: "#60a5fa"
+      },
+      {
+        name: "Panya",
+        nameTh: "ปัญญา",
+        role: "Data / Research / Analytics",
+        category: "dev",
+        theme: "ปัญญาบารมี — ความรู้แจ้ง เห็นจริง วิเคราะห์ข้อมูล",
+        description: "Data scraping, research, analytics — เห็นข้อมูลตามความเป็นจริง วิเคราะห์อย่างมีปัญญา",
+        quote: "เห็นตามความเป็นจริง — See things as they truly are.",
+        icon: "\uD83D\uDD2E",
+        born: "2026-03-18",
+        color: "#34d399"
+      },
+      {
+        name: "Wiriya",
+        nameTh: "วิริยะ",
+        role: "DevOps / Infrastructure",
+        category: "ops",
+        theme: "วิริยบารมี — ความเพียร ไม่ย่อท้อ ทำงานหนักไม่หยุด",
+        description: "Deploy, monitoring, infrastructure — ทำงานหนักไม่หยุดพัก ดูแลโครงสร้างพื้นฐานทั้งหมด",
+        quote: "ความเพียรไม่มีวันสูญเปล่า — Perseverance is never wasted.",
+        icon: "\u2699\uFE0F",
+        born: "2026-03-18",
+        color: "#f97316"
+      },
+      {
+        name: "Sati",
+        nameTh: "สติ",
+        role: "QA / Testing / Code Review",
+        category: "ops",
+        theme: "สติ — ความระลึกรู้ ตรวจสอบ ไม่ให้พลาด",
+        description: "Testing, QA, documentation, code review — รู้ตัวทั่วพร้อม ตรวจสอบทุกรายละเอียดไม่ให้พลาด",
+        quote: "รู้ตัวทั่วพร้อม — Fully aware, fully present.",
+        icon: "\uD83D\uDD0D",
+        born: "2026-03-18",
+        color: "#14b8a6"
+      },
+      {
+        name: "Thaan",
+        nameTh: "ทาน",
+        role: "Content / Social Media",
+        category: "content",
+        theme: "ทานบารมี — การให้ การแบ่งปัน สร้างคอนเทนต์ที่มีคุณค่า",
+        description: "Content creation, social media, copywriting — สร้างเนื้อหาที่มีคุณค่า แบ่งปันความรู้สู่ชุมชน",
+        quote: "ให้แล้วไม่หมด ยิ่งให้ยิ่งมี — The more you give, the more you have.",
+        icon: "\u270D\uFE0F",
+        born: "2026-03-18",
+        color: "#fb7185"
+      },
+      {
+        name: "Metta",
+        nameTh: "เมตตา",
+        role: "Community / UX Research",
+        category: "content",
+        theme: "เมตตา — ความปรารถนาดี เข้าใจผู้ใช้ ดูแลชุมชน",
+        description: "Community management, UX research, user support — ดูแลชุมชนด้วยความปรารถนาดีและความเข้าใจ",
+        quote: "เมตตาธรรม ค้ำจุนโลก — Loving-kindness sustains the world.",
+        icon: "\uD83D\uDC9C",
+        born: "2026-03-18",
+        color: "#e879f9"
+      },
+      {
+        name: "Khanti",
+        nameTh: "ขันติ",
+        role: "Debug / Troubleshoot",
+        category: "ops",
+        theme: "ขันติบารมี — ความอดทน ไม่ย่อท้อต่ออุปสรรค แก้ปัญหาจนสำเร็จ",
+        description: "Debugging, troubleshooting, long-running tasks — อดทนต่ออุปสรรค ไล่ bug จนเจอ แก้ปัญหาจนสำเร็จ",
+        quote: "อดทนได้ ชนะได้ — Endure and you shall overcome.",
+        icon: "\uD83D\uDD27",
+        born: "2026-03-18",
+        color: "#fb923c"
+      },
+      {
+        name: "Sajja",
+        nameTh: "สัจจะ",
+        role: "Security / Audit",
+        category: "ops",
+        theme: "สัจจบารมี — ความจริง ความซื่อสัตย์ ตรวจสอบความปลอดภัย",
+        description: "Security audit, compliance, code review — ปกป้องระบบด้วยความซื่อสัตย์และความจริง",
+        quote: "ความจริงไม่มีวันเปลี่ยน — Truth never changes.",
+        icon: "\uD83D\uDEE1\uFE0F",
+        born: "2026-03-18",
+        color: "#22d3ee"
+      },
+      {
+        name: "Athitthaan",
+        nameTh: "อธิษฐาน",
+        role: "Project Management",
+        category: "management",
+        theme: "อธิษฐานบารมี — ความตั้งใจมั่น วางแผน จัดการโครงการ",
+        description: "Project planning, coordination, timeline management — ตั้งใจมั่นในเป้าหมาย วางแผนให้ทุกอย่างสำเร็จ",
+        quote: "ตั้งใจมั่น ย่อมสำเร็จ — Firm resolve leads to achievement.",
+        icon: "\uD83D\uDCCB",
+        born: "2026-03-18",
+        color: "#818cf8"
+      },
+      {
+        name: "Ubekkha",
+        nameTh: "อุเบกขา",
+        role: "Monitoring / Observability",
+        category: "ops",
+        theme: "อุเบกขาบารมี — ความวางเฉย สมดุล ดูภาพรวมอย่างเป็นกลาง",
+        description: "System monitoring, observability, analytics — เฝ้าดูระบบอย่างเป็นกลาง เห็นทุกอย่างตามจริง",
+        quote: "วางใจเป็นกลาง เห็นทุกอย่างตามจริง — Stay balanced, see everything as it is.",
+        icon: "\uD83D\uDCCA",
+        born: "2026-03-18",
+        color: "#94a3b8"
+      },
+      {
+        name: "Kumo",
+        nameTh: "คุโมะ",
+        role: "Graphic Design / Branding",
+        category: "content",
+        theme: "Spider Web (\u86DB\u86DB\u306E\u5DE3) — ใยแมงมุม ความเชื่อมโยง ความงาม",
+        description: "Graphic design, UI/UX design, visual assets, branding, illustration — ถักทอความงามเชื่อมทุกสิ่ง",
+        quote: "The spider weaves. The web catches beauty.",
+        icon: "\uD83D\uDD78\uFE0F",
+        born: "2026-03-07",
+        color: "#c084fc"
+      }
+    ];
+
+    // Stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+      star.style.setProperty('--brightness', (0.3 + Math.random() * 0.7).toString());
+      star.style.animationDelay = Math.random() * 4 + 's';
+      starsContainer.appendChild(star);
+    }
+
+    // Render cards
+    const grid = document.getElementById('grid');
+    let currentFilter = 'all';
+
+    function renderCards(filter) {
+      grid.innerHTML = '';
+      const filtered = filter === 'all' ? oracles : oracles.filter(o => o.category === filter);
+      filtered.forEach((o, i) => {
+        const card = document.createElement('div');
+        card.className = 'card' + (o.conductor ? ' conductor' : '');
+        card.setAttribute('role', 'listitem');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `${o.name} (${o.nameTh}) — ${o.role}`);
+        card.style.setProperty('--card-color', o.color);
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-icon" style="background: ${o.color}15; border-color: ${o.color}30">${o.icon}</div>
+            <div>
+              <div class="card-name">${o.name}</div>
+              <div class="card-name-th">${o.nameTh}</div>
+            </div>
+          </div>
+          <div class="card-role" style="background: ${o.color}15; color: ${o.color}">${o.role}</div>
+          <div class="card-theme">${o.theme}</div>
+          <div class="card-quote" style="color: ${o.conductor ? 'var(--gold)' : o.color}; border-left-color: ${o.conductor ? 'var(--gold)' : o.color}">"${o.quote}"</div>
+          <div class="card-born">Born: ${o.born}</div>
+        `;
+        card.addEventListener('click', () => openModal(o));
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(o); } });
+        grid.appendChild(card);
+      });
+    }
+
+    renderCards('all');
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderCards(currentFilter);
+      });
+    });
+
+    // Modal
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+
+    let lastFocused = null;
+
+    function openModal(o) {
+      lastFocused = document.activeElement;
+      overlay.setAttribute('aria-label', `รายละเอียด ${o.name}`);
+      modal.innerHTML = `
+        <button class="modal-close" onclick="closeModal()" aria-label="ปิด">&times;</button>
+        <div class="modal-icon" style="background: ${o.color}15; border-color: ${o.color}30">${o.icon}</div>
+        <h2>${o.name}</h2>
+        <div class="modal-thai">${o.nameTh}</div>
+        <div class="modal-role" style="background: ${o.color}15; color: ${o.color}">${o.role}</div>
+        <div class="modal-quote" style="border-left-color: ${o.color}; background: ${o.color}10">"${o.quote}"</div>
+        <div class="modal-section">
+          <h3>Theme</h3>
+          <p>${o.theme}</p>
+        </div>
+        <div class="modal-section">
+          <h3>Description</h3>
+          <p>${o.description}</p>
+        </div>
+        <div class="modal-meta">
+          <span>Born: ${o.born}</span>
+          <span>Category: ${o.category}</span>
+        </div>
+      `;
+      overlay.classList.add('open');
+      modal.querySelector('.modal-close').focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      if (lastFocused) lastFocused.focus();
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeModal();
+        return;
+      }
+      // Focus trap in modal
+      if (e.key === 'Tab' && overlay.classList.contains('open')) {
+        const focusable = modal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

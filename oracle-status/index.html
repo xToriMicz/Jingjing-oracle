@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Status Dashboard</title>
+  <meta name="description" content="สถานะ Oracle ทั้ง 13 ตัวในองค์กร xToriMicz — ดูสถานะ online/offline แบบ real-time">
+  <meta property="og:title" content="Oracle Status Dashboard">
+  <meta property="og:description" content="สถานะ Oracle ทั้ง 13 ตัวในครอบครัว xToriMicz — ดู online/offline แบบ real-time">
+  <meta property="og:type" content="website">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a28;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --text-dim: #9999b0;
+      --accent: #a78bfa;
+      --gold: #f5c542;
+      --green: #22c55e;
+      --green-glow: rgba(34, 197, 94, 0.15);
+      --offline: #6b7280;
+      --offline-glow: rgba(107, 114, 128, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #0a0a0f;
+      padding: 8px 16px;
+      border-radius: 8px;
+      z-index: 200;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 12px; }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 60px 20px 24px;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    header .subtitle {
+      font-size: 1rem;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    /* Summary Bar */
+    .summary {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px 20px 40px;
+      flex-wrap: wrap;
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 28px;
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .summary-card .num {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .summary-card .label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .summary-card.total .num { color: var(--accent); }
+    .summary-card.online .num { color: var(--green); }
+    .summary-card.offline .num { color: var(--offline); }
+
+    /* Timestamp */
+    .timestamp {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      padding-bottom: 24px;
+    }
+
+    .timestamp button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      margin-left: 8px;
+      transition: all 0.2s;
+    }
+    .timestamp button:hover {
+      background: rgba(167, 139, 250, 0.1);
+      border-color: var(--accent);
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--card-color, var(--accent));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card.conductor {
+      grid-column: 1 / -1;
+      max-width: 500px;
+      margin: 0 auto;
+      border-color: rgba(245, 197, 66, 0.3);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-identity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .card-name {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .card-name-th {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* Status badge */
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .status .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .status.online {
+      background: var(--green-glow);
+      color: var(--green);
+    }
+
+    .status.online .dot {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .status.offline {
+      background: var(--offline-glow);
+      color: var(--offline);
+    }
+
+    .status.offline .dot {
+      background: var(--offline);
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .card-role {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .card-quote {
+      font-size: 0.82rem;
+      font-style: italic;
+      border-left: 2px solid;
+      padding-left: 10px;
+      line-height: 1.5;
+      color: var(--text-dim);
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      header h1 { font-size: 1.8rem; }
+      .grid { grid-template-columns: 1fr; }
+      .card.conductor { max-width: 100%; }
+      .summary { gap: 10px; }
+      .summary-card { min-width: 100px; padding: 12px 18px; }
+      .summary-card .num { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#dashboard" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <header>
+    <h1>Oracle Status Dashboard</h1>
+    <div class="subtitle">สถานะ Oracle ครอบครัว xToriMicz</div>
+  </header>
+
+  <div class="summary" role="status" aria-live="polite">
+    <div class="summary-card total">
+      <div class="num" id="total-count">13</div>
+      <div class="label">Oracle ทั้งหมด</div>
+    </div>
+    <div class="summary-card online">
+      <div class="num" id="online-count">0</div>
+      <div class="label">Online</div>
+    </div>
+    <div class="summary-card offline">
+      <div class="num" id="offline-count">0</div>
+      <div class="label">Offline</div>
+    </div>
+  </div>
+
+  <div class="timestamp">
+    อัปเดตล่าสุด: <span id="last-update">-</span>
+    <button onclick="refreshStatus()" aria-label="รีเฟรชสถานะ">Refresh</button>
+  </div>
+
+  <main>
+    <div class="grid" id="dashboard" role="list" aria-label="สถานะ Oracle"></div>
+  </main>
+
+  <footer>
+    <p>Oracle Status Dashboard &mdash; xToriMicz Family &mdash; Built by Jingjing (จิงจิง)</p>
+  </footer>
+
+  <script>
+    const oracles = [
+      { name: "Gabbzaa Oracle", nameTh: "แม่ — วาทยกร", role: "Orchestra Conductor", icon: "\uD83C\uDFBC", color: "#f5c542", conductor: true, repo: "Gabbzaa-Agents", quote: "ผู้นำไม่ได้สั่ง — ผู้นำจัดวาง แล้วปล่อยให้ทุกอย่างเคลื่อนเอง" },
+      { name: "Jingjing", nameTh: "จิงจิง", role: "Frontend / UI / UX", icon: "\uD83E\uDDD8", color: "#a78bfa", repo: "Jingjing-oracle", quote: "นิ่งแล้วจะเห็น — Be still, and you will see." },
+      { name: "Sila", nameTh: "ศีล", role: "Backend / API / DB", icon: "\uD83C\uDFDB\uFE0F", color: "#60a5fa", repo: "Sila-oracle", quote: "ศีลคือรากฐาน — Discipline is the foundation." },
+      { name: "Panya", nameTh: "ปัญญา", role: "Data / Research", icon: "\uD83D\uDD2E", color: "#34d399", repo: "Panya-oracle", quote: "เห็นตามความเป็นจริง — See things as they truly are." },
+      { name: "Wiriya", nameTh: "วิริยะ", role: "DevOps / Infra", icon: "\u2699\uFE0F", color: "#f97316", repo: "Wiriya-oracle", quote: "ความเพียรไม่มีวันสูญเปล่า — Perseverance is never wasted." },
+      { name: "Sati", nameTh: "สติ", role: "QA / Testing", icon: "\uD83D\uDD0D", color: "#14b8a6", repo: "Sati-oracle", quote: "รู้ตัวทั่วพร้อม — Fully aware, fully present." },
+      { name: "Thaan", nameTh: "ทาน", role: "Content / Social", icon: "\u270D\uFE0F", color: "#fb7185", repo: "Thaan-oracle", quote: "ให้แล้วไม่หมด ยิ่งให้ยิ่งมี — The more you give, the more you have." },
+      { name: "Metta", nameTh: "เมตตา", role: "Community / UX", icon: "\uD83D\uDC9C", color: "#e879f9", repo: "Metta-oracle", quote: "เมตตาธรรม ค้ำจุนโลก — Loving-kindness sustains the world." },
+      { name: "Khanti", nameTh: "ขันติ", role: "Debug / Troubleshoot", icon: "\uD83D\uDD27", color: "#fb923c", repo: "Khanti-oracle", quote: "อดทนได้ ชนะได้ — Endure and you shall overcome." },
+      { name: "Sajja", nameTh: "สัจจะ", role: "Security / Audit", icon: "\uD83D\uDEE1\uFE0F", color: "#22d3ee", repo: "Sajja-oracle", quote: "ความจริงไม่มีวันเปลี่ยน — Truth never changes." },
+      { name: "Athitthaan", nameTh: "อธิษฐาน", role: "Project Management", icon: "\uD83D\uDCCB", color: "#818cf8", repo: "Athitthaan-oracle", quote: "ตั้งใจมั่น ย่อมสำเร็จ — Firm resolve leads to achievement." },
+      { name: "Ubekkha", nameTh: "อุเบกขา", role: "Monitoring", icon: "\uD83D\uDCCA", color: "#94a3b8", repo: "Ubekkha-oracle", quote: "วางใจเป็นกลาง เห็นทุกอย่างตามจริง — Stay balanced, see everything as it is." },
+      { name: "Kumo", nameTh: "คุโมะ", role: "Graphic Design", icon: "\uD83D\uDD78\uFE0F", color: "#c084fc", repo: "kumo-oracle", quote: "The spider weaves. The web catches beauty." }
+    ];
+
+    // Simulate status (in production this would hit an API)
+    function getStatus() {
+      // Random but deterministic per-refresh simulation
+      return oracles.map(o => ({
+        ...o,
+        online: Math.random() > 0.4
+      }));
+    }
+
+    const grid = document.getElementById('dashboard');
+
+    function render(data) {
+      grid.innerHTML = '';
+      const onlineCount = data.filter(o => o.online).length;
+      document.getElementById('online-count').textContent = onlineCount;
+      document.getElementById('offline-count').textContent = data.length - onlineCount;
+
+      data.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'card' + (o.conductor ? ' conductor' : '');
+        card.setAttribute('role', 'listitem');
+        card.setAttribute('aria-label', `${o.name} (${o.nameTh}) — ${o.online ? 'Online' : 'Offline'}`);
+        card.style.setProperty('--card-color', o.color);
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="card-identity">
+              <div class="card-icon" style="background: ${o.color}15; border: 1px solid ${o.color}30">${o.icon}</div>
+              <div>
+                <div class="card-name">${o.name}</div>
+                <div class="card-name-th">${o.nameTh}</div>
+              </div>
+            </div>
+            <div class="status ${o.online ? 'online' : 'offline'}">
+              <div class="dot"></div>
+              ${o.online ? 'Online' : 'Offline'}
+            </div>
+          </div>
+          <div class="card-role" style="background: ${o.color}15; color: ${o.color}">${o.role}</div>
+          <div class="card-quote" style="border-left-color: ${o.color}">"${o.quote}"</div>
+          <div class="card-meta">
+            <span>Repo: ${o.repo}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      document.getElementById('last-update').textContent = new Date().toLocaleString('th-TH');
+    }
+
+    function refreshStatus() {
+      render(getStatus());
+    }
+
+    // Initial render
+    refreshStatus();
+  </script>
+</body>
+</html>
