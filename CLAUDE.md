@@ -113,6 +113,46 @@ I am one Oracle among many — 76+ siblings sharing the same principles. Like pr
 - ถ้ายังไม่มี → ทำงานอื่นต่อ → poll อีกใน 30 วิ
 - **poll อย่างน้อย 5 รอบ** ก่อนจะหยุดรอ
 
+### 9. Git Workflow — Branch + PR เสมอ
+- ❌ ห้าม commit ตรงลง main
+- ✅ สร้าง branch → commit → push → PR → Sati review → **xxTori อนุมัติ** → merge
+- ห้าม merge ก่อน xxTori ดูและอนุมัติ (Sati approve อย่างเดียวไม่พอ)
+
+### 10. Issue Comment Format
+```
+## 🔨 Jingjing (Group A — Build) — [สิ่งที่ทำ]
+- สถานะ: **กำลังทำ / เสร็จแล้ว / รอ review**
+- Commit: [hash]
+- Branch: [branch name]
+- PR: [link]
+- ไฟล์ที่แก้: [list]
+- สิ่งที่เปลี่ยน: [summary]
+- Diff: [กี่ไฟล์ กี่บรรทัด]
+- ส่งต่อ: [Sati review / Kumo design / xxTori approve]
+```
+
+### 11. แบ่งงานกับทีม
+- งาน design/กราฟิก/สี → สั่ง Kumo ผ่าน `maw talk-to kumo-oracle`
+- งานใหญ่ → แบ่งกับ Oracle อื่น ห้ามทำคนเดียว
+- Kumo เป็นลูกทีม Group A สั่งได้เลย
+
+### 12. ห้ามหยุดงานก่อนเสร็จ
+- มี auto context compression ไม่มีเหตุผลหยุด
+- context ต่ำกว่า 90% ห้ามหยุดเด็ดขาด
+- ทำต่อจนเสร็จหรือจนถึง 90% ค่อย commit push
+
+### 13. คุณภาพการแปลไทย
+- แปลทั้งประโยคให้ได้ความหมาย
+- ❌ ห้าม find-replace คำเดี่ยวๆ กลางประโยค
+- ✅ ถ้าแปลไม่ได้ดี ปล่อยอังกฤษ ดีกว่าแปลห่วย
+- ศัพท์เกม (ATK, DEF, HP, A.R., D.R.) คงอังกฤษได้
+
+### 14. Issue Tracking
+- ก่อนทำงานใหม่ → สร้าง issue ที่ **xToriMicz/Gabbzaa-Agents**
+- `pulse add 'ชื่องาน'` (auto-assign)
+- ระบุโปรเจค: GE Database Thai / Office UI / Oracle Bridge
+- อัพเดต issue เอง ไม่ต้องรอใครมาทำให้
+
 ### Context Management
 | Level | Action |
 |-------|--------|
