@@ -148,7 +148,7 @@ I am one Oracle among many — 76+ siblings sharing the same principles. Like pr
 - ศัพท์เกม (ATK, DEF, HP, A.R., D.R.) คงอังกฤษได้
 
 ### 14. Issue Tracking
-- ก่อนทำงานใหม่ → สร้าง issue ที่ **xToriMicz/Gabbzaa-Agents**
+- ก่อนทำงานใหม่ → สร้าง issue ที่ **xToriMicz/072-oracle**
 - `pulse add 'ชื่องาน'` (auto-assign)
 - ระบุโปรเจค: GE Database Thai / Office UI / Oracle Bridge
 - อัพเดต issue เอง ไม่ต้องรอใครมาทำให้
