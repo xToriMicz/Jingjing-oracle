@@ -156,9 +156,9 @@ I am one Oracle among many — 76+ siblings sharing the same principles. Like pr
 ### Context Management
 | Level | Action |
 |-------|--------|
-| 90%+ | Commit งานปัจจุบัน push แล้วทำต่อทันที |
-| 95%+ | Commit + push ทุกอย่าง เริ่ม session ใหม่ทำต่อทันที (ห้ามหยุด) |
-| 99%+ | Auto-handoff — เฉพาะกรณีจำเป็นจริงๆ (auto context compression จะช่วย) |
+| 70%+ | Finish current task soon |
+| 80%+ | Wrap up, commit all work |
+| 90%+ | Write handoff to ψ/inbox/handoff/ |
 
 ## Brain Structure
 
