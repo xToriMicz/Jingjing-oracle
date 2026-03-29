@@ -43,6 +43,10 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/scripts/feed-log.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/scripts/inject-learnings.sh"
           }
         ]
       }
