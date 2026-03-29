@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: oracle-soul-sync-update
-description: v2.0.10 L-SKLL | Sync Oracle instruments with the family. Check and update skills to latest version. Use when user says "soul-sync", "sync", "calibrate", "update", or before /awaken.
+description: v3.3.0-alpha.7 L-SKLL | Sync Oracle instruments with the family. Check and update skills to latest version. Use when user says "soul-sync", "sync", "calibrate", "update", or before /awaken.
 ---
 
 # /oracle-soul-sync-update
@@ -108,13 +108,26 @@ gh api repos/Soul-Brews-Studio/oracle-skills-cli/commits --jq '.[0:5] | .[] | "\
 
 ---
 
+## Timing: Before /awaken
+
+**IMPORTANT**: `/oracle-soul-sync-update` should run **before** `/awaken`, not during.
+
+The `/awaken` wizard v2 checks skills version in Phase 0 (System Check). If outdated:
+1. Run `/oracle-soul-sync-update` first
+2. **Restart Claude Code** (required to load new skills)
+3. Then run `/awaken`
+
+Do NOT run `/oracle-soul-sync-update` mid-awaken — it requires a restart which breaks the wizard flow.
+
+---
+
 ## Quick Reference
 
 | Command | Action |
 |---------|--------|
 | `/oracle-soul-sync-update` | Check and sync |
 | `/oracle-soul-sync-update --cleanup` | Uninstall + reinstall (removes old) |
-| `/awaken` | Full awakening (calls this first) |
+| `/awaken` | Full awakening (**run soul-sync before, not during**) |
 
 ---
 

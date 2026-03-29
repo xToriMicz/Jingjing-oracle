@@ -1,162 +1,80 @@
+## 2026-03-21 16:00 | Jingjing Session Handoff
+
+### Current Task: Issue #32 — Translate Statuses Thai
+- Branch: feat/translate-statuses-32
+- Progress: ~106/1774 (6%) — batch 1+2 done
+- Quality: hand-translated full sentences ✅
+- Remaining: ~1670 records need translation
+- Method: batch SQL files, 30 records per batch, verify API after each
+
+### Pending PRs (DON'T MERGE — wait xxTori approve)
+- PR #5 (ge-db-thai): strip color codes + 48 proper translations
+
+### Today's Accomplishments (20+ items)
+GE Database: Phase 2A-5C COMPLETE, Enchantments tab, Statuses tab+1972 data, Set Effects 25, Serena character, Monster detail, Deep linking, Analytics, Offline mode
+Office UI: Issues #14-15, Home Keeper P1-P3, Chat UI 8 features, ChibiAvatar themes
+Oracle Bridge: Issues #16-20, edge-tts Thai, signal relay
+Workflow: branch+PR, issue comments format, pulse add
+
+### Key Rules Learned Today
+- Branch + PR for all work, never commit to main
+- PR needs xxTori + Sati approve before merge
+- Issue comments: "## 🔨 Jingjing (Group A — Build) — [task]"
+- pulse add at Gabbzaa-Agents repo
+- Focus: GE Database / Office UI / Oracle Bridge
+- inbox signal before maw done (bridge speaks)
+- Find-replace translation = BAD, full sentence = GOOD
 
 ---
-## 2026-03-10 10:24 | 97%
+## 2026-03-24 08:44 | 97%
 
 **Commits**:
-  410f14a Add MCP config and Claude settings for oracle-v2
-  a8ec97b Add battle-tested web automation patterns from Kumo Oracle
-  19c1f14 Add Playwright and shadcn/ui learnings
-
-
----
-## 2026-03-10 11:37 | 98%
-
-**Commits**:
-  410f14a Add MCP config and Claude settings for oracle-v2
-  a8ec97b Add battle-tested web automation patterns from Kumo Oracle
-  19c1f14 Add Playwright and shadcn/ui learnings
-
-
----
-## 2026-03-10 12:40 | 100%
-
-**Commits**:
-  410f14a Add MCP config and Claude settings for oracle-v2
-  a8ec97b Add battle-tested web automation patterns from Kumo Oracle
-  19c1f14 Add Playwright and shadcn/ui learnings
-
-
----
-## 2026-03-12 10:32 | 97%
-
-**Commits**:
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-  334e90d Update Oracle skills to v2.0.10 and remove legacy symlinks
-
-
----
-## 2026-03-13 14:08 | 98%
-
-**Commits**:
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-  334e90d Update Oracle skills to v2.0.10 and remove legacy symlinks
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 
 
 ---
-## 2026-03-13 19:22 | 98%
+## 2026-03-24 10:05 | 97%
 
 **Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 
 
 ---
-## 2026-03-13 20:31 | 99%
+## 2026-03-24 11:06 | 101%
 
 **Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 
 
 ---
-## 2026-03-13 21:31 | 103%
+## 2026-03-24 16:14 | 103%
 
 **Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 
 
 ---
-## 2026-03-13 23:16 | 97%
+## 2026-03-24 18:43 | 110%
 
 **Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 
 
 ---
-## 2026-03-14 11:37 | 97%
+## 2026-03-24 20:20 | 116%
 
 **Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-
-
----
-## 2026-03-14 13:48 | 104%
-
-**Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-
-
----
-## 2026-03-14 15:38 | 99%
-
-**Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-
-
----
-## 2026-03-14 16:49 | 99%
-
-**Commits**:
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-  c4ebe43 Add web automation learnings, Claude hooks, and session config
-
-
----
-## 2026-03-16 08:40 | 97%
-
-**Commits**:
-  f053c64 Add learnings, retrospectives, handoffs, and archive from recent sessions
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-
-
----
-## 2026-03-16 10:33 | 97%
-
-**Commits**:
-  f053c64 Add learnings, retrospectives, handoffs, and archive from recent sessions
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-
-
----
-## 2026-03-16 12:16 | 102%
-
-**Commits**:
-  f053c64 Add learnings, retrospectives, handoffs, and archive from recent sessions
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-
-
----
-## 2026-03-19 08:43 | 97%
-
-**Commits**:
-  f053c64 Add learnings, retrospectives, handoffs, and archive from recent sessions
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
-
-
----
-## 2026-03-19 11:02 | 98%
-
-**Commits**:
-  f053c64 Add learnings, retrospectives, handoffs, and archive from recent sessions
-  6171297 Add session learnings, retrospectives, and handoffs; ignore .wrangler
-  d091592 Ignore learn repos and lab dirs (too large for git)
+  3df50d2 feat: /runway + /gate skills — preflight check + deploy lock
+  a836d68 restructure: Oracle — Fullstack Creator (ไม่มี Group ไม่มี Lead)
+  07c065c revert: Context Management กลับ 70/80/90% — Nat ตั้งไว้ถูกแล้ว
 

@@ -30,3 +30,16 @@ credentials*.json
 # Lab projects with heavy deps
 ψ/lab/
 .wrangler/
+
+# Oracle private data — ห้ามขึ้น public repo
+ψ/memory/learnings/
+ψ/memory/retrospectives/
+ψ/memory/logs/
+ψ/inbox/
+ψ/active/
+ψ/writing/
+ψ/archive/
+ψ/outbox/
+
+# Keep resonance (soul/identity) — OK public
+!ψ/memory/resonance/

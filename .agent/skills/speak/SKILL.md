@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: speak
-description: v2.0.10 L-SKLL | Text-to-speech using edge-tts or macOS say. Use when user says "speak", "say", "read aloud", or wants text spoken.
+description: v3.3.0-alpha.7 L-SKLL | Text-to-speech using edge-tts or macOS say. Use when user says "speak", "say", "read aloud", or wants text spoken.
+argument-hint: "<text>"
 ---
 
 # /speak - Text-to-Speech

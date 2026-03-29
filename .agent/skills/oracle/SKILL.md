@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: oracle
-description: v2.0.10 L-SKLL | Manage Oracle skills and profiles. Use when user says "oracle", "profile", "install skill", "remove skill", "switch profile".
+description: v3.3.0-alpha.7 L-SKLL | Manage Oracle skills — profiles, features, enable/disable. Use when user says "oracle", "profile", "install skill", "remove skill", "switch profile", "enable", "disable".
+argument-hint: "<profiles|install|uninstall|list>"
 ---
 
 # /oracle
@@ -13,11 +14,71 @@ description: v2.0.10 L-SKLL | Manage Oracle skills and profiles. Use when user s
 
 ```
 /oracle prepare              # check & install git, gh, ghq; set up gh auth
-/oracle profile              # list available profiles
-/oracle profile <name>       # switch to a profile
+/oracle profile              # list profiles + current state
+/oracle profile <name>       # switch to a profile tier
+/oracle feature add <name>   # add feature module on top of profile
+/oracle feature remove <name> # remove feature module
+/oracle enable <skill...>    # enable specific skills
+/oracle disable <skill...>   # disable specific skills (nothing deleted)
+/oracle skills               # list all skills with ✓/✗ status
 /oracle install <skill>      # install one skill
 /oracle remove <skill>       # remove one skill
-/oracle skills               # list installed skills
+```
+
+---
+
+## Profiles (tiers)
+
+Base tiers — pick how much you need:
+
+| Profile | Skills | Description |
+|---------|-------:|-------------|
+| **minimal** | 4 | Daily ritual: `standup` → `recap` → work → `rrr` → `forward` |
+| **standard** | 9 | Daily driver + discovery (96% of actual usage) |
+| **full** | 30 | Everything |
+
+### minimal (4 skills)
+`forward`, `rrr`, `recap`, `standup`
+
+### standard (9 skills)
+minimal + `trace`, `dig`, `learn`, `talk-to`, `oracle-family-scan`
+
+### full (30 skills)
+All skills enabled.
+
+---
+
+## Features (add-on modules)
+
+Bolt on domain-specific skill sets on top of any profile:
+
+| Feature | Skills | When |
+|---------|-------:|------|
+| **soul** | 6 | Birthing/awakening new oracles |
+| **network** | 5 | Multi-oracle communication |
+| **workspace** | 3 | Parallel work + daily ops |
+| **creator** | 4 | Content creation + research |
+
+### soul
+`awaken`, `philosophy`, `who-are-you`, `about-oracle`, `birth`, `feel`
+
+### network
+`talk-to`, `oracle-family-scan`, `oracle-soul-sync-update`, `oracle`, `oraclenet`
+
+### workspace
+`worktree`, `physical`, `schedule`
+
+> Deprecated (can bring back): `merged`, `fyi` — 0-1 calls, removed from v3
+
+### creator
+`speak`, `deep-research`, `watch`, `gemini`
+
+### Composable examples
+```
+minimal + soul         → community oracle (10 skills)
+minimal + creator      → content creator (8 skills)
+standard + network     → oracle developer (14 skills)
+standard + workspace   → parallel agent work (14 skills)
 ```
 
 ---
@@ -72,20 +133,110 @@ If everything is already set up, just print the summary — no changes needed.
 
 ### /oracle profile
 
-List available profiles.
+List available profiles and current state.
 
-```bash
-oracle-skills profiles
+Show which profile is active, which features are enabled, and skill counts:
+
+```
+Current: standard + soul (15 skills enabled, 15 disabled)
+
+Profiles:
+  minimal     4 skills   Daily ritual
+  standard    9 skills   Daily driver + discovery  ← active
+  full       30 skills   Everything
+
+Features:
+  soul        6 skills   Birth/awaken oracles  ← active
+  network     5 skills   Multi-oracle comms
+  workspace   5 skills   Parallel work + ops
+  creator     4 skills   Content + research
 ```
 
 ### /oracle profile \<name\>
 
-Switch to a profile (installs that profile's skill set).
+Switch to a profile tier. This enables the profile's skills and disables the rest.
 
-Profiles: `seed`/`minimal` (6 skills), `standard` (12 skills), `full` (all)
+**Enable** = rename `SKILL.md.disabled` → `SKILL.md`
+**Disable** = rename `SKILL.md` → `SKILL.md.disabled`
+
+Nothing is deleted. Disabled skills stay on disk, invisible to AI.
 
 ```bash
-oracle-skills install -g -y --profile <name>
+# For each skill in profile: enable
+# For each skill NOT in profile: disable
+```
+
+Show before/after:
+```
+Switching to: standard
+
+  ✓ forward        (was ✓)
+  ✓ rrr            (was ✓)
+  ✓ recap          (was ✓)
+  ✓ standup        (was ✗ disabled → enabled)
+  ✓ trace          (was ✓)
+  ✓ dig            (was ✓)
+  ✓ learn          (was ✓)
+  ✓ talk-to        (was ✓)
+  ✓ oracle-family-scan (was ✓)
+  ✗ awaken         (was ✓ enabled → disabled)
+  ✗ oraclenet      (was ✓ enabled → disabled)
+  ...
+
+9 enabled, 21 disabled. Restart session to apply.
+```
+
+### /oracle feature add \<name\>
+
+Enable a feature module on top of current profile.
+
+```bash
+# Enable all skills in the feature
+```
+
+### /oracle feature remove \<name\>
+
+Disable a feature module (only disables skills not in the active profile).
+
+### /oracle enable \<skill...\>
+
+Enable specific skills by name:
+
+```bash
+# For each skill name:
+#   ~/.claude/skills/<name>/SKILL.md.disabled → SKILL.md
+```
+
+### /oracle disable \<skill...\>
+
+Disable specific skills — **nothing is deleted**:
+
+```bash
+# For each skill name:
+#   ~/.claude/skills/<name>/SKILL.md → SKILL.md.disabled
+```
+
+### /oracle skills
+
+List all skills with current status:
+
+```
+Oracle Skills (30 installed, 9 enabled, 21 disabled)
+
+  ✓ forward          minimal    730 calls
+  ✓ rrr              minimal    981 calls
+  ✓ recap            minimal    449 calls
+  ✓ standup          minimal      4 calls
+  ✓ trace            standard  1537 calls
+  ✓ dig              standard   679 calls
+  ✓ learn            standard   420 calls
+  ✓ talk-to          standard   177 calls
+  ✓ oracle-family-scan standard  319 calls
+  ✗ awaken           [soul]      25 calls
+  ✗ philosophy       [soul]      29 calls
+  ✗ worktree         [workspace] 63 calls
+  ✗ merged           [workspace]  0 calls
+  ...
 ```
 
 ### /oracle install \<skill\>
@@ -104,26 +255,22 @@ Uninstall a single skill.
 oracle-skills uninstall -g -y --skill <skill>
 ```
 
-### /oracle skills
-
-List installed skills.
-
-```bash
-oracle-skills list -g
-```
-
 ---
 
 ## Quick Reference
 
 | Command | Action |
 |---------|--------|
-| `/oracle prepare` | Check & install git, gh, ghq; set up gh auth |
-| `/oracle profile` | List available profiles |
-| `/oracle profile seed` | Switch to seed profile |
-| `/oracle install <skill>` | Install one skill |
-| `/oracle remove <skill>` | Remove one skill |
-| `/oracle skills` | List installed skills |
+| `/oracle prepare` | Check & install git, gh, ghq |
+| `/oracle profile` | Show profiles + current state |
+| `/oracle profile minimal` | Switch to minimal (4 skills) |
+| `/oracle profile standard` | Switch to standard (9 skills) |
+| `/oracle profile full` | Enable all 30 |
+| `/oracle feature add soul` | Add soul skills |
+| `/oracle feature remove creator` | Remove creator skills |
+| `/oracle enable trace dig` | Enable specific skills |
+| `/oracle disable watch gemini` | Disable specific skills |
+| `/oracle skills` | List all with ✓/✗ status |
 
 ---
 

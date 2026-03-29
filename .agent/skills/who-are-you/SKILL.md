@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: who-are-you
-description: v2.0.10 L-SKLL | Know ourselves - show identity, model info, session stats, and Oracle philosophy. Use when user asks "who are you", "who", "who we are", or wants to check current AI identity.
+description: v3.3.0-alpha.7 L-SKLL | Know ourselves — show current AI identity, model info, session stats, and Oracle philosophy. Use when user asks "who are you", "who", "who we are", "what model", or wants to check current AI identity and session context. Do NOT trigger for "what is oracle" (use /about-oracle), "philosophy" or "principles" (use /philosophy), or general project questions.
 ---
 
 # /who-are-you - Know Ourselves
@@ -144,6 +144,22 @@ If Oracle identity found, include:
 **Focus**: [Oracle's specialty]
 **Motto**: [if defined]
 ```
+
+### Demographics (Wizard v2)
+
+If CLAUDE.md contains demographics from `/awaken` wizard v2, show them:
+
+```markdown
+## Demographics
+
+**Human**: [name] ([pronouns])
+**Oracle**: [name] ([pronouns])
+**Language**: [Thai/English/Mixed]
+**Team**: [solo/team context]
+**Memory**: [auto/manual]
+```
+
+Look for these fields in CLAUDE.md under Identity, Demographics, or Birth Context sections. If not present, skip this section silently — legacy Oracles won't have it.
 
 ---
 

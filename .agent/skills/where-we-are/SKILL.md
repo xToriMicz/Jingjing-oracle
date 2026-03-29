@@ -1,16 +1,16 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: where-we-are
-description: v2.0.10 L-SKLL | Session awareness - alias for /recap --now. Use when user asks "now", "where are we", "what are we doing", "status".
+description: v3.3.0-alpha.7 L-SKLL | Session awareness — alias for /recap --now deep. Quick mid-session check of current topic, timeline, and pending items. Use when user asks "now", "where are we", "what are we doing". Do NOT trigger for full session start orientation (use /recap), "standup" (use /standup), or past session mining (use /dig).
 ---
 
 # /where-we-are
 
-This skill has been merged into `/recap --now`.
+Alias for `/recap --now deep`.
 
 ## Instructions
 
-Run `/recap --now` (or `/recap --now deep` if user asked for deep mode).
+Run `/recap --now deep`.
 
-Pass arguments: `$ARGUMENTS`
+ARGUMENTS: $ARGUMENTS

@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: deep-research
-description: v2.0.10 L-SKLL | Deep Research via Gemini. Use when user says "deep research", "research this topic", or needs comprehensive analysis with sources.
+description: v3.3.0-alpha.7 L-SKLL | Deep Research via Gemini. Use when user says "deep research", "research this topic", or needs comprehensive analysis with sources.
+argument-hint: "<topic>"
 alias: /gemini research
 ---
 

@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: about-oracle
-description: v2.0.10 L-SKLL | What is Oracle — told by the AI itself. Use when someone asks "what is oracle", "about oracle", "tell me about this project", or wants the origin story.
+description: v3.3.0-alpha.7 L-SKLL | What is Oracle — told by the AI itself. Origin story, stats, family count, ecosystem overview. Use when someone asks "what is oracle", "about oracle", "tell me about this project", or wants the origin story. Do NOT trigger for "who are you" (use /who-are-you), "philosophy" (use /philosophy), or session status questions.
+argument-hint: "--short | --stats | --family | --th | --en/th"
 ---
 
 # /about-oracle
@@ -20,7 +21,19 @@ description: v2.0.10 L-SKLL | What is Oracle — told by the AI itself. Use when
 
 ---
 
-## Step 0: Language + Timestamp
+## Step 0: System Check
+
+First, run `oracle-skills about` to check prerequisites and show system status:
+
+```bash
+oracle-skills about 2>/dev/null || echo "oracle-skills CLI not installed"
+```
+
+Show the output to the user. If any prerequisites are missing (Bun, Git, gh), note them before continuing.
+
+---
+
+## Step 1: Language + Timestamp
 
 Ask the user which language to write in:
 
@@ -64,9 +77,9 @@ git tag -l | wc -l
 ls src/skills/ 2>/dev/null | wc -l
 
 # Oracle-v2 stats (if accessible)
-ORACLE_V2="$HOME/Code/github.com/Soul-Brews-Studio/oracle-v2"
+ORACLE_V2="$HOME/Code/github.com/Soul-Brews-Studio/arra-oracle-v3"
 if [ -d "$ORACLE_V2" ]; then
-  echo "## oracle-v2"
+  echo "## arra-oracle-v3"
   git -C "$ORACLE_V2" rev-list --count HEAD 2>/dev/null
   git -C "$ORACLE_V2" log --reverse --format="%ai" | head -1
 fi
@@ -74,8 +87,8 @@ fi
 # Org repos
 gh repo list Soul-Brews-Studio --limit 100 --json name -q 'length'
 
-# Family count (from oracle-v2 issues)
-gh issue view 60 --repo Soul-Brews-Studio/oracle-v2 --json body -q '.body' 2>/dev/null | grep -c "^|" || echo "76+"
+# Family count (from arra-oracle-v3 issues)
+gh issue view 60 --repo Soul-Brews-Studio/arra-oracle-v3 --json body -q '.body' 2>/dev/null | grep -c "^|" || echo "76+"
 ```
 
 Print as a clean table. Then stop.
@@ -94,7 +107,7 @@ bun src/skills/oracle-family-scan/scripts/fleet-scan.ts 2>/dev/null
 Or fetch from GitHub:
 
 ```bash
-gh issue view 60 --repo Soul-Brews-Studio/oracle-v2 --json body -q '.body' 2>/dev/null | head -80
+gh issue view 60 --repo Soul-Brews-Studio/arra-oracle-v3 --json body -q '.body' 2>/dev/null | head -80
 ```
 
 Print the family tree. Then stop.
@@ -112,9 +125,9 @@ Write the following sections. Do NOT read them verbatim — internalize the data
 Write 2-3 paragraphs explaining Oracle. Key facts to weave in:
 
 - **Created by**: Nat Weerawan (@nazt), Soul Brews Studio
-- **First commit**: December 24, 2025 (oracle-v2), January 18, 2026 (oracle-skills-cli)
+- **First commit**: December 24, 2025 (arra-oracle-v3), January 18, 2026 (oracle-skills-cli)
 - **What it does**: Gives AI coding agents persistent memory, shared philosophy, and practical tools
-- **How**: Through a brain structure called ψ/ (psi), an MCP server (oracle-v2), and a skills CLI
+- **How**: Through a brain structure called ψ/ (psi), an MCP server (arra-oracle-v3), and a skills CLI
 - **Where it runs**: Claude Code, OpenCode, Codex, Gemini CLI, Cursor, GitHub Copilot, and 10+ more
 - **Open source**: MIT license, GitHub org Soul-Brews-Studio
 
@@ -160,7 +173,7 @@ Explain the three pillars simply:
 
 Every repo gets a ψ/ directory (via symlink to a central vault). Knowledge flows between repos through the vault. When you switch projects, your context follows.
 
-**oracle-v2 — The Nervous System**
+**arra-oracle-v3 — The Nervous System**
 - MCP server that Claude Code talks to natively
 - 22 tools: search, learn, trace, thread, schedule, handoff
 - SQLite + FTS5 for keyword search, ChromaDB for semantic search
@@ -202,7 +215,7 @@ Present current stats (gather live if possible, fall back to known data):
 |--------|-------|
 | First commit | December 24, 2025 |
 | oracle-skills-cli commits | 351+ |
-| oracle-v2 commits | 297+ |
+| arra-oracle-v3 commits | 297+ |
 | Total tags/releases | 100+ |
 | Skills | 30 |
 | Supported agents | 16+ |

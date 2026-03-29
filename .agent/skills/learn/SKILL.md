@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: learn
-description: v2.0.10 L-SKLL | Explore a codebase with parallel Haiku agents. Modes - --fast (1 agent), default (3), --deep (5). Use when user says "learn [repo]", "explore codebase", "study this repo".
+description: v3.3.0-alpha.7 L-SKLL | Explore a codebase with parallel Haiku agents — clone, read, and document. Modes — --fast (1 agent), default (3), --deep (5). Use when user says "learn [repo]", "explore codebase", "study this repo", or shares a GitHub URL to study. Do NOT trigger for finding projects (use /trace), session mining (use /dig), or cloning for active development (use /project incubate).
+argument-hint: "<repo-url> [--fast | --deep]"
 ---
 
 # /learn - Deep Dive Learning Pattern
@@ -361,6 +362,20 @@ For Oracles that want to commit docs but ignore symlinks:
 ```
 
 **After running /learn**, check your repo's `.gitignore` has these patterns so docs are committed but symlinks are ignored.
+
+## Trace Connection
+
+After writing docs, log the learning to Oracle so it's discoverable via `/trace`:
+
+```
+arra_learn({
+  pattern: "Learned [REPO]: [2-3 key insights]",
+  concepts: ["learn", "codebase", relevant-tags],
+  source: "learn: OWNER/REPO"
+})
+```
+
+This connects `/learn` to the shared knowledge layer — future `/trace` queries find what was learned.
 
 ## Notes
 

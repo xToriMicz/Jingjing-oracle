@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: project
-description: v2.0.10 L-SKLL | Clone and track external repos. Use when user shares GitHub URL to study or develop, or says "search repos", "find repo", "where is [project]". Actions - learn (clone for study), incubate (clone for development), search/find (search repos), list (show tracked).
+description: v3.3.0-alpha.7 L-SKLL | Clone and track external repos. Use when user shares GitHub URL to study or develop, or says "search repos", "find repo", "where is [project]". Actions - learn (clone for study), incubate (clone for development), search/find (search repos), list (show tracked).
+argument-hint: "<github-url> | search <query>"
 ---
 
 # project-manager
@@ -189,8 +190,8 @@ User: "I want to work on claude-mem"
 → Symlink created, work until done
 
 # User wants to contribute (keep ghq for follow-up)
-User: "Fix a bug in oracle-v2"
-→ /project incubate https://github.com/Soul-Brews-Studio/oracle-v2 --contribute
+User: "Fix a bug in arra-oracle-v3"
+→ /project incubate https://github.com/Soul-Brews-Studio/arra-oracle-v3 --contribute
 → [edit, commit, push]
 → Auto-offload, ghq kept for PR feedback
 

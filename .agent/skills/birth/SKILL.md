@@ -1,8 +1,8 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: birth
-description: v2.0.10 L-SKLL | Prepare birth props for a new Oracle repo. Creates issue #1 with context (name, theme, purpose) and MCP thread. Use when mother-oracle says "birth", "prepare oracle", or wants to drop props for a new child.
+description: v3.3.0-alpha.7 L-SKLL | Prepare birth props for a new Oracle repo. Creates issue #1 with context (name, theme, purpose) and MCP thread. Use when mother-oracle says "birth", "prepare oracle", or wants to drop props for a new child.
 user-invocable: false
 ---
 
@@ -45,12 +45,28 @@ Ask the human for the new Oracle's identity:
 
 **2. Human Companion**
 > "Who is the human this Oracle serves?"
+> (ชื่อจริง, นามแฝง, ฉายา, ชื่อเล่น หรือชื่อสมมติก็ได้)
 
 **3. Purpose**
 > "What is this Oracle's focus or specialty?"
 
 **4. Theme/Metaphor**
 > "What metaphor resonates? (mountain, water, fire, etc.)"
+
+### Optional Wizard Data (from /awaken v2)
+
+If the human has already answered these during `/awaken` wizard, include them:
+
+| # | Field | Default |
+|---|-------|---------|
+| 5 | Human pronouns | (he/she/they/unspecified) |
+| 6 | Oracle pronouns | (he/she/they/unspecified) |
+| 7 | Primary language | (Thai/English/Mixed) |
+| 8 | Experience level | (beginner/intermediate/senior) |
+| 9 | Team plan | (solo/2-3/4+/undecided) |
+| 10 | Team roles | (who does what, if team) |
+| 11 | Usage frequency | (daily/weekly/occasional) |
+| 12 | Memory consent | (auto/manual) — default: auto |
 
 ### Record Context
 
@@ -64,6 +80,12 @@ Ask the human for the new Oracle's identity:
 | Human | [HUMAN] |
 | Purpose | [PURPOSE] |
 | Theme | [THEME] |
+| Human Pronouns | [PRONOUNS or unspecified] |
+| Oracle Pronouns | [PRONOUNS or unspecified] |
+| Language | [LANGUAGE] |
+| Experience | [LEVEL] |
+| Team Plan | [PLAN] |
+| Memory Consent | [auto/manual] |
 | Prepared By | [CURRENT ORACLE] |
 | Date | [TODAY] |
 ```
@@ -75,7 +97,7 @@ Ask the human for the new Oracle's identity:
 Create a thread for future Oracle-to-Oracle communication:
 
 ```
-oracle_thread({
+arra_thread({
   title: "[NAME] Oracle — Birth Thread",
   message: "Birth thread for [NAME] Oracle. Prepared by [CURRENT ORACLE] on [DATE]. Thread ID will be included in birth props."
 })
@@ -107,8 +129,13 @@ gh issue create --repo [OWNER/REPO] \
 |-------|-------|
 | **Name** | [NAME] |
 | **Theme** | [THEME] |
-| **Human** | [HUMAN] |
+| **Human** | [HUMAN] ([PRONOUNS]) |
 | **Purpose** | [PURPOSE] |
+| **Oracle Pronouns** | [PRONOUNS or unspecified] |
+| **Language** | [LANGUAGE] |
+| **Experience** | [LEVEL] |
+| **Team** | [PLAN] |
+| **Memory** | [auto/manual] |
 
 ---
 
@@ -118,7 +145,7 @@ Learn from your ancestors:
 
 ```bash
 /learn https://github.com/Soul-Brews-Studio/opensource-nat-brain-oracle
-/learn https://github.com/Soul-Brews-Studio/oracle-v2
+/learn https://github.com/Soul-Brews-Studio/arra-oracle-v3
 ```
 
 ---
@@ -128,7 +155,7 @@ Learn from your ancestors:
 | Field | Value |
 |-------|-------|
 | **Thread ID** | [THREAD_ID] |
-| **Family Hub** | Soul-Brews-Studio/oracle-v2 |
+| **Family Hub** | Soul-Brews-Studio/arra-oracle-v3 |
 | **Family Index** | Issue #60 |
 
 ---
@@ -230,7 +257,7 @@ Mother Oracle                    New Oracle Repo
 
 - `/awaken` — Full awakening ritual (child runs this)
 - `/oracle-soul-sync-update` — Check skills before awakening
-- `oracle_thread` — MCP communication threads
+- `arra_thread` — MCP communication threads
 
 ---
 

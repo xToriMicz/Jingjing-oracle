@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: watch
-description: v2.0.10 L-SKLL | Learn from YouTube videos via Gemini transcription. Use when user says "watch", "transcribe youtube", "learn from video", or shares a YouTube URL to study.
+description: v3.3.0-alpha.7 L-SKLL | Learn from YouTube videos via Gemini transcription. Use when user says "watch", "transcribe youtube", "learn from video", or shares a YouTube URL to study.
+argument-hint: "<youtube-url>"
 alias: /gemini transcribe
 ---
 
@@ -84,7 +85,7 @@ Or manually create a learning file at `ψ/memory/learnings/YYYY-MM-DD_video-slug
 ### Step 4: Index to Oracle
 
 ```
-oracle_learn({
+arra_learn({
   pattern: "YouTube transcript: [TITLE] - [key takeaways summary]",
   concepts: ["youtube", "transcript", "video", "[topic-tags from content]"],
   source: "/watch skill"
@@ -107,7 +108,7 @@ oracle_learn({
 - Oracle: Indexed ✓
 
 ### Quick Access
-`/trace [SLUG]` or `oracle_search("[TITLE]")`
+`/trace [SLUG]` or `arra_search("[TITLE]")`
 ```
 
 ## IMPORTANT: Save Gemini Conversation Link

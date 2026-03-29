@@ -2,9 +2,10 @@
 """Session goldminer — scan Claude Code .jsonl files for session timeline."""
 import json, os, glob, sys, subprocess, re
 from datetime import datetime, timedelta
+from pathlib import Path
 
 project_dirs = [d for d in os.environ.get('PROJECT_DIRS', '').split(':') if d]
-count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+count = int(sys.argv[1]) if len(sys.argv) > 1 else 10  # 0 = no limit (scan all)
 bkk = timedelta(hours=7)
 
 def build_repo_map():
@@ -32,7 +33,9 @@ for d in project_dirs:
         if base not in seen or os.path.getmtime(f) > os.path.getmtime(seen[base][0]):
             seen[base] = (f, d)   # store (filepath, project_dir) tuple
 all_files = [(fp, d) for fp, d in seen.values()]
-files = sorted(all_files, key=lambda x: os.path.getmtime(x[0]), reverse=True)[:count]
+files = sorted(all_files, key=lambda x: os.path.getmtime(x[0]), reverse=True)
+if count > 0:
+    files = files[:count]
 
 # Load sessions-index from all dirs
 index_map = {}

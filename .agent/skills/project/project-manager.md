@@ -16,7 +16,7 @@ Supports both formats:
 ```yaml
 # ψ/memory/slugs.yaml
 thedotmack/claude-mem: ~/Code/github.com/thedotmack/claude-mem
-laris-co/oracle-v2: ~/Code/github.com/laris-co/oracle-v2
+laris-co/arra-oracle-v3: ~/Code/github.com/laris-co/arra-oracle-v3
 ```
 
 ## Commands
@@ -89,8 +89,8 @@ laris-co/oracle-v2: ~/Code/github.com/laris-co/oracle-v2
 
 ### Offload (remove symlinks)
 ```bash
-.claude/skills/project-manager/scripts/offload.sh laris-co/oracle-v2
-.claude/skills/project-manager/scripts/offload.sh oracle-v2  # short slug
+.claude/skills/project-manager/scripts/offload.sh laris-co/arra-oracle-v3
+.claude/skills/project-manager/scripts/offload.sh arra-oracle-v3  # short slug
 .claude/skills/project-manager/scripts/offload.sh all        # clean slate
 ```
 
@@ -122,7 +122,7 @@ laris-co/oracle-v2: ~/Code/github.com/laris-co/oracle-v2
 2. **Score** → Rank files by type (retrospectives=10, docs=5, CLAUDE.md=0)
 3. **Filter** → Skip i18n, CLAUDE.md, low-value files
 4. **Extract** → Get key content from high-value files
-5. **Learn** → Call `oracle_learn` with source attribution
+5. **Learn** → Call `arra_learn` with source attribution
 
 ## Offload Pattern
 

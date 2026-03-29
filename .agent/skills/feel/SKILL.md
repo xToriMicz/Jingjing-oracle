@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: feel
-description: v2.0.10 L-SKLL | Log emotions with optional structure. Use when user says "feel", "feeling", "mood", "tired", "sleepy", "frustrated", "happy", "excited".
+description: v3.3.0-alpha.7 L-SKLL | Log emotions with optional structure. Use when user says "feel", "feeling", "mood", "tired", "sleepy", "frustrated", "happy", "excited".
+argument-hint: "<emotion> [note]"
 ---
 
 # /feel - Smart Emotion Log

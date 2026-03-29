@@ -5,14 +5,44 @@ import { existsSync, readdirSync, realpathSync } from "fs";
 import { join } from "path";
 
 const ROOT = process.env.ROOT || (await $`git rev-parse --show-toplevel`.text().catch(() => process.cwd())).trim();
-await $`git -C ${ROOT} config core.quotePath false`.quiet().catch(() => {});
+const isGit = (await $`git -C ${ROOT} rev-parse --is-inside-work-tree`.quiet().text().catch(() => "false")).trim() === "true";
+if (isGit) await $`git -C ${ROOT} config core.quotePath false`.quiet().catch(() => {});
 
 const now = new Date();
 const date = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 const time = now.toTimeString().slice(0, 5);
 const month = now.toISOString().slice(0, 7);
 
+// Session detection
+let sessionLine = "";
+try {
+  const encodedPwd = ROOT.replace(/^\//, '-').replace(/\//g, '-');
+  const projectDir = `${process.env.HOME}/.claude/projects/${encodedPwd}`;
+  if (existsSync(projectDir)) {
+    const jsonls = (await $`ls -t ${projectDir}/*.jsonl 2>/dev/null`.text()).trim().split('\n').filter(Boolean);
+    if (jsonls.length) {
+      const sessionId = jsonls[0].split('/').pop()!.replace('.jsonl', '');
+      const shortId = sessionId.slice(0, 8);
+      const firstLine = (await $`head -1 ${jsonls[0]}`.text()).trim();
+      let startStr = "";
+      try {
+        const ts = JSON.parse(firstLine).timestamp;
+        if (ts) {
+          const start = new Date(ts);
+          const elapsed = Math.round((Date.now() - start.getTime()) / 60000);
+          const h = Math.floor(elapsed / 60);
+          const m = elapsed % 60;
+          startStr = h > 0 ? `${h}h ${String(m).padStart(2, '0')}m` : `${m}m`;
+        }
+      } catch {}
+      const repoName = ROOT.split('/').pop() || '';
+      sessionLine = `${shortId} | ${repoName}${startStr ? ` | ${startStr}` : ''}`;
+    }
+  }
+} catch {}
+
 console.log("# RECAP (Rich)");
+if (sessionLine) console.log(`📡 Session: ${sessionLine}`);
 console.log(`\n${time} | ${date}\n\n---\n`);
 
 // Resolve ψ symlink (used for focus + schedule)
@@ -44,9 +74,13 @@ if (existsSync(scheduleFile)) {
 
 // Git
 console.log("\n## GIT");
-console.log(await $`git -C ${ROOT} status -sb`.text());
-console.log("**Last 3 commits:**");
-console.log(await $`git -C ${ROOT} log --oneline -3`.text());
+if (isGit) {
+  console.log(await $`git -C ${ROOT} status -sb`.text());
+  console.log("**Last 3 commits:**");
+  console.log(await $`git -C ${ROOT} log --oneline -3`.text());
+} else {
+  console.log("Not a git repository");
+}
 
 // Tracks
 console.log("## TRACKS");
@@ -93,9 +127,13 @@ if (existsSync(handoffDir)) {
 
 // Context
 console.log("\n---\n\n## CONTEXT\n");
-const status = await $`git -C ${ROOT} status --porcelain`.text();
-const modified = status.split("\n").filter((l) => l.startsWith(" M")).map((l) => l.slice(3));
-const untracked = status.split("\n").filter((l) => l.startsWith("??")).map((l) => l.slice(3));
+if (isGit) {
+  const status = await $`git -C ${ROOT} status --porcelain`.text();
+  const modified = status.split("\n").filter((l) => l.startsWith(" M")).map((l) => l.slice(3));
+  const untracked = status.split("\n").filter((l) => l.startsWith("??")).map((l) => l.slice(3));
 
-if (modified.length) console.log("**Modified**:\n" + modified.map((f) => `  ${f}`).join("\n"));
-if (untracked.length) console.log("\n**Untracked**:\n" + untracked.map((f) => `  ${f}`).join("\n"));
+  if (modified.length) console.log("**Modified**:\n" + modified.map((f) => `  ${f}`).join("\n"));
+  if (untracked.length) console.log("\n**Untracked**:\n" + untracked.map((f) => `  ${f}`).join("\n"));
+} else {
+  console.log("Not a git repository — skipping file status");
+}

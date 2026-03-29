@@ -14,10 +14,23 @@ if [ -n "$INPUT" ]; then
   echo "$INPUT" > "$CACHE"
 fi
 
+# Set tmux pane title from project name
+PROJECT=$(basename "$CLAUDE_PROJECT_DIR")
+case "$PROJECT" in
+  *Jingjing*|*jingjing*) PANE_TITLE="🧘 Jingjing (Conductor)" ;;
+  *072*)                 PANE_TITLE="✍️ 072 Content Creator" ;;
+  *kumo*|*Kumo*)         PANE_TITLE="☁️ Kumo Fullstack" ;;
+  *sati*|*Sati*)         PANE_TITLE="🛡️ Sati Security" ;;
+  *wiriya*|*Wiriya*)     PANE_TITLE="⚡ Wiriya Specialist" ;;
+  *)                     PANE_TITLE="$PROJECT" ;;
+esac
+if [ -n "$TMUX_PANE" ]; then
+  tmux select-pane -t "$TMUX_PANE" -T "$PANE_TITLE" 2>/dev/null
+fi
+
 # Time + Date + Project
 TIME=$(date '+%H:%M')
 DATE=$(date '+%d %b %Y')
-PROJECT=$(basename "$CLAUDE_PROJECT_DIR")
 
 # Context from stdin JSON
 CONTEXT=""

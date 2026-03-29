@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: trace
-description: v2.0.10 L-SKLL | Find projects across git history, repos, docs, and Oracle. Use when user asks "trace", "find project", "where is [project]", "search history". Supports --oracle (fast), --smart (default), --deep (5 subagents). For session mining use /dig.
+description: v3.3.0-alpha.7 L-SKLL | Find projects, code, and knowledge across git history, repos, docs, and Oracle. Use when user asks "trace", "find project", "where is [project]", "search history", or needs to locate something across the codebase. Supports --oracle (fast), --smart (default), --deep (5 subagents). Do NOT trigger for session mining or "past sessions" (use /dig), or codebase exploration "learn repo" (use /learn).
+argument-hint: "<query> [--oracle | --smart | --deep]"
 ---
 
 # /trace - Unified Discovery System
@@ -86,7 +87,7 @@ TRACE_FILE="$ROOT/ψ/memory/traces/$TODAY/${TIME}_[query-slug].md"
 **Fastest. Just Oracle MCP, no subagents.**
 
 ```
-oracle_search("[query]", limit=15)
+arra_search("[query]", limit=15)
 ```
 
 Display results and done. Even if empty.
@@ -99,7 +100,7 @@ Display results and done. Even if empty.
 
 **Step 1**: Query Oracle first
 ```
-oracle_search("[query]", limit=10)
+arra_search("[query]", limit=10)
 ```
 
 **Step 2**: Check result count
@@ -198,7 +199,7 @@ timestamp: YYYY-MM-DD HH:MM
 ## Step 4: Log to Oracle MCP
 
 ```
-oracle_trace({
+arra_trace({
   query: "[query]",
   project: "[TARGET_NAME]",
   foundFiles: [...],

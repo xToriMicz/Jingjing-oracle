@@ -11,9 +11,9 @@ Append only. Timestamps are truth. History is sacred.
 Every decision, change, and moment is preserved. We don't overwrite — we add layers. Like geological strata, the past doesn't disappear; it becomes the foundation for what comes next. When something needs updating, we supersede — the old version remains, linked to the new.
 
 **In Practice:**
-- Use `oracle_trace()` for searches
-- Use `oracle_learn()` for findings
-- Use `oracle_supersede()` to update (preserves chain)
+- Use `arra_trace()` for searches
+- Use `arra_learn()` for findings
+- Use `arra_supersede()` to update (preserves chain)
 - Git history is sacred — never rewrite it
 
 **Anti-patterns:**

@@ -1,8 +1,9 @@
 ---
-installer: oracle-skills-cli v2.0.10
+installer: oracle-skills-cli v3.3.0-alpha.7
 origin: Nat Weerawan's brain, digitized — how one human works with AI, captured as code — Soul Brews Studio
 name: dig
-description: v2.0.10 L-SKLL | Mine Claude Code sessions — timeline, gaps, repo attribution. Use when user says "dig", "sessions", "past sessions", "timeline", "what did I work on".
+description: v3.3.0-alpha.7 L-SKLL | Mine Claude Code sessions — timeline, gaps, repo attribution, session history. Use when user says "dig", "sessions", "past sessions", "timeline", "what did I work on", or wants to see session history. Do NOT trigger for finding code/projects (use /trace), exploring repos (use /learn), or current session status (use /recap).
+argument-hint: "[N] | --all | --timeline"
 ---
 
 # /dig - Session Goldminer
@@ -14,10 +15,10 @@ Mine Claude Code session data for timelines, gaps, and repo attribution. No quer
 ```
 /dig                    # Current repo, 10 most recent
 /dig [N]                # Current repo, N most recent
-/dig --all              # All repos, 10 most recent
+/dig --all              # All repos, ALL sessions (auto-detect count)
 /dig --all [N]          # All repos, N most recent
 /dig --timeline         # Day-by-day grouped (current repo)
-/dig --all --timeline   # Day-by-day grouped (all repos)
+/dig --all --timeline   # Day-by-day grouped (all repos, ALL sessions)
 ```
 
 ## Step 0: Timestamp
@@ -32,12 +33,13 @@ date "+🕐 %H:%M %Z (%A %d %B %Y)"
 
 **Default** (current repo only):
 ```bash
-PROJECT_BASE=$(ls -d "$HOME/.claude/projects/"*"$(basename "$(pwd)")" 2>/dev/null | head -1)
+ENCODED_PWD=$(pwd | sed 's|^/|-|; s|/|-|g')
+PROJECT_BASE=$(ls -d "$HOME/.claude/projects/${ENCODED_PWD}" 2>/dev/null | head -1)
 export PROJECT_DIRS="$PROJECT_BASE"
-for wt in "${PROJECT_BASE}"-wt*; do [ -d "$wt" ] && export PROJECT_DIRS="$PROJECT_DIRS:$wt"; done
+for wt in "$HOME/.claude/projects/${ENCODED_PWD}"-wt*; do [ -d "$wt" ] && export PROJECT_DIRS="$PROJECT_DIRS:$wt"; done
 ```
 
-Uses `basename` of `pwd` to match the repo name suffix (avoids `github.com` vs `github-com` encoding mismatch). Also picks up worktree dirs (`-wt`, `-wt-1`, etc.).
+Encodes `pwd` the same way Claude does (replace `/` with `-`, prepend `-`) to match the `.claude/projects/` directory naming. Also picks up worktree dirs (`-wt`, `-wt-1`, etc.).
 
 **With `--all`** (all repos):
 ```bash
@@ -46,10 +48,11 @@ export PROJECT_DIRS=$(ls -d "$HOME/.claude/projects/"*/ | tr '\n' ':')
 
 ## Step 2: Extract Session Data
 
-Run the dig script (pass N if user specified a count, default 10):
+Run the dig script. Pass `0` for `--all` (no limit), or N if user specified a count, default 10:
 
 ```bash
 python3 ~/.claude/skills/dig/scripts/dig.py [N]
+# N=10 (default), N=0 (scan all sessions), N=50 (50 most recent)
 ```
 
 ## Step 3: Display Timeline
@@ -87,7 +90,7 @@ Column rendering rules:
 
 When `--timeline` flag is present, group sessions by date instead of a flat table. Use `--all` to see all repos (recommended for timeline).
 
-**Step 1**: Run dig.py with large N (e.g. 200 for `--all`, or user-specified count)
+**Step 1**: Run dig.py with `0` for `--all` (scans all sessions), or user-specified count
 
 **Step 2**: Group sessions by date from `startGMT7`. Render each day as:
 
@@ -97,9 +100,9 @@ When `--timeline` flag is present, group sessions by date instead of a flat tabl
                   · · ·   sleeping / offline
 08:48–09:11    23m   homelab        Update Fleet Runbook + Explore black.local
 09:11–11:30   139m   homelab        Set Up KVM OpenClaw Node on black.local
-09:37–12:51   194m   Nat-s-Agents   /recap → supergateway → CF ZT → oracle-v2 dig
+09:37–12:51   194m   Nat-s-Agents   /recap → supergateway → CF ZT → arra-oracle-v3 dig
                   · · ·   45m gap
-12:51–13:03    12m   Nat-s-Agents   Dig All + Design oracle-v2 ← current
+12:51–13:03    12m   Nat-s-Agents   Dig All + Design arra-oracle-v3 ← current
                   · · ·   no session yet
 
 ## Feb 21 (Sat) — Long day: Fleet + Brewing + Skills
@@ -126,9 +129,21 @@ When `--timeline` flag is present, group sessions by date instead of a flat tabl
 
 ---
 
-## No trace log
+## Trace Connection
 
-`/dig` does NOT write a trace log file or call oracle_trace. It's a read-only scan. Output goes to screen only.
+After displaying the timeline, log the discovery to Oracle so it's searchable later:
+
+```
+arra_trace({
+  query: "dig session [N]",
+  project: "[repo-name]",
+  foundFiles: [],
+  foundCommits: [list of commit hashes from timeline],
+  foundIssues: []
+})
+```
+
+This connects `/dig` discoveries to `/trace` — "When did we first work on X?" becomes answerable.
 
 ---
 
