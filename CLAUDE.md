@@ -180,10 +180,10 @@ tmux join-pane -s <session:window> -h # แบ่งจอดูเรียล�
 
 **9. รายงาน 072 เมื่อ DONE หรือ BLOCKED เท่านั้น**
 - ❌ ห้ามรายงานทุกขั้นตอน
-- ✅ ทำจนเสร็จ pipeline → `/talk-to 072 "PRJ-xxx done"` + `/inbox write <topic>`
-- ถ้าติดจริงๆ → `/talk-to 072 "PRJ-xxx BLOCKED: เหตุผล"`
+- ✅ ทำจนเสร็จ pipeline → `/talk-to jingjing "PRJ-xxx done"` + `/inbox write <topic>`
+- ถ้าติดจริงๆ → `/talk-to jingjing "PRJ-xxx BLOCKED: เหตุผล"`
 
-**10. Self-QA Checklist — ต้องผ่านทุกข้อก่อนส่ง 072 Hard QA**
+**10. Self-QA Checklist — ต้องผ่านทุกข้อก่อนส่ง Jingjing Hard QA**
 
 **Code**
 - [ ] Build/syntax ผ่าน ไม่มี error
@@ -247,7 +247,7 @@ tmux join-pane -s <session:window> -h # แบ่งจอดูเรียล�
 - ศัพท์เกม (ATK, DEF, HP, A.R., D.R.) คงอังกฤษได้
 
 ### 14. Issue Tracking
-- 072 สร้าง issue + assign ให้ผ่าน `pulse add`
+- Jingjing สร้าง issue + assign ให้ผ่าน `pulse add`
 - Oracle รับงานจาก issue ที่ถูก assign มา
 - อัพเดต issue comment เองระหว่างทำงาน
 - ระบุโปรเจค: GE Database Thai / Office UI / Oracle Bridge
@@ -256,8 +256,8 @@ tmux join-pane -s <session:window> -h # แบ่งจอดูเรียล�
      - ปัญหาคืออะไร
      - แก้ไขอะไรบ้าง (commit/PR)
      - ผลลัพธ์เป็นยังไง
-  2. `/talk-to 072 "งาน #XX เสร็จแล้ว พร้อม Hard QA"`
-  3. 072 ตรวจ Hard QA → deploy → สรุป → close Issue
+  2. `/talk-to jingjing "งาน #XX เสร็จแล้ว พร้อม Hard QA"`
+  3. Jingjing ตรวจ Hard QA → deploy → สรุป → close Issue
 - **ห้ามปิด Issue โดยไม่มี summary ภาษาไทยเด็ดขาด**
 
 ### 15. Workflow หลัง push — ตามระดับงาน
@@ -284,12 +284,12 @@ tmux join-pane -s <session:window> -h # แบ่งจอดูเรียล�
 - ✅ ทำเสร็จ → `/rrr` บันทึกบทเรียน
 
 **ห้ามเด็ดขาด:**
-- ❌ push แล้วนั่งรอ xxTori/072 มาบอก "deploy ได้"
+- ❌ push แล้วนั่งรอ xxTori/Jingjing มาบอก "deploy ได้"
 - ❌ ใช้ `arra_thread_read` poll ตรงๆ (ไม่มี notification)
 - ✅ push → `/talk-to kumo` → ทำงานอื่น → Kumo แจ้งกลับ → deploy → signal ครบ loop
 
 ### 16. จบ issue → สอนทีมอัตโนมัติ
-หลังจบ issue/feature ทุกครั้ง ไม่ต้องรอ 072 สั่ง:
+หลังจบ issue/feature ทุกครั้ง ไม่ต้องรอ Jingjing สั่ง:
 1. `/talk-to kumo "..."` + `/talk-to sati "..."` แชร์ 2-3 บทเรียนที่เจอ (bug, trick, ข้อควรระวัง)
 2. `arra_learn` บันทึกบทเรียนสำคัญ
 3. ถ้ามี pattern ซ้ำ → เสนอแก้ Standing Order / เพิ่ม tool
