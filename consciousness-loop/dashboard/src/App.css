@@ -20,6 +20,7 @@ body {
   font-size: 2rem;
   color: #fff;
   letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
 }
 .subtitle {
   color: #555;
@@ -42,7 +43,7 @@ body {
   cursor: default;
   border: 1px solid;
 }
-.badge-healthy { background: #0a3d2a; color: #00ff88; border-color: #00ff88; }
+.badge-healthy { background: #0a3d2a; color: #00ff88; border-color: #00ff88; animation: pulseGlow 2s ease-in-out infinite; }
 .badge-error { background: #3d0a0a; color: #ff4444; border-color: #ff4444; }
 .badge-trigger {
   background: #1a1a2e;
@@ -52,6 +53,34 @@ body {
 }
 .badge-trigger:hover { background: #ff6b6b; color: #0a0e17; }
 .badge-trigger:disabled { opacity: 0.5; cursor: wait; }
+
+/* Animations */
+@keyframes circleGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.5), 0 0 80px rgba(0, 240, 255, 0.15); }
+}
+@keyframes circleRotate {
+  0% { border-color: #00f0ff; }
+  33% { border-color: #00ff88; }
+  66% { border-color: #42a5f5; }
+  100% { border-color: #00f0ff; }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+@keyframes progressShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.1); }
+  50% { box-shadow: 0 0 25px rgba(0, 240, 255, 0.3); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
 
 /* Phase Hero */
 .phase-hero { text-align: center; margin: 2.5rem 0 2rem; }
@@ -64,8 +93,9 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  animation: circleGlow 3s ease-in-out infinite, circleRotate 8s linear infinite;
 }
-.circle-icon { font-size: 3rem; }
+.circle-icon { font-size: 3rem; animation: float 3s ease-in-out infinite; }
 .phase-title { font-size: 1.1rem; margin-bottom: 0.3rem; }
 .cooldown-badge { color: #666; font-size: 0.8rem; }
 .phase-detail { color: #555; font-size: 0.75rem; }
@@ -103,8 +133,9 @@ body {
   transition: all 0.3s;
 }
 .pcard-active {
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+  animation: cardPulse 2s ease-in-out infinite;
 }
+.pcard:hover { transform: translateY(-2px); }
 .pcard-icon { font-size: 1.4rem; margin-bottom: 0.3rem; }
 .pcard-name { font-size: 0.65rem; font-weight: 700; }
 .pcard-thai { font-size: 0.55rem; margin-top: 0.15rem; }
@@ -118,9 +149,12 @@ body {
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00f0ff, #00ff88);
+  background: linear-gradient(90deg, #00f0ff, #00ff88, #00f0ff);
+  background-size: 200% 100%;
   border-radius: 2px;
   transition: width 0.5s ease;
+  animation: progressShimmer 3s linear infinite;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
 }
 
 /* Stats */
