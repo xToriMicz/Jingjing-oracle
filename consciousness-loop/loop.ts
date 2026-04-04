@@ -7,7 +7,7 @@
  * Inspired by Nat's Oracle (Soul Brews Studio)
  */
 
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1480767991703535746/hGJVJUeTh3vEIGRHh8sFsOE7mCc2Bv-S5ubVGx6uSrx2IRIVn7YnuGNkaMJoswf2lNHz";
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK || "";
 
 async function sh(cmd: string): Promise<string> {
   const proc = Bun.spawn(["bash", "-c", cmd], { stdout: "pipe", stderr: "pipe" });
@@ -85,7 +85,8 @@ ${contents.join("\n---\n")}`
   // Fallback: ถ้า claude ไม่ตอบ ใช้ grep analysis
   if (!insight) {
     const topics = files.map(f => f.split("/").pop()?.replace(/\.md$/, '').replace(/^[\d_-]+/, '') || '').filter(Boolean);
-    insight = `Cross-check: ${topics.join(' + ')} — ${count} learnings, ${rulesCount} rules ยังไม่เป็น hooks`;
+    const totalCount = await sh(`ls ${LEARNINGS_DIR}/*.md 2>/dev/null | wc -l`);
+    insight = `Cross-check: ${topics.join(' + ')} — ${totalCount.trim()} learnings, topics ยังไม่ถูก connect`;
   }
 
   if (insight) {
@@ -107,8 +108,8 @@ async function wonder(reflectResult: string, state: LoopState): Promise<string> 
 ตอบแค่คำถาม 1 บรรทัด ภาษาไทย`
   );
 
-  // ไปหาคำตอบ (ค้นหาใน learnings + codebase)
-  const searchTerm = question.split(" ").slice(0, 3).join(".*");
+  // ไปหาคำตอบ (ค้นหาใน learnings — sanitize input)
+  const searchTerm = (question || "").replace(/[^a-zA-Z0-9ก-๙\s]/g, '').split(" ").slice(0, 3).join(".*");
   const searchResult = await sh(`grep -rl "${searchTerm}" ${LEARNINGS_DIR}/ ψ/memory/resonance/ 2>/dev/null | head -3`);
 
   let answer = "";
@@ -138,7 +139,7 @@ async function wonder(reflectResult: string, state: LoopState): Promise<string> 
 async function soul(wonderResult: string): Promise<string> {
   console.log("✨ Soul (เติบโต)...");
 
-  const beliefs = await sh(`cat ${BELIEFS_PATH} 2>/dev/null`);
+  const beliefs = await Bun.file(BELIEFS_PATH).text().catch(() => "");
   const beliefCount = (beliefs.match(/^### \d+\./gm) || []).length;
 
   // ถาม AI ว่าควรเพิ่ม/แก้ belief ไหม
@@ -163,7 +164,8 @@ ${beliefs.slice(0, 500)}
   if (soulCheck.includes("ฉันเชื่อว่า")) {
     const nextNum = beliefCount + 1;
     const newBelief = `\n### ${nextNum}. ${soulCheck}\n- **Updated**: ${new Date().toISOString().slice(0, 10)}\n`;
-    await sh(`echo '${newBelief.replace(/'/g, "\\'\\'\\'")}' >> ${BELIEFS_PATH}`);
+    const existing = await Bun.file(BELIEFS_PATH).text();
+    await Bun.write(BELIEFS_PATH, existing + newBelief);
     return `Soul: เพิ่ม belief #${nextNum} — ${soulCheck.slice(0, 100)}`;
   }
 
@@ -301,6 +303,7 @@ async function runLoop(state: LoopState): Promise<LoopState> {
     state.lastLoop = new Date().toISOString();
     state.lastPhase = "complete";
     state.lastProposal = proposeResult.slice(0, 500);
+    state.failures = 0; // Reset failures on success
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
 
@@ -335,7 +338,10 @@ async function runLoop(state: LoopState): Promise<LoopState> {
       propose: proposeResult.slice(0, 500),
       security: securityResult?.slice(0, 200) || "",
     });
-    await sh(`echo '${historyEntry.replace(/'/g, "\\'\\'\\'")}' >> ${HISTORY_FILE}`);
+    try {
+      const existing = await Bun.file(HISTORY_FILE).text().catch(() => "");
+      await Bun.write(HISTORY_FILE, existing + historyEntry + "\n");
+    } catch {}
 
     await sendDiscord(discordMsg);
 
