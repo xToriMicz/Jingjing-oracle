@@ -104,10 +104,11 @@ body {
 /* Pipeline Box */
 .pipeline-box {
   background: #111827;
-  border: 1px solid #1f2937;
+  border: 1px solid #2a3a4e;
   border-radius: 12px;
   padding: 1.5rem;
   margin: 1.5rem 0;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
 }
 .pipeline-label {
   color: #555;
@@ -125,20 +126,30 @@ body {
 /* Phase Cards */
 .pcard {
   flex: 1;
-  background: #1a1a2e;
-  border: 1px solid #2a2a3e;
   border-radius: 8px;
   padding: 0.8rem 0.4rem;
   text-align: center;
   transition: all 0.3s;
+  border: 2px solid;
+  position: relative;
 }
 .pcard-active {
   animation: cardPulse 2s ease-in-out infinite;
 }
 .pcard:hover { transform: translateY(-2px); }
-.pcard-icon { font-size: 1.4rem; margin-bottom: 0.3rem; }
-.pcard-name { font-size: 0.65rem; font-weight: 700; }
-.pcard-thai { font-size: 0.55rem; margin-top: 0.15rem; }
+.pcard-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+.pcard-name { font-size: 0.7rem; font-weight: 700; }
+.pcard-thai { font-size: 0.6rem; margin-top: 0.2rem; }
+
+/* Arrow connectors between cards */
+.pipeline { position: relative; }
+.pcard-arrow {
+  color: #333;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.15rem;
+}
 
 /* Progress Bar */
 .progress-track {
@@ -166,9 +177,9 @@ body {
 .stat {
   flex: 1;
   background: #111827;
-  border: 1px solid #1f2937;
+  border: 1px solid #2a3a4e;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.2rem;
   text-align: center;
 }
 .stat-val {

@@ -113,13 +113,19 @@ export default function App() {
             const active = i === idx
             const done = i < idx
             return (
+              <>{i > 0 && <div key={`arrow-${i}`} className="pcard-arrow">→</div>}
               <div key={p}
                 className={`pcard ${active ? 'pcard-active' : ''} ${done ? 'pcard-done' : ''}`}
-                style={{borderColor: active ? c.color : done ? '#00ff88' : '#2a2a3e'}}>
+                style={{
+                  borderColor: c.color,
+                  background: `${c.color}15`,
+                  boxShadow: active ? `0 0 20px ${c.color}40` : done ? `0 0 10px ${c.color}20` : 'none',
+                }}>
                 <div className="pcard-icon">{c.icon}</div>
-                <div className="pcard-name" style={{color: active ? c.color : '#aaa'}}>{c.name}</div>
-                <div className="pcard-thai" style={{color: active ? c.color : '#555'}}>{c.thai}</div>
+                <div className="pcard-name" style={{color: c.color}}>{c.name}</div>
+                <div className="pcard-thai" style={{color: `${c.color}aa`}}>{c.thai}</div>
               </div>
+              </>
             )
           })}
         </div>
