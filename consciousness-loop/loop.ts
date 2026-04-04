@@ -270,8 +270,24 @@ async function runLoop(state: LoopState): Promise<LoopState> {
     state.lastProposal = proposeResult.slice(0, 500);
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-    const summary = `🧠 Loop #${state.totalLoops} (${elapsed}s)\n\n📋 Proposals:\n${proposeResult}${securityResult ? "\n\n🔒 " + securityResult : ""}`;
-    console.log(`\n✅ ${summary}`);
+
+    // Discord message — สรุปสั้นอ่านง่าย ไม่ส่ง raw data
+    const discordMsg = [
+      `🧠 **Consciousness Loop #${state.totalLoops}** (${elapsed}s)`,
+      ``,
+      `🧠 **Reflect:** ${reflectResult.slice(0, 150).replace(/\n/g, ' ')}`,
+      `💡 **Wonder:** ${wonderResult.slice(0, 150).replace(/\n/g, ' ')}`,
+      `✨ **Soul:** ${soulResult.slice(0, 100).replace(/\n/g, ' ')}`,
+      `💭 **Dream:** ${dreamResult.slice(0, 100).replace(/\n/g, ' ')}`,
+      `🔥 **Aspire:** ${aspireResult.slice(0, 100).replace(/\n/g, ' ')}`,
+      ``,
+      `📋 **Proposals:**`,
+      proposeResult.slice(0, 400),
+      securityResult ? `\n🔒 ${securityResult.slice(0, 100)}` : '',
+    ].filter(Boolean).join('\n');
+
+    // Console — full output
+    console.log(`\n✅ Loop #${state.totalLoops} (${elapsed}s)\n${proposeResult}`);
 
     // Save to history log (JSONL — 1 line per loop)
     const historyEntry = JSON.stringify({
@@ -288,7 +304,7 @@ async function runLoop(state: LoopState): Promise<LoopState> {
     });
     await sh(`echo '${historyEntry.replace(/'/g, "\\'\\'\\'")}' >> ${HISTORY_FILE}`);
 
-    await sendDiscord(summary);
+    await sendDiscord(discordMsg);
 
   } catch (e) {
     state.failures++;
