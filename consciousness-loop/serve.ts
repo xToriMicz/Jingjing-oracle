@@ -4,7 +4,7 @@
  * Serves dashboard.html + state.json + trigger endpoint
  */
 
-const PORT = 3457;
+const PORT = 3458;
 const BASE = import.meta.dir;
 
 Bun.serve({

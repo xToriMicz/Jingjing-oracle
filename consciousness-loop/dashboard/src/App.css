@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #0a0e17;
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.header { position: relative; text-align: center; margin-bottom: 1rem; }
+.title {
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.subtitle {
+  color: #555;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+.badges {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+.badge {
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: default;
+  border: 1px solid;
+}
+.badge-healthy { background: #0a3d2a; color: #00ff88; border-color: #00ff88; }
+.badge-error { background: #3d0a0a; color: #ff4444; border-color: #ff4444; }
+.badge-trigger {
+  background: #1a1a2e;
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+  cursor: pointer;
+}
+.badge-trigger:hover { background: #ff6b6b; color: #0a0e17; }
+.badge-trigger:disabled { opacity: 0.5; cursor: wait; }
+
+/* Phase Hero */
+.phase-hero { text-align: center; margin: 2.5rem 0 2rem; }
+.circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #00f0ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.circle-icon { font-size: 3rem; }
+.phase-title { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.cooldown-badge { color: #666; font-size: 0.8rem; }
+.phase-detail { color: #555; font-size: 0.75rem; }
+.loop-info { color: #444; font-size: 0.75rem; margin-top: 0.4rem; }
+
+/* Pipeline Box */
+.pipeline-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+.pipeline-label {
+  color: #555;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+}
+.pipeline {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Phase Cards */
+.pcard {
+  flex: 1;
+  background: #1a1a2e;
+  border: 1px solid #2a2a3e;
+  border-radius: 8px;
+  padding: 0.8rem 0.4rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+.pcard-active {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}
+.pcard-icon { font-size: 1.4rem; margin-bottom: 0.3rem; }
+.pcard-name { font-size: 0.65rem; font-weight: 700; }
+.pcard-thai { font-size: 0.55rem; margin-top: 0.15rem; }
+
+/* Progress Bar */
+.progress-track {
+  height: 4px;
+  background: #1a1a2e;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00f0ff, #00ff88);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.stat {
+  flex: 1;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+.stat-val {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+.stat-lbl {
+  font-size: 0.6rem;
+  color: #555;
+  margin-top: 0.3rem;
+  text-transform: capitalize;
+}
+
+/* Quote */
+.quote-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1.2rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.quote-thai { color: #666; font-size: 0.8rem; }
+.quote-eng {
+  color: #444;
+  font-size: 0.7rem;
+  font-style: italic;
+  margin-top: 0.4rem;
+}
