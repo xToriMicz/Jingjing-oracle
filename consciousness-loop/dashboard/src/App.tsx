@@ -56,7 +56,7 @@ export default function App() {
       try { setHistory(await (await fetch('/api/history?' + Date.now())).json()) } catch {}
     }
     f()
-    const id = setInterval(f, 10000)
+    const id = setInterval(f, 2000)
     return () => clearInterval(id)
   }, [])
 
