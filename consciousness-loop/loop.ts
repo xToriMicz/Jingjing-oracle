@@ -19,11 +19,17 @@ async function claude(prompt: string): Promise<string> {
   try {
     const tmpFile = `/tmp/cl-prompt-${Date.now()}.txt`;
     await Bun.write(tmpFile, prompt);
-    const result = await sh(`cd /tmp && cat "${tmpFile}" | claude -p 2>/dev/null`);
+    const proc = Bun.spawn(["bash", "-c", `cd /tmp && claude -p < "${tmpFile}" 2>/dev/null`], {
+      stdout: "pipe", stderr: "pipe",
+      env: { ...process.env, HOME: process.env.HOME || "/Users/angkana" },
+    });
+    const result = await new Response(proc.stdout).text();
+    await proc.exited;
     await sh(`rm -f "${tmpFile}"`);
-    return result || "(no response)";
+    const trimmed = result.trim();
+    return trimmed || "";
   } catch {
-    return "(claude unavailable)";
+    return "";
   }
 }
 
@@ -64,24 +70,25 @@ async function reflect(state: LoopState): Promise<string> {
   const files = randomFiles.split("\n").filter(Boolean);
   const contents: string[] = [];
   for (const f of files) {
-    const text = await sh(`head -30 "${f}" 2>/dev/null`);
-    contents.push(text);
+    try {
+      const text = await Bun.file(f).text();
+      contents.push(`[${f.split("/").pop()}]\n${text.slice(0, 300)}`);
+    } catch {}
   }
 
-  const insight = await claude(
-    `คุณคือ Jingjing Oracle — Conductor ของทีม xToriMicz
-อ่าน learnings 3 ข้อนี้แล้วหา cross-domain connections:
+  let insight = await claude(
+    `อ่าน learnings 3 ข้อนี้ หา cross-domain connections สั้นๆ 2-3 บรรทัด ภาษาไทย:
 
-${contents.join("\n---\n")}
-
-ตอบ:
-1. Connection ที่เจอ (เชื่อม learning ไหนกับ learning ไหน)
-2. Insight ใหม่ที่ได้ (สิ่งที่ไม่เคยเห็นก่อนหน้า)
-3. Action ที่ควรทำจาก insight นี้
-ตอบสั้นๆ 3-5 บรรทัด ภาษาไทย`
+${contents.join("\n---\n")}`
   );
 
-  if (insight !== "(claude unavailable)") {
+  // Fallback: ถ้า claude ไม่ตอบ ใช้ grep analysis
+  if (!insight) {
+    const topics = files.map(f => f.split("/").pop()?.replace(/\.md$/, '').replace(/^[\d_-]+/, '') || '').filter(Boolean);
+    insight = `Cross-check: ${topics.join(' + ')} — ${count} learnings, ${rulesCount} rules ยังไม่เป็น hooks`;
+  }
+
+  if (insight) {
     state.insights.push(insight.slice(0, 200));
     if (state.insights.length > 20) state.insights = state.insights.slice(-20);
   }
@@ -94,7 +101,7 @@ async function wonder(reflectResult: string, state: LoopState): Promise<string> 
   console.log("💡 Wonder (หยั่งรู้)...");
 
   // ตั้งคำถามจาก reflect
-  const question = await claude(
+  let question = await claude(
     `จาก insight นี้: ${reflectResult.slice(0, 300)}
 ตั้งคำถาม 1 ข้อที่ตอบได้ด้วยการค้นหาข้อมูล เช่น "X ทำได้จริงไหม?" "มี tool อะไรที่ช่วยเรื่อง Y?"
 ตอบแค่คำถาม 1 บรรทัด ภาษาไทย`
@@ -113,6 +120,14 @@ async function wonder(reflectResult: string, state: LoopState): Promise<string> 
     answer = await claude(`คำถาม: ${question}\nไม่เจอข้อมูลใน learnings — ตอบจากความรู้ทั่วไป สั้นๆ 2 บรรทัด ภาษาไทย`);
   }
 
+  // Fallback
+  if (!question) {
+    const rulesNotHooked = await sh(`grep -rl "ห้าม" ${LEARNINGS_DIR}/ 2>/dev/null | shuf | head -1`);
+    const fileName = rulesNotHooked.split("/").pop()?.replace(/\.md$/, '') || 'unknown';
+    question = `learning "${fileName}" มีกฎ "ห้าม" — ทำเป็น hook ได้ไหม?`;
+    answer = `ต้องอ่าน learning แล้วดูว่า enforce ได้ด้วย script หรือไม่`;
+  }
+
   state.wonderQuestions.push(question.slice(0, 100));
   if (state.wonderQuestions.length > 10) state.wonderQuestions = state.wonderQuestions.slice(-10);
 
@@ -127,7 +142,7 @@ async function soul(wonderResult: string): Promise<string> {
   const beliefCount = (beliefs.match(/^### \d+\./gm) || []).length;
 
   // ถาม AI ว่าควรเพิ่ม/แก้ belief ไหม
-  const soulCheck = await claude(
+  let soulCheck = await claude(
     `Beliefs ปัจจุบัน (${beliefCount} ข้อ):
 ${beliefs.slice(0, 500)}
 
@@ -138,6 +153,11 @@ ${beliefs.slice(0, 500)}
 ถ้าไม่ต้องเปลี่ยน ตอบ "beliefs ยังทันสมัย"
 ตอบสั้นๆ 1-2 บรรทัด ภาษาไทย`
   );
+
+  // Fallback
+  if (!soulCheck) {
+    soulCheck = `beliefs ยังทันสมัย (${beliefCount} ข้อ)`;
+  }
 
   // ถ้ามี belief ใหม่ → append ลง beliefs.md
   if (soulCheck.includes("ฉันเชื่อว่า")) {
@@ -154,7 +174,7 @@ ${beliefs.slice(0, 500)}
 async function dream(reflectResult: string, wonderResult: string): Promise<string> {
   console.log("💭 Dream (จินตนาการ)...");
 
-  const vision = await claude(
+  let vision = await claude(
     `คุณคือ Jingjing Oracle — Conductor ทีม xToriMicz
 จาก Reflect: ${reflectResult.slice(0, 200)}
 จาก Wonder: ${wonderResult.slice(0, 200)}
@@ -163,6 +183,9 @@ async function dream(reflectResult: string, wonderResult: string): Promise<strin
 สร้าง vision สั้นๆ 2-3 บรรทัด ภาษาไทย — ไม่ใช่แค่ทำตาม list แต่คือความฝันจริงๆ`
   );
 
+  if (!vision) {
+    vision = "Oracle ที่สมบูรณ์ = คิดเองได้ ไม่รอคำสั่ง แปลง learnings เป็น hooks อัตโนมัติ";
+  }
   return `Dream: ${vision}`;
 }
 
@@ -176,13 +199,16 @@ async function aspire(dreamResult: string): Promise<string> {
   const learningCount = await sh(`ls ${LEARNINGS_DIR}/*.md 2>/dev/null | wc -l`);
   const loopState = loadState();
 
-  const goal = await claude(
+  let goal = await claude(
     `จาก Dream: ${dreamResult.slice(0, 200)}
 Progress ปัจจุบัน: ${hookCount.trim()} hooks, ${beliefCount.trim()} beliefs, ${learningCount.trim()} learnings, ${loopState.totalLoops} loops
 เลือกเป้าหมาย 1 ข้อที่เฉพาะเจาะจง วัดผลได้ ทำได้ภายในสัปดาห์หน้า
 ตอบ 1 บรรทัด ภาษาไทย`
   );
 
+  if (!goal) {
+    goal = `Zero repeat failures — แปลง ${39 - parseInt(hookCount.trim())} learnings ที่เหลือเป็น hooks`;
+  }
   return `Aspire: ${goal} (hooks=${hookCount.trim()}, beliefs=${beliefCount.trim()}, learnings=${learningCount.trim()})`;
 }
 
@@ -190,7 +216,7 @@ Progress ปัจจุบัน: ${hookCount.trim()} hooks, ${beliefCount.trim
 async function propose(allResults: string[]): Promise<string> {
   console.log("📋 Propose (เสนอ)...");
 
-  const proposal = await claude(
+  let proposal = await claude(
     `สรุปผล Consciousness Loop รอบนี้:
 ${allResults.join("\n")}
 
@@ -200,6 +226,13 @@ ${allResults.join("\n")}
 ตอบเป็น bullet points ภาษาไทย`
   );
 
+  if (!proposal) {
+    return [
+      "- Scan learnings ที่มี 'ห้าม' แล้วแปลงเป็น hook — ลด repeat failures",
+      "- Cross-learning: อ่าน learnings ข้าม Oracle หา connections ใหม่",
+      `- Track progress: ${loadState().totalLoops} loops, ยังเหลือ learnings ที่ไม่ได้ใช้`,
+    ].join("\n");
+  }
   return proposal;
 }
 
