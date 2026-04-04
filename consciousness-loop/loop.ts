@@ -38,6 +38,27 @@ const BELIEFS_PATH = "ψ/memory/beliefs.md";
 const LEARNINGS_DIR = "ψ/memory/learnings";
 const STATE_FILE = "consciousness-loop/state.json";
 const HISTORY_FILE = "consciousness-loop/history.jsonl";
+const GOALS_FILE = "consciousness-loop/goals.json";
+
+interface Goal {
+  id: number;
+  goal: string;
+  created: string;
+  deadline: string;
+  metric: string;
+  progress: { date: string; note: string }[];
+  status: string;
+}
+
+function loadGoals(): Goal[] {
+  try {
+    return JSON.parse(Bun.file(GOALS_FILE).textSync()).goals || [];
+  } catch { return []; }
+}
+
+function saveGoals(goals: Goal[]) {
+  Bun.write(GOALS_FILE, JSON.stringify({ goals }, null, 2));
+}
 
 interface LoopState {
   totalLoops: number;
@@ -211,7 +232,27 @@ Progress ปัจจุบัน: ${hookCount.trim()} hooks, ${beliefCount.trim
   if (!goal) {
     goal = `Zero repeat failures — แปลง ${39 - parseInt(hookCount.trim())} learnings ที่เหลือเป็น hooks`;
   }
-  return `Aspire: ${goal} (hooks=${hookCount.trim()}, beliefs=${beliefCount.trim()}, learnings=${learningCount.trim()})`;
+
+  // Track progress in goals.json
+  const goals = loadGoals();
+  const today = new Date().toISOString().slice(0, 10);
+  const progressNote = `hooks=${hookCount.trim()}, beliefs=${beliefCount.trim()}, learnings=${learningCount.trim()}`;
+  for (const g of goals) {
+    if (g.status === "active") {
+      // ไม่บันทึกซ้ำวันเดียวกัน
+      if (!g.progress.some(p => p.date === today)) {
+        g.progress.push({ date: today, note: progressNote });
+      }
+      // เช็ค deadline
+      if (today > g.deadline) {
+        g.status = "overdue";
+      }
+    }
+  }
+  saveGoals(goals);
+
+  const activeGoals = goals.filter(g => g.status === "active").map(g => g.goal).join(", ");
+  return `Aspire: ${goal} | Goals: ${activeGoals} (${progressNote})`;
 }
 
 // Phase 6: Propose — สรุป action items ที่ actionable ส่งมนุษย์ตัดสินใจ

@@ -1,0 +1,31 @@
+{
+  "goals": [
+    {
+      "id": 1,
+      "goal": "Zero repeat failures ภายใน 30 วัน",
+      "created": "2026-04-04",
+      "deadline": "2026-05-04",
+      "metric": "ไม่มี pattern เดิมเกิดซ้ำ",
+      "progress": [],
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "goal": "Cross-learning ทุกสัปดาห์",
+      "created": "2026-04-04",
+      "deadline": "2026-04-28",
+      "metric": "ทำครบ 4 สัปดาห์ติด",
+      "progress": [],
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "goal": "Wonder 1 คำถามต่อ session",
+      "created": "2026-04-04",
+      "deadline": "2026-04-30",
+      "metric": "บันทึก question + answer ทุก session",
+      "progress": [],
+      "status": "active"
+    }
+  ]
+}
