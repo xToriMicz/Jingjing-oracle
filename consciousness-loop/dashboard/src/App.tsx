@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
+interface LoopHistory {
+  loop: number
+  timestamp: string
+  elapsed: number
+  reflect: string
+  wonder: string
+  soul: string
+  dream: string
+  aspire: string
+  propose: string
+  security: string
+}
+
 interface LoopState {
   totalLoops: number
   lastLoop: string
@@ -35,13 +48,15 @@ function timeSince(d: string): string {
 export default function App() {
   const [state, setState] = useState<LoopState | null>(null)
   const [triggering, setTriggering] = useState(false)
+  const [history, setHistory] = useState<LoopHistory[]>([])
 
   useEffect(() => {
     const f = async () => {
       try { setState(await (await fetch('/state.json?' + Date.now())).json()) } catch {}
+      try { setHistory(await (await fetch('/api/history?' + Date.now())).json()) } catch {}
     }
     f()
-    const id = setInterval(f, 5000)
+    const id = setInterval(f, 10000)
     return () => clearInterval(id)
   }, [])
 
@@ -120,6 +135,32 @@ export default function App() {
         <div className="stat"><div className="stat-val">{(state?.failures||0)===0 ? timeSince(state?.lastLoop||'') : '--'}</div><div className="stat-lbl">Last Success</div></div>
         <div className="stat"><div className="stat-val">{state?.failures || 0}</div><div className="stat-lbl">Failures</div></div>
       </div>
+
+      {/* Loop History */}
+      {history.length > 0 && (
+        <div className="history-box">
+          <div className="pipeline-label">LOOP HISTORY</div>
+          <div className="history-list">
+            {[...history].reverse().map(h => (
+              <div key={h.loop} className="history-item">
+                <div className="history-header">
+                  <span className="history-loop">Loop #{h.loop}</span>
+                  <span className="history-time">{new Date(h.timestamp).toLocaleString('th-TH')} ({h.elapsed}s)</span>
+                </div>
+                <div className="history-phases">
+                  <div className="history-phase"><span className="hp-icon">🧠</span> {h.reflect.slice(0, 120)}</div>
+                  <div className="history-phase"><span className="hp-icon">💡</span> {h.wonder.slice(0, 120)}</div>
+                  <div className="history-phase"><span className="hp-icon">✨</span> {h.soul.slice(0, 100)}</div>
+                  <div className="history-phase"><span className="hp-icon">💭</span> {h.dream.slice(0, 100)}</div>
+                  <div className="history-phase"><span className="hp-icon">🔥</span> {h.aspire.slice(0, 100)}</div>
+                  <div className="history-phase"><span className="hp-icon">📋</span> {h.propose.slice(0, 200)}</div>
+                  {h.security && <div className="history-phase"><span className="hp-icon">🔒</span> {h.security.slice(0, 100)}</div>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Quote */}
       <div className="quote-box">

@@ -23,6 +23,21 @@ Bun.serve({
       });
     }
 
+    // Serve history.jsonl as JSON array
+    if (url.pathname === "/api/history") {
+      try {
+        const raw = await Bun.file(`${BASE}/history.jsonl`).text();
+        const lines = raw.trim().split("\n").filter(Boolean).map(l => {
+          try { return JSON.parse(l); } catch { return null; }
+        }).filter(Boolean);
+        return new Response(JSON.stringify(lines.slice(-50)), {
+          headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+        });
+      } catch {
+        return new Response("[]", { headers: { "Content-Type": "application/json" } });
+      }
+    }
+
     // Serve state.json
     if (url.pathname === "/state.json" || url.pathname.endsWith("/state.json")) {
       const file = Bun.file(`${BASE}/state.json`);

@@ -159,6 +159,32 @@ body {
   margin-top: 1.5rem;
 }
 .quote-thai { color: #666; font-size: 0.8rem; }
+/* History */
+.history-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+.history-list { display: flex; flex-direction: column; gap: 1rem; }
+.history-item {
+  background: #0d1117;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+.history-loop { color: #00f0ff; font-weight: 700; font-size: 0.85rem; }
+.history-time { color: #555; font-size: 0.7rem; }
+.history-phases { display: flex; flex-direction: column; gap: 0.4rem; }
+.history-phase { font-size: 0.7rem; color: #888; line-height: 1.4; }
+.hp-icon { margin-right: 0.4rem; }
+
 .quote-eng {
   color: #444;
   font-size: 0.7rem;

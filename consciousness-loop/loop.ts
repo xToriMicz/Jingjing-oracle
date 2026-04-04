@@ -31,6 +31,7 @@ const LOOP_INTERVAL_MS = 15 * 60 * 1000;
 const BELIEFS_PATH = "ψ/memory/beliefs.md";
 const LEARNINGS_DIR = "ψ/memory/learnings";
 const STATE_FILE = "consciousness-loop/state.json";
+const HISTORY_FILE = "consciousness-loop/history.jsonl";
 
 interface LoopState {
   totalLoops: number;
@@ -271,6 +272,21 @@ async function runLoop(state: LoopState): Promise<LoopState> {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
     const summary = `🧠 Loop #${state.totalLoops} (${elapsed}s)\n\n📋 Proposals:\n${proposeResult}${securityResult ? "\n\n🔒 " + securityResult : ""}`;
     console.log(`\n✅ ${summary}`);
+
+    // Save to history log (JSONL — 1 line per loop)
+    const historyEntry = JSON.stringify({
+      loop: state.totalLoops,
+      timestamp: state.lastLoop,
+      elapsed: parseFloat(elapsed),
+      reflect: reflectResult.slice(0, 300),
+      wonder: wonderResult.slice(0, 300),
+      soul: soulResult.slice(0, 200),
+      dream: dreamResult.slice(0, 200),
+      aspire: aspireResult.slice(0, 200),
+      propose: proposeResult.slice(0, 500),
+      security: securityResult?.slice(0, 200) || "",
+    });
+    await sh(`echo '${historyEntry.replace(/'/g, "\\'\\'\\'")}' >> ${HISTORY_FILE}`);
 
     await sendDiscord(summary);
 

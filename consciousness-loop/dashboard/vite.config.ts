@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     port: 3457,
     proxy: {
-      '/state.json': 'http://localhost:3458',
-      '/api': 'http://localhost:3458',
+      '/state.json': { target: 'http://localhost:3458', changeOrigin: true },
+      '/api': { target: 'http://localhost:3458', changeOrigin: true },
     },
   },
 })
