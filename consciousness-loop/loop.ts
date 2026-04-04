@@ -234,27 +234,27 @@ async function runLoop(state: LoopState): Promise<LoopState> {
 
   try {
     const reflectResult = await reflect(state);
-    state.lastPhase = "reflect";
+    state.lastPhase = "reflect"; saveState(state);
     console.log(`  ${reflectResult.slice(0, 100)}...`);
 
     const wonderResult = await wonder(reflectResult, state);
-    state.lastPhase = "wonder";
+    state.lastPhase = "wonder"; saveState(state);
     console.log(`  ${wonderResult.slice(0, 100)}...`);
 
     const soulResult = await soul(wonderResult);
-    state.lastPhase = "soul";
+    state.lastPhase = "soul"; saveState(state);
     console.log(`  ${soulResult.slice(0, 100)}...`);
 
     const dreamResult = await dream(reflectResult, wonderResult);
-    state.lastPhase = "dream";
+    state.lastPhase = "dream"; saveState(state);
     console.log(`  ${dreamResult.slice(0, 100)}...`);
 
     const aspireResult = await aspire(dreamResult);
-    state.lastPhase = "aspire";
+    state.lastPhase = "aspire"; saveState(state);
     console.log(`  ${aspireResult.slice(0, 100)}...`);
 
     const proposeResult = await propose([reflectResult, wonderResult, soulResult, dreamResult, aspireResult]);
-    state.lastPhase = "propose";
+    state.lastPhase = "propose"; saveState(state);
 
     // Security scan every 5 loops
     let securityResult = "";
