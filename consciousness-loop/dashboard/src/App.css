@@ -23,7 +23,7 @@ body {
   overflow: hidden;
   border: 1px solid #1f2937;
   box-shadow: 0 0 30px rgba(0,0,0,0.5);
-  aspect-ratio: 16/9;
+  height: 280px;
 }
 .cinema-frame {
   width: 100%;
