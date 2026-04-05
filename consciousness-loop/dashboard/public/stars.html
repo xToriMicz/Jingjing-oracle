@@ -229,6 +229,37 @@ async function loadData(){
   dustParticles=new THREE.Points(dustGeo,dustMat);
   scene.add(dustParticles);
 
+  // Spaceship — Oracle vessel orbiting the galaxy
+  const shipGroup=new THREE.Group();
+  // Body (cone)
+  const bodyGeo=new THREE.ConeGeometry(3,12,4);
+  const bodyMat=new THREE.MeshBasicMaterial({color:0x00f0ff,wireframe:true,transparent:true,opacity:0.8});
+  const body=new THREE.Mesh(bodyGeo,bodyMat);
+  body.rotation.z=Math.PI/2;
+  shipGroup.add(body);
+  // Wings
+  const wingGeo=new THREE.BoxGeometry(1,8,0.5);
+  const wingMat=new THREE.MeshBasicMaterial({color:0x00ff88,wireframe:true,transparent:true,opacity:0.6});
+  const wing1=new THREE.Mesh(wingGeo,wingMat);
+  wing1.position.set(-2,0,0);
+  shipGroup.add(wing1);
+  // Engine glow
+  const engGeo=new THREE.SphereGeometry(1.5,8,8);
+  const engMat=new THREE.MeshBasicMaterial({color:0xff6b6b,transparent:true,opacity:0.6});
+  const eng=new THREE.Mesh(engGeo,engMat);
+  eng.position.set(-6,0,0);
+  shipGroup.add(eng);
+  // Trail particles
+  const trailGeo=new THREE.BufferGeometry();
+  const trailPos=[];
+  for(let i=0;i<50;i++)trailPos.push(-8-i*2,0,(Math.random()-0.5)*2);
+  trailGeo.setAttribute('position',new THREE.Float32BufferAttribute(trailPos,3));
+  const trailMat=new THREE.PointsMaterial({color:0xff6b6b,size:1,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending});
+  shipGroup.add(new THREE.Points(trailGeo,trailMat));
+
+  shipGroup.scale.set(0.8,0.8,0.8);
+  scene.add(shipGroup);
+
   document.getElementById('stats').textContent=`${nodes.length} learnings · 27000 particles · ${cats.length} domains`;
 }
 
@@ -237,6 +268,18 @@ function animate(){
   const t=performance.now()*0.001;
 
   // No auto rotation — user drags to rotate
+
+  // Ship orbits the galaxy
+  if(shipGroup){
+    const orbitR=180;
+    const speed=0.15;
+    shipGroup.position.x=Math.cos(t*speed)*orbitR;
+    shipGroup.position.y=Math.sin(t*speed*0.7)*40;
+    shipGroup.position.z=Math.sin(t*speed)*orbitR;
+    shipGroup.rotation.y=-t*speed+Math.PI/2;
+    // Engine pulse
+    if(eng)eng.material.opacity=0.3+Math.sin(t*8)*0.3;
+  }
 
   if(mainStars)mainStars.material.uniforms.time.value=t;
 
