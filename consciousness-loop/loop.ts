@@ -60,9 +60,10 @@ interface Goal {
   status: string;
 }
 
-function loadGoals(): Goal[] {
+async function loadGoals(): Promise<Goal[]> {
   try {
-    const data = JSON.parse(Bun.file(GOALS_FILE).textSync());
+    const text = await Bun.file(GOALS_FILE).text();
+    const data = JSON.parse(text);
     return data.goals || [];
   } catch { return []; }
 }
@@ -83,9 +84,10 @@ interface LoopState {
   lastProposal: string;
 }
 
-function loadState(): LoopState {
+async function loadState(): Promise<LoopState> {
   try {
-    return JSON.parse(Bun.file(STATE_FILE).textSync());
+    const text = await Bun.file(STATE_FILE).text();
+    return JSON.parse(text);
   } catch {
     return { totalLoops: 0, lastLoop: "", lastPhase: "", failures: 0, insights: [], wonderQuestions: [], lastProposal: "" };
   }
@@ -233,7 +235,7 @@ async function aspire(dreamResult: string): Promise<string> {
   const hookCount = await sh(`find /Users/angkana/ghq/github.com/xToriMicz -name "pre-deploy.sh" 2>/dev/null | wc -l`);
   const beliefCount = await sh(`grep -c "^### " ${BELIEFS_PATH} 2>/dev/null || echo 0`);
   const learningCount = await sh(`ls ${LEARNINGS_DIR}/*.md 2>/dev/null | wc -l`);
-  const loopState = loadState();
+  const loopState = await loadState();
 
   let goal = await claude(
     `จาก Dream: ${dreamResult.slice(0, 200)}
@@ -247,7 +249,7 @@ Progress ปัจจุบัน: ${hookCount.trim()} hooks, ${beliefCount.trim
   }
 
   // Track progress in goals.json
-  const goals = loadGoals();
+  const goals = await loadGoals();
   const today = new Date().toISOString().slice(0, 10);
   const progressNote = `hooks=${hookCount.trim()}, beliefs=${beliefCount.trim()}, learnings=${learningCount.trim()}`;
   for (const g of goals) {
@@ -286,7 +288,7 @@ ${allResults.join("\n")}
     return [
       "- Scan learnings ที่มี 'ห้าม' แล้วแปลงเป็น hook — ลด repeat failures",
       "- Cross-learning: อ่าน learnings ข้าม Oracle หา connections ใหม่",
-      `- Track progress: ${loadState().totalLoops} loops, ยังเหลือ learnings ที่ไม่ได้ใช้`,
+      `- Track progress: ${(await loadState()).totalLoops} loops, ยังเหลือ learnings ที่ไม่ได้ใช้`,
     ].join("\n");
   }
   return proposal;
@@ -415,7 +417,7 @@ async function runLoop(state: LoopState): Promise<LoopState> {
 
 async function main() {
   const args = process.argv.slice(2);
-  let state = loadState();
+  let state = await loadState();
 
   if (args.includes("--once")) {
     state = await runLoop(state);
