@@ -27,25 +27,25 @@ async function load(){
   const data=await res.json();
   const nodes=data.nodes;
 
-  // Category clusters — position each category in a circle
+  // Category clusters — tighter, galaxy-like
   const cats=[...new Set(nodes.map(n=>n.category))];
   const catPos={};
   cats.forEach((c,i)=>{
     const a=i/cats.length*Math.PI*2-Math.PI/2;
-    const r=Math.min(W,H)*0.28;
+    const r=Math.min(W,H)*0.15;
     catPos[c]={x:Math.cos(a)*r,y:Math.sin(a)*r,color:COLORS[c]||'#888'};
   });
 
   // Main stars (149 learnings)
   nodes.forEach((n,i)=>{
     const cp=catPos[n.category]||{x:0,y:0,color:'#888'};
-    const spread=80+Math.random()*60;
+    const spread=40+Math.random()*80;
     const a=Math.random()*Math.PI*2;
     stars.push({
       x:cp.x+Math.cos(a)*spread*(0.5+Math.random()),
       y:cp.y+Math.sin(a)*spread*(0.5+Math.random()),
       z:(Math.random()-0.5)*100,
-      size:3+Math.random()*4+(n.tags?.length||0)*0.8,
+      size:1+Math.random()*2+(n.tags?.length||0)*0.3,
       color:COLORS[n.category]||'#888',
       pulse:Math.random()*Math.PI*2,
       name:n.name,
@@ -54,12 +54,12 @@ async function load(){
     });
   });
 
-  // Dust particles (3000+ tiny stars around clusters)
-  for(let i=0;i<3000;i++){
+  // Dust particles (8000+ tiny stars — creates nebula density)
+  for(let i=0;i<8000;i++){
     const cat=cats[Math.floor(Math.random()*cats.length)];
     const cp=catPos[cat];
     const a=Math.random()*Math.PI*2;
-    const r=Math.random()*180;
+    const r=Math.random()*220;
     dust.push({
       x:cp.x+Math.cos(a)*r,
       y:cp.y+Math.sin(a)*r,
@@ -71,7 +71,7 @@ async function load(){
   }
 
   // Background dust (scattered)
-  for(let i=0;i<500;i++){
+  for(let i=0;i<1000;i++){
     dust.push({
       x:(Math.random()-0.5)*W*1.5,
       y:(Math.random()-0.5)*H*1.5,
@@ -85,16 +85,21 @@ async function load(){
   // Nebula clouds (large colored circles)
   cats.forEach(c=>{
     const cp=catPos[c];
-    for(let i=0;i<5;i++){
+    for(let i=0;i<8;i++){
       nebulas.push({
-        x:cp.x+(Math.random()-0.5)*120,
-        y:cp.y+(Math.random()-0.5)*120,
-        r:60+Math.random()*100,
+        x:cp.x+(Math.random()-0.5)*180,
+        y:cp.y+(Math.random()-0.5)*180,
+        r:80+Math.random()*150,
         color:cp.color,
-        alpha:0.03+Math.random()*0.04,
+        alpha:0.04+Math.random()*0.06,
       });
     }
   });
+  // Extra center nebula
+  for(let i=0;i<10;i++){
+    const c=cats[Math.floor(Math.random()*cats.length)];
+    nebulas.push({x:(Math.random()-0.5)*100,y:(Math.random()-0.5)*100,r:100+Math.random()*200,color:COLORS[c],alpha:0.02+Math.random()*0.03});
+  }
 
   // Labels
   cats.forEach(c=>{
@@ -164,17 +169,17 @@ function draw(){
     // Glow
     ctx.save();
     ctx.shadowColor=s.color;
-    ctx.shadowBlur=isH?50:25;
+    ctx.shadowBlur=isH?30:15;
     ctx.fillStyle=s.color;
     ctx.beginPath();
-    ctx.arc(p.sx,p.sy,isH?r*2:r,0,Math.PI*2);
+    ctx.arc(p.sx,p.sy,isH?r*1.5:r,0,Math.PI*2);
     ctx.fill();
     ctx.restore();
 
     // Bright core
     ctx.fillStyle='#fff';
     ctx.beginPath();
-    ctx.arc(p.sx,p.sy,(isH?r*0.8:r*0.35),0,Math.PI*2);
+    ctx.arc(p.sx,p.sy,(isH?r*0.5:r*0.25),0,Math.PI*2);
     ctx.fill();
   }
 
