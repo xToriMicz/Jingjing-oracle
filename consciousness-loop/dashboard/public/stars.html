@@ -5,6 +5,7 @@
 #info{position:fixed;top:20px;left:20px;color:#00f0ff;font-size:14px;text-shadow:0 0 10px rgba(0,240,255,0.5);z-index:10}
 #info h1{font-size:20px;margin-bottom:5px}
 #info .stats{color:#555;font-size:11px}
+.embedded #info{display:none}
 #tooltip{position:fixed;display:none;background:rgba(10,14,23,0.95);border:1px solid #00f0ff;border-radius:8px;padding:10px 14px;color:#e0e0e0;font-size:11px;max-width:300px;box-shadow:0 0 20px rgba(0,240,255,0.2);pointer-events:none;z-index:20}
 #tooltip .t{color:#00f0ff;font-weight:700;margin-bottom:4px}
 #tooltip .c{color:#888;font-size:10px}
@@ -226,6 +227,7 @@ function animate(){
   renderer.render(scene,camera);
 }
 
+if(window.self!==window.top)document.body.classList.add('embedded');
 init();
 loadData().then(animate);
 </script></body></html>
