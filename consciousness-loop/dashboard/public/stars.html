@@ -95,7 +95,10 @@ async function loadData(){
       void main(){
         vColor=color;
         vec4 mvPosition=modelViewMatrix*vec4(position,1.0);
-        float pulse=1.0+0.3*sin(time*2.0+position.x*0.1);
+        float pulse=1.0+0.4*sin(time*2.0+position.x*0.1+position.y*0.15);
+        // Random bright flash for "learning" events
+        float flash=step(0.997,fract(sin(dot(position.xy,vec2(12.9898,78.233))+time*0.5)*43758.5453));
+        pulse+=flash*3.0;
         gl_PointSize=size*pulse*(300.0/-mvPosition.z);
         gl_Position=projectionMatrix*mvPosition;
       }
