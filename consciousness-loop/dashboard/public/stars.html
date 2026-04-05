@@ -24,7 +24,7 @@ raycaster.params.Points.threshold=5;
 function init(){
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,1,5000);
-  camera.position.z=500;
+  camera.position.z=350;
   renderer=new THREE.WebGLRenderer({antialias:true});
   renderer.setSize(innerWidth,innerHeight);
   renderer.setPixelRatio(devicePixelRatio);
@@ -68,7 +68,7 @@ async function loadData(){
     mainPositions.push(x,y,z);
     const col=new THREE.Color(cp.color);
     mainColors.push(col.r,col.g,col.b);
-    mainSizes.push(3+Math.random()*5+(n.tags?.length||0)*1.5);
+    mainSizes.push(5+Math.random()*8+(n.tags?.length||0)*2);
     starData.push({name:n.name,category:n.category,tags:n.tags||[],idx:i});
   });
 
@@ -127,7 +127,7 @@ async function loadData(){
     );
     const col=new THREE.Color(cp.color);
     dustCol.push(col.r,col.g,col.b);
-    dustSiz.push(0.3+Math.random()*1.5);
+    dustSiz.push(0.5+Math.random()*2.5);
   }
   // Center blend dust
   for(let i=0;i<5000;i++){
@@ -137,13 +137,13 @@ async function loadData(){
     const col=new THREE.Color(COLORS[cat]||0x888888);
     dustPos.push(Math.cos(a)*r,Math.sin(a)*r,(Math.random()-0.5)*50);
     dustCol.push(col.r,col.g,col.b);
-    dustSiz.push(0.2+Math.random()*0.8);
+    dustSiz.push(0.4+Math.random()*1.5);
   }
   // Background
   for(let i=0;i<2000;i++){
     dustPos.push((Math.random()-0.5)*1500,(Math.random()-0.5)*1000,(Math.random()-0.5)*500);
     dustCol.push(1,1,1);
-    dustSiz.push(0.1+Math.random()*0.3);
+    dustSiz.push(0.2+Math.random()*0.6);
   }
 
   dustGeo.setAttribute('position',new THREE.Float32BufferAttribute(dustPos,3));
