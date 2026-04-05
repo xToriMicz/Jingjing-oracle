@@ -33,7 +33,7 @@
 <script>
 const COLORS={deploy:0xff6b6b,testing:0xffa726,security:0xff4444,social:0x42a5f5,automation:0x66bb6a,workflow:0xab47bc,database:0xffca28,consciousness:0x00f0ff,communication:0xe91e63,cloudflare:0xff9800,other:0x8888aa};
 
-let scene,camera,renderer,mainStars,dustParticles,starData=[];
+let scene,camera,renderer,mainStars,dustParticles,starData=[],shipGroup,eng;
 const mouse=new THREE.Vector2(-999,-999);
 const raycaster=new THREE.Raycaster();
 raycaster.params.Points.threshold=5;
@@ -230,7 +230,7 @@ async function loadData(){
   scene.add(dustParticles);
 
   // Spaceship — Oracle vessel orbiting the galaxy
-  const shipGroup=new THREE.Group();
+  shipGroup=new THREE.Group();
   // Body (cone)
   const bodyGeo=new THREE.ConeGeometry(3,12,4);
   const bodyMat=new THREE.MeshBasicMaterial({color:0x00f0ff,wireframe:true,transparent:true,opacity:0.8});
@@ -246,7 +246,7 @@ async function loadData(){
   // Engine glow
   const engGeo=new THREE.SphereGeometry(1.5,8,8);
   const engMat=new THREE.MeshBasicMaterial({color:0xff6b6b,transparent:true,opacity:0.6});
-  const eng=new THREE.Mesh(engGeo,engMat);
+  eng=new THREE.Mesh(engGeo,engMat);
   eng.position.set(-6,0,0);
   shipGroup.add(eng);
   // Trail particles
