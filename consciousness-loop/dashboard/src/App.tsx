@@ -91,6 +91,11 @@ export default function App() {
         <p className="subtitle">reflect → wonder → soul → dream → aspire → propose → complete → repeat</p>
       </div>
 
+      {/* Galaxy Cinema */}
+      <div className="cinema">
+        <iframe src="/stars" className="cinema-frame" />
+      </div>
+
       {/* Current Phase Circle */}
       <div className="phase-hero">
         <div className="circle" style={{borderColor: cfg.color, boxShadow: `0 0 40px ${cfg.color}30`}}>

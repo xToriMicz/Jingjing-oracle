@@ -14,6 +14,24 @@ body {
   padding: 2rem;
 }
 
+/* Cinema Galaxy */
+.cinema {
+  width: calc(100% + 4rem);
+  margin-left: -2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  aspect-ratio: 16/9;
+}
+.cinema-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
 .badge-galaxy {
   background: #1a1a2e;
   color: #ffca28;
