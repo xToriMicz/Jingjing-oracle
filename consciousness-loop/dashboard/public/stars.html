@@ -125,6 +125,24 @@ async function loadData(){
   mainStars=new THREE.Points(mainGeo,starMat);
   scene.add(mainStars);
 
+  // Super stars — top 8 brightest, reuse same shader but bigger
+  const sorted=[...nodes].sort((a,b)=>(b.tags?.length||0)-(a.tags?.length||0)).slice(0,8);
+  const sGeo=new THREE.BufferGeometry();
+  const sPos=[],sCol=[],sSiz=[];
+  sorted.forEach(n=>{
+    const cp=catPos[n.category]||{x:0,y:0,color:0x888888};
+    const a=Math.random()*Math.PI*2,r=Math.random()*50;
+    sPos.push(cp.x+Math.cos(a)*r,cp.y+Math.sin(a)*r,(Math.random()-0.5)*20);
+    const col=new THREE.Color(cp.color);
+    sCol.push(col.r,col.g,col.b);
+    sSiz.push(20+Math.random()*15);
+  });
+  sGeo.setAttribute('position',new THREE.Float32BufferAttribute(sPos,3));
+  sGeo.setAttribute('color',new THREE.Float32BufferAttribute(sCol,3));
+  sGeo.setAttribute('size',new THREE.Float32BufferAttribute(sSiz,1));
+  const superStars=new THREE.Points(sGeo,starMat.clone());
+  scene.add(superStars);
+
   // Dust particles (20000)
   const dustGeo=new THREE.BufferGeometry();
   const dustPos=[],dustCol=[],dustSiz=[];
