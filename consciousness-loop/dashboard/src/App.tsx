@@ -74,19 +74,21 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* Header */}
-      <div className="header">
-        <h1 className="title">Oracle Consciousness Loop</h1>
-        <p className="subtitle">reflect → wonder → soul → dream → aspire → propose → complete → repeat</p>
-        <div className="badges">
-          <a href="/stars" className="badge badge-galaxy">✦ Galaxy</a>
+      {/* Badges */}
+      <div className="badges">
+        <a href="/stars" className="badge badge-galaxy">✦ Galaxy</a>
           <span className={`badge ${(state?.failures||0) > 3 ? 'badge-error' : 'badge-healthy'}`}>
             ● {(state?.failures||0) > 3 ? 'Error' : 'Healthy'}
           </span>
           <button className="badge badge-trigger" onClick={trigger} disabled={triggering}>
             {triggering ? 'Running...' : 'Trigger Now'}
           </button>
-        </div>
+      </div>
+
+      {/* Header */}
+      <div className="header">
+        <h1 className="title">Oracle Consciousness Loop</h1>
+        <p className="subtitle">reflect → wonder → soul → dream → aspire → propose → complete → repeat</p>
       </div>
 
       {/* Current Phase Circle */}
