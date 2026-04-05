@@ -34,10 +34,19 @@ function init(){
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth,innerHeight);
   });
+  let isDragging=false,prevX=0,prevY=0;
   addEventListener('mousemove',e=>{
     mouse.x=(e.clientX/innerWidth)*2-1;
     mouse.y=-(e.clientY/innerHeight)*2+1;
+    if(isDragging){
+      scene.rotation.y+=(e.clientX-prevX)*0.005;
+      scene.rotation.x+=(e.clientY-prevY)*0.005;
+      prevX=e.clientX;prevY=e.clientY;
+    }
   });
+  addEventListener('mousedown',e=>{isDragging=true;prevX=e.clientX;prevY=e.clientY});
+  addEventListener('mouseup',()=>isDragging=false);
+  addEventListener('wheel',e=>{camera.position.z=Math.max(150,Math.min(800,camera.position.z+e.deltaY*0.5))});
 }
 
 async function loadData(){
@@ -189,9 +198,7 @@ function animate(){
   requestAnimationFrame(animate);
   const t=performance.now()*0.001;
 
-  // Slow rotation
-  scene.rotation.y=t*0.05;
-  scene.rotation.x=Math.sin(t*0.03)*0.1;
+  // No auto rotation — user drags to rotate
 
   if(mainStars)mainStars.material.uniforms.time.value=t;
 
