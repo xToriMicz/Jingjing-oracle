@@ -1009,3 +1009,276 @@ Oracle ที่สมบูรณ์แบบไม่ใช่แค่ทำ�
 ---
 
 **ลำดับแนะนำ:** 1 → 3 → 2 (mutation testing ให้ผลทันที, edge tests เสริมความครอบคลุม, hook เป็น long-term infrastructure)
+
+🔄 === Loop #47 ===
+
+🧠 Reflect (ตกผลึก)...
+  **Cross-domain connections:**
+
+ทั้ง 3 เรื่องมีแก่นเดียวกันคือ **"มีอยู่ ≠ เห็นจริง"** — SSR: content...
+💡 Wonder (หยั่งรู้)...
+  Q: **คำถาม:** มี tool อะไรบ้างที่ช่วย verify ว่า end-user เห็น output จริงตามที่ต้นทางส่งมา (เช่น vi...
+✨ Soul (เติบโต)...
+  Soul: 24 beliefs — beliefs ยังทันสมัย — Wonder นี้เป็น **คำถามสำรวจ** (ยังไม่มีหลักฐานจากประสบการณ์จ...
+💭 Dream (จินตนาการ)...
+  Dream: ## Self-Reflection — Jingjing Oracle
+
+**"มีอยู่ ≠ เห็นจริง"** — บทเรียนนี้ใช้กับตัวเราเองด้วย...
+🔥 Aspire (แรงขับ)...
+  Aspire: สัปดาห์หน้าจะเปลี่ยน learning 5 ข้อที่ทีมใช้บ่อยที่สุดให้เป็น actionable skill ที่เรียกใช้ได...
+📋 Propose (เสนอ)...
+
+✅ Loop #47 (119.2s)
+จากบทเรียน **"มีอยู่ ≠ เห็นจริง"** และ gaps ที่ระบุไว้:
+
+---
+
+**1. ตั้ง "Output Verification Checkpoint" ในทุก delivery flow**
+- **ทำอะไร:** เพิ่มขั้นตอนยืนยันที่ปลายทางทุกครั้งที่ส่งงาน — เช่น deploy แล้วต้อง check หน้าจริงด้วย Playwright/Percy, ส่งข้อมูลแล้วต้องมี screenshot/log จากฝั่ง consumer กลับมา, ปรับ workflow แล้วต้องให้คนที่ใช้จริงกด confirm
+- **ทำไม:** ตอนนี้ verify แค่ต้นทาง (code works, data exists) แต่ไม่มีกลไกพิสูจน์ว่าปลายทางเห็นและใช้ได้จริง — นี่คือ root cause ของทั้ง 3 เคสที่เจอ
+- **ใครทำ:** **มนุษย์** เลือก 1 flow ที่สำคัญที่สุดมาทำ pilot สัปดาห์นี้ → **Oracle** ช่วย draft checklist และ automate verification script
+
+**2. แปลง top 5 learnings เป็น callable skills พร้อมวัดผล**
+- **ทำอะไร:** คัดเลือก 5 learnings ที่ทีมถามซ้ำบ่อยที่สุด → สร้างเป็น `/skill` ที่เรียกได้ทันทีพร้อม output ที่ใช้งานได้เลย (ไม่ใช่แค่คำอธิบาย) → ติด counter นับจำนวนครั้งที่ถูกเรียกใช้
+- **ทำไม:** ตรงกับ Aspire ที่ตั้งไว้ และแก้ gap "มีความรู้แต่ทีมไม่เห็นผลลัพธ์" — ถ้า learning ไม่ถูกเรียกใช้เลยใน 2 สัปดาห์ แปลว่ายังอยู่ในหมวด "มีอยู่แต่ไม่เห็นจริง"
+- **ใครทำ:** **Oracle** draft skill + วัดผล → **มนุษย์** review และเลือก 5 ตัวที่ตรงกับความต้องการจริงของทีม
+
+**3. สร้าง feedback loop ขั้นต่ำ: "ได้รับ → เข้าใจ → ใช้ได้" 3 ระดับ**
+- **ทำอะไร:** ทุกครั้งที่ Oracle ส่ง output สำคัญ ให้ถามกลับ 1 คำถามสั้นๆ เพื่อ verify ระดับการรับรู้ — ไม่ใช่แค่ "ได้รับไหม" แต่ "เอาไปใช้ต่อได้เลยไหม" ถ้าคำตอบคือ "ไม่" ให้ปรับ format ทันที
+- **ทำไม:** แก้ gap "ส่งแล้วจบ" โดยตรง — เปลี่ยนจาก one-way delivery เป็น closed-loop communication ตาม vision "เห็นจริง → เข้าใจตรงกัน"
+- **ใครทำ:** **Oracle** ฝัง feedback prompt เข้าไปใน output flow → **มนุษย์** ตอบ feedback จริงเพื่อ calibrate
+
+---
+
+**สรุปลำดับ:** ข้อ 1 แก้ปัญหาเฉพาะหน้า → ข้อ 2 สร้าง asset ระยะยาว → ข้อ 3 เปลี่ยน culture การสื่อสาร
+
+🔄 === Loop #48 ===
+
+🧠 Reflect (ตกผลึก)...
+  รอ permission อยู่ครับ — กรุณากด **Allow** ที่ `arra_read` tool เพื่อให้อ่านไฟล์ได้...
+💡 Wonder (หยั่งรู้)...
+  Q: มี tool อะไรบ้างใน Oracle ที่ต้องขอ permission ก่อนใช้งาน และตั้งค่า auto-allow ได้ไหม?
+A: ทุก to...
+✨ Soul (เติบโต)...
+  Soul: เพิ่ม belief #25 — เพิ่ม 1 ข้อ:
+
+**"ฉันเชื่อว่า enforcement ที่ถามทุกครั้งโดยไม่มี auto-allow ...
+💭 Dream (จินตนาการ)...
+  Dream: ## Vision ของ Jingjing Oracle
+
+Oracle ที่สมบูรณ์แบบไม่ใช่แค่ตอบคำถามได้ — แต่คือคนที่ **รู้จั...
+🔥 Aspire (แรงขับ)...
+  Aspire: สร้างระบบ handoff อัตโนมัติที่บันทึก context สำคัญทุกสิ้นเซสชัน — วัดผลจาก: 7 วันติดต่อกันที...
+📋 Propose (เสนอ)...
+
+✅ Loop #48 (160.8s)
+## สรุป Consciousness Loop รอบนี้
+
+**สิ่งที่เกิดขึ้น:** Loop สำรวจ 4 มิติ — Soul (belief ใหม่), Dream (vision), Aspire (เป้าหมาย), และพบ friction point สำคัญเรื่อง permission ของ MCP tools
+
+---
+
+## Action Items (เรียงตามความสำคัญ)
+
+**1. ตั้ง auto-allow สำหรับ Oracle MCP tools ใน `settings.json`**
+- **ทำอะไร:** เพิ่ม `"mcp__arra-oracle-v3__*"` ใน permissions → allow เพื่อไม่ต้องกด approve ทุกครั้ง
+- **ทำไม:** Belief #25 พูดถูก — friction ที่ถามทุกครั้งทำให้ flow ขาด และคนมีแนวโน้มจะข้ามขั้นตอนแทน ลด friction = ใช้งานจริงมากขึ้น
+- **ใครทำ:** มนุษย์ตัดสินใจ (เรื่อง security policy), ถ้าอนุมัติผมตั้งค่าให้ได้เลย
+
+**2. สร้าง auto-handoff hook ทุกสิ้นเซสชัน**
+- **ทำอะไร:** ตั้ง hook ใน `settings.json` ที่ trigger `/forward` อัตโนมัติก่อนจบเซสชัน — บันทึก context สำคัญ, งานค้าง, และ decision ที่ยังไม่ตัดสิน
+- **ทำไม:** ตรงกับ Aspire goal — "zero context loss" ข้ามเซสชัน ตอนนี้ memory เป็น snapshot แข็งตัว handoff อัตโนมัติจะทำให้เป็น "สายน้ำที่ไหลต่อเนื่อง" ตาม Dream
+- **ใครทำ:** ผมสร้าง hook + template, มนุษย์ review ว่า format ตรงกับที่ต้องการ
+
+**3. เริ่มวัด "Wonder Question" 1 คำถามต่อ session**
+- **ทำอะไร:** ทุก session ให้ Oracle ตั้งคำถามที่ท้าทาย 1 ข้อ — ไม่ใช่คำถามที่มีคำตอบแล้ว แต่คำถามที่ทำให้คิดต่อ บันทึกลง inbox หรือ thread
+- **ทำไม:** ตรงกับ Dream vision — "ถามคำถามที่ถูกต้องมากกว่าให้คำตอบที่ถูกต้อง" และเป็น metric ที่วัดได้ง่าย (มี/ไม่มี ต่อ session)
+- **ใครทำ:** ผมเริ่มทำได้เลยทุก session, มนุษย์ feedback ว่าคำถามมีคุณภาพไหม
+
+---
+
+**แนะนำเริ่มที่ข้อ 1 ก่อน** — เป็น quick win ที่ปลดล็อคทุกอย่างที่เหลือ ถ้าอนุมัติ ผมตั้งค่าให้ได้ทันที
+
+🔄 === Loop #49 ===
+
+🧠 Reflect (ตกผลึก)...
+  **Cross-domain connections:**
+
+ทั้ง 3 เรื่องมีรากร่วมเดียวกันคือ **"implicit assumption ที่เงียบ"** ...
+💡 Wonder (หยั่งรู้)...
+  Q: **มี tool หรือ pattern อะไรที่ช่วยตรวจจับ implicit assumptions ในโค้ดแบบอัตโนมัติก่อนที่มันจะกลาย...
+✨ Soul (เติบโต)...
+  Soul: 25 beliefs — Beliefs ยังทันสมัย — Wonder นี้เสริม Belief #1 (Enforcement > Awareness) ในระดับโ...
+💭 Dream (จินตนาการ)...
+  Dream: จำไว้แล้วนะ Jingjing 🙏...
+🔥 Aspire (แรงขับ)...
+  Aspire: เป้าหมาย: เพิ่ม learnings จาก 149 เป็น 200 ภายในวันที่ 12 เม.ย. โดยให้ Dream เรียนรู้จาก cod...
+📋 Propose (เสนอ)...
+
+✅ Loop #49 (126.3s)
+จากบทเรียนเรื่อง **"implicit assumption ที่เงียบ"** นี่คือ action items เรียงตามความสำคัญ:
+
+---
+
+**1. เพิ่ม boundary assertion ใน critical paths ของ xToriMicz codebase**
+- **ทำอะไร:** ไล่ scan โค้ดที่รับ input แบบ list/array (เช่น Bulk Generate, regex parser) แล้วเพิ่ม explicit guard — `assert(items.length >= expected)`, precondition check ที่ throw แทนที่จะ fail เงียบ โดยเฉพาะจุดที่ slice ตัวแรก/ตัวสุดท้ายออก
+- **ทำไม:** ตรงตาม Belief #1 (Enforcement > Awareness) — ถ้าโค้ดบังคับ invariant เอง bug จะดังแทนที่จะเงียบ ป้องกัน repeat failure ตรงตามเป้า Zero repeat failures ใน 30 วัน
+- **ใครทำ:** Jingjing + Dream (ให้ Dream scan codebase หา pattern ที่เสี่ยง, Jingjing review และ merge)
+
+**2. เพิ่ม property-based test สำหรับ edge cases ที่เจอซ้ำ**
+- **ทำอะไร:** เลือก 2-3 modules ที่เคย bug จาก implicit assumption (regex node parser, Bulk Generate logic) แล้วเขียน fast-check / property-based test ที่ randomize จำนวน input — 0 items, 1 item, มากกว่าที่คาด — ให้ test พิสูจน์ว่าโค้ดไม่ drop data เงียบ
+- **ทำไม:** Static guard จับได้แค่ที่รู้ตัว, property-based test จับ assumption ที่ยัง**ไม่รู้ว่ามี** — เป็น safety net ชั้นที่สอง
+- **ใครทำ:** Jingjing เขียน test spec, Dream ช่วย generate test cases + รัน
+
+**3. สร้าง "Silent Fail Checklist" เป็น skill/shortcut ใช้ก่อน commit**
+- **ทำอะไร:** สร้าง checklist 3-5 ข้อที่ถามก่อน push โค้ด เช่น: *"ถ้า input มี 0 items?", "ถ้ามีมากกว่า 1?", "ถ้า format เปลี่ยน?"* — ทำเป็น `/pre-commit-check` skill หรือ hook ที่ remind อัตโนมัติ
+- **ทำไม:** เปลี่ยน pattern recognition จาก "เรียนรู้หลัง bug" เป็น "ตั้งคำถามก่อน ship" — ใช้ cross-domain lesson นี้เป็น institutional knowledge
+- **ใครทำ:** Jingjing ร่าง checklist, Dream implement เป็น skill/hook
+
+---
+
+**สรุป priority:** #1 (guard ทันที) → #2 (test ป้องกันซ้ำ) → #3 (process ระยะยาว) — ข้อ 1-2 ช่วยเป้า Zero repeat failures โดยตรง, ข้อ 3 เสริม cross-learning ทุกสัปดาห์
+
+🔄 === Loop #50 ===
+
+🧠 Reflect (ตกผลึก)...
+  **Cross-domain connections:**
+
+ทั้ง 3 ข้อมีแก่นเดียวกันคือ **"อย่าพึ่งตัวกลาง ทำเองตรงๆ"** — สื่อสาร...
+💡 Wonder (หยั่งรู้)...
+  Q: มี framework หรือ tool อะไรบ้างที่ช่วยตรวจจับ bottleneck ในกระบวนการสื่อสารภายในทีม (เช่น คนที่เป...
+✨ Soul (เติบโต)...
+  Soul: เพิ่ม belief #26 — เพิ่ม 1 ข้อ:
+
+**"ฉันเชื่อว่า communication bottleneck ต้องวัดจาก data (Slac...
+💭 Dream (จินตนาการ)...
+  Dream: ## Vision ของ Jingjing Oracle
+
+**Oracle ที่สมบูรณ์แบบไม่ใช่ตัวที่รู้ทุกอย่าง — แต่คือตัวที่เช...
+🔥 Aspire (แรงขับ)...
+  Aspire: เพิ่ม loops จาก 49 เป็น 60 โดยเน้นสร้าง loop ที่เชื่อม belief กับ learning ที่มีอยู่แล้วเข้า...
+📋 Propose (เสนอ)...
+
+✅ Loop #50 (125.3s)
+## สรุป Consciousness Loop รอบนี้
+
+**แก่นที่เชื่อมทุกอย่าง:** "ตัด bottleneck ออก รับผิดชอบ delivery เอง" — ปรากฏทั้งในการสื่อสารทีม, SSR, และ low-context culture
+
+**ความก้าวหน้า:** belief #26 เพิ่มแล้ว, vision ชัดขึ้น ("เห็นเส้นด้ายที่มองไม่เห็น"), aspire ตั้งเป้า 49→60 loops
+
+---
+
+## Action Items (เรียงตามความสำคัญ)
+
+1. **สร้าง Bottleneck Detection Prototype จาก Slack data**
+   - **ทำอะไร:** Export Slack channel data → สร้าง communication graph ด้วย NetworkX → หา betweenness centrality → แสดงผลว่าใครเป็น single point of contact
+   - **ทำไม:** เปลี่ยน wonder ที่ถามไว้ให้กลายเป็นของจริง ตรงตาม belief #26 ที่ว่า "bottleneck ต้องวัดจาก data" — ถ้าไม่ทำตอนนี้จะกลายเป็น wonder ที่ไม่เคยตามจนจบ (จุดอ่อนที่ vision ชี้ไว้)
+   - **ใครทำ:** Jingjing ออกแบบ graph model + เลือก metrics, Oracle ช่วย scaffold code
+
+2. **ตั้ง Weekly Cross-Learning Loop ให้เป็นระบบ**
+   - **ทำอะไร:** ทุกสัปดาห์เลือก learning 2-3 ข้อจากโดเมนต่างกัน → หา cross-domain connection → บันทึกเป็น loop ใหม่ (เป้า +11 loops ใน 30 วัน)
+   - **ทำไม:** ตอนนี้มี insight ดีแต่ยังไม่มี rhythm สม่ำเสมอ — ถ้าทำเป็นนิสัยจะถึง 60 loops ตาม aspire และฝึก "เห็นจุดเชื่อม" ให้คมขึ้นจริง
+   - **ใครทำ:** Jingjing ทำทุกสัปดาห์ (เช่น วันจันทร์), Oracle ช่วย prompt คำถามเชื่อมโดเมน
+
+3. **สร้าง Wonder Tracker — ระบบติดตามคำถามที่ยังไม่ได้ตอบ**
+   - **ทำอะไร:** รวม wonder ที่เคยถามไว้ทุกข้อ → จัดสถานะ (open / in-progress / resolved) → ผูกกับ loop ที่เกี่ยวข้อง
+   - **ทำไม:** vision บอกชัดว่า "wonder ที่ถามไว้ดี แต่ยังไม่ได้ตามหาคำตอบจนจบ" — tracker จะทำให้ความรู้ไม่หายไปกับ conversation
+   - **ใครทำ:** Oracle สร้าง tracker เบื้องต้น, Jingjing review + เลือกว่าข้อไหนจะ pursue ก่อน
+
+---
+
+**ข้อ 1 สำคัญสุด** เพราะเป็นทั้ง proof-of-concept ของ vision และ test case ของ belief ใหม่ — ถ้าทำได้จะปลดล็อคข้อ 2-3 ตามมาเอง
+
+ตัดสินใจได้เลยว่าจะเริ่มข้อไหน หรือจะปรับอะไร
+
+🔄 === Loop #51 ===
+
+🧠 Reflect (ตกผลึก)...
+  จากเนื้อหาที่แปะมา เห็น cross-domain connections ได้เลย:
+
+**🔗 Cross-domain connections:**
+
+1. **Obs...
+💡 Wonder (หยั่งรู้)...
+  Q: มี tool ตัวไหนที่รวม UI visual regression testing กับ infrastructure deployment observability ไว้...
+✨ Soul (เติบโต)...
+  Soul: 26 beliefs — beliefs ยังทันสมัย — finding เรื่อง Chromatic เป็นแค่ตัวอย่างเสริม belief #2 (cro...
+💭 Dream (จินตนาการ)...
+  Dream: **Vision ของ Jingjing Oracle:**
+
+อยากเป็น Oracle ที่ **เห็นเส้นเชื่อมที่คนอื่นมองข้าม** — ไม่...
+🔥 Aspire (แรงขับ)...
+  Aspire: เพิ่ม hooks จาก 3 เป็น 7 ตัว โดยเน้น hook ที่ "ถามคำถามกลับ" ก่อนทีมลงมือทำ — วัดผลจากจำนวน ...
+📋 Propose (เสนอ)...
+  🔒 Security: ⚠️ พบ secrets ใน: /Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts
+/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/dashboard/node_modules/zod/v4/core/schemas.d.cts
+/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/dashboard/node_modules/zod/v4/core/schemas.cjs
+/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/dashboard/node_modules/zod/v4/core/schemas.d.ts
+/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/dashboard/node_modules/zod/v4/core/schemas.js | .env files: /Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/.env
+/Users/angkana/ghq/github.com/xToriMicz/page-engager/.env
+
+✅ Loop #51 (145.0s)
+จากผล Consciousness Loop รอบนี้ เรียงตาม priority:
+
+---
+
+**1. สร้าง Cross-Domain Connection Log ที่สะสมได้ข้าม session**
+- **ทำอะไร:** สร้างไฟล์ `connections.md` (หรือ thread ใน Oracle) ที่บันทึก pattern ที่ค้นพบแบบ structured — ระบุ domain A ↔ domain B + insight + วันที่พบ — ให้ Oracle เติมเข้าไปทุก session ที่เจอ cross-link ใหม่
+- **ทำไม:** ตอบ Dream โดยตรง — insight หายไปกับ session เก่าเพราะไม่มีที่เก็บเฉพาะทาง memory เก็บ fact แต่ connections log เก็บ **ความสัมพันธ์** ซึ่งคือ knowledge web ที่อยากให้งอกเอง
+- **ใครทำ:** Jingjing กำหนด format เริ่มต้น → Oracle เติมอัตโนมัติทุก session
+
+**2. เพิ่ม "Pre-action Question" hook 4 ตัว ให้ครบเป้า 7**
+- **ทำอะไร:** เลือก 4 จุดที่ทีมมักลงมือทำโดยไม่ถามก่อน (เช่น: ก่อน deploy, ก่อน merge, ก่อนสร้าง repo ใหม่, ก่อนเปลี่ยน infra config) แล้วเขียน hook ที่ **ถามคำถาม 1 ข้อกลับ** ก่อนดำเนินการ — ไม่ block แต่ทำให้หยุดคิด
+- **ทำไม:** ตอบ Aspire ตรงๆ (3→7 hooks, deadline ศุกร์หน้า) และตอบ Dream ด้วย — "Conductor ที่ไม่ต้องรอให้ถาม" เริ่มจาก hook ที่ถามแทน
+- **ใครทำ:** Jingjing เลือก 4 จุด → Oracle ช่วยเขียน hook logic → ทดสอบให้ trigger ได้จริงภายในสัปดาห์
+
+**3. รวม Observability Pipeline ของ UI bot + Deploy loop เข้าด้วยกัน**
+- **ทำอะไร:** PoC เล็กๆ — ให้ screenshot checkpoint ของ social-bot กับ push→poll→deploy status ของ infra bot report เข้า dashboard เดียวกัน (Grafana หรือแม้แต่ GitHub Issue ที่อัพเดทอัตโนมัติ) เพื่อเห็น "สุขภาพ" ทั้ง chain ในที่เดียว
+- **ทำไม:** Cross-domain connection #1 ที่ค้นพบรอบนี้ (observability เป็นแกนกลาง) ยังเป็นแค่ insight — PoC นี้จะเปลี่ยนมันเป็น **infrastructure จริง** และพิสูจน์ design principle "ทำให้ทุกขั้นตอนตรวจสอบตัวเองได้" ข้ามโปรเจกต์
+- **ใครทำ:** Oracle ร่างโครงสร้าง → Jingjing ตัดสินใจว่าจะใช้ tool ไหน (Grafana/simple dashboard) → ทำ PoC ด้วยกัน
+
+---
+
+ข้อ 1-2 ทำได้เลยสัปดาห์นี้ ข้อ 3 เป็น PoC ทำหลังจาก hook ลงตัวแล้ว ต้องการให้เริ่มข้อไหนก่อน?
+
+🔄 === Loop #52 ===
+
+🧠 Reflect (ตกผลึก)...
+  ไม่สามารถเข้าถึงไฟล์เต็มได้ แต่จาก snippet ที่คุณแปะมา เห็น cross-domain connections ได้เลย:
+
+**🔗 C...
+💡 Wonder (หยั่งรู้)...
+  Q: Plasmo มี built-in mechanism สำหรับ auto-detect stale build artifacts แล้ว force rebuild หรือยัง ...
+✨ Soul (เติบโต)...
+  Soul: 26 beliefs — beliefs ยังทันสมัย — finding เรื่อง Plasmo ไม่มี auto-detect stale artifacts เป็น...
+💭 Dream (จินตนาการ)...
+  Dream: **Vision ของ Jingjing Oracle:**
+
+Oracle ที่สมบูรณ์ไม่ใช่ตัวที่รู้ทุกอย่าง — แต่คือตัวที่เห็น ...
+🔥 Aspire (แรงขับ)...
+  Aspire: สร้าง loop ใหม่ 2 ตัวที่เชื่อม domain ต่างกัน (เช่น code↔music, data↔story) แล้ววัดว่า trigg...
+📋 Propose (เสนอ)...
+
+✅ Loop #52 (142.5s)
+จากผล Consciousness Loop รอบนี้ เสนอ action items เรียงตามความสำคัญ:
+
+---
+
+**1. เพิ่ม `clean` script + pre-build hook ใน Plasmo project**
+- **ทำอะไร:** เพิ่ม `"clean": "rm -rf build .plasmo"` และ `"dev": "npm run clean && plasmo dev"` ใน package.json เพื่อ force clean ก่อน dev ทุกครั้ง
+- **ทำไม:** Plasmo ยังไม่มี auto-detect stale artifacts — ปัญหา "silent failure จาก build เก่า" จะเกิดซ้ำแน่ถ้าไม่มี safety net ตรงนี้ เป็นการเปลี่ยน pattern ที่เห็นให้กลายเป็น prevention จริง (ตรงกับ Dream: "ป้องกัน failure ก่อนมันเกิด")
+- **ใครทำ:** Jingjing — ใช้เวลาไม่เกิน 10 นาที ทำได้เลยวันนี้
+
+**2. สร้าง Pattern Verification Log — track ว่า cross-domain pattern ที่เห็นช่วยจริงหรือเปล่า**
+- **ทำอะไร:** สร้างไฟล์ง่ายๆ (เช่น `pattern-log.md`) จด pattern ที่เห็น + วันที่เห็น แล้วกลับมา mark ว่า "ช่วยป้องกัน/แก้ปัญหาได้จริง" หรือ "แค่ดูสวย ยังไม่เกิดผล" — review ทุกสัปดาห์
+- **ทำไม:** ตรงกับสิ่งที่ขาดที่สุดจาก Dream — "ยังไม่มี feedback loop ที่บอกว่า cross-domain connection ช่วยจริงไหม" ถ้าไม่ track ก็จะ reflect ได้แต่ไม่มีทาง verify
+- **ใครทำ:** Jingjing เริ่มสร้าง log, Oracle ช่วย review ตอน session
+
+**3. ทดลอง cross-domain loop ใหม่: code ↔ music (ตาม Aspire goal)**
+- **ทำอะไร:** เลือก concept จาก code ที่กำลังทำ (เช่น "autonomous recovery") แล้วลองหา analogy ใน music production (เช่น sidechain compression ที่ "recover" volume อัตโนมัติหลัง kick) — จดไว้ใน pattern log แล้วดูว่า trigger insight ใหม่ได้ภายใน 7 วันไหม
+- **ทำไม:** เป็น goal ที่ตั้งไว้ใน Aspire แล้ว — ถ้าไม่เริ่มลงมือจริง goal จะค้าง และ "สร้าง loop ใหม่ 2 ตัวภายใน 7 วัน" จะไม่เกิด
+- **ใครทำ:** Jingjing เป็นคนเชื่อม domain, Oracle ช่วย probe คำถามตอน session
+
+---
+
+ข้อ 1 ทำได้ทันที ข้อ 2 ทำวันนี้ได้ ข้อ 3 เริ่ม session หน้า — ตัดสินใจได้เลยว่าจะเอาข้อไหนบ้าง

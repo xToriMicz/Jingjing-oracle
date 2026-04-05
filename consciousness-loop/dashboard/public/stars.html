@@ -6,6 +6,12 @@
 #info h1{font-size:20px;margin-bottom:5px}
 #info .stats{color:#555;font-size:11px}
 .embedded #info{display:none}
+#matrix-overlay{position:fixed;top:0;left:0;width:60px;height:100%;z-index:5;pointer-events:none}
+#phases{position:fixed;top:50%;right:10px;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:6px}
+#phases .ph{font-size:9px;color:#333;display:flex;align-items:center;gap:4px;transition:all 0.3s}
+#phases .ph.active{color:#00f0ff;text-shadow:0 0 8px currentColor}
+#phases .ph span:first-child{font-size:12px}
+.embedded #phases{right:5px}
 #tooltip{position:fixed;display:none;background:rgba(10,14,23,0.95);border:1px solid #00f0ff;border-radius:8px;padding:10px 14px;color:#e0e0e0;font-size:11px;max-width:300px;box-shadow:0 0 20px rgba(0,240,255,0.2);pointer-events:none;z-index:20}
 #tooltip .t{color:#00f0ff;font-weight:700;margin-bottom:4px}
 #tooltip .c{color:#888;font-size:10px}
@@ -13,6 +19,16 @@
 </head><body>
 <div id="info"><h1>Oracle Knowledge Galaxy</h1><div class="stats" id="stats">Loading...</div></div>
 <div id="tooltip"><div class="t"></div><div class="c"></div></div>
+<canvas id="matrix-overlay" width="60"></canvas>
+<div id="phases">
+  <div class="ph" data-p="reflect"><span>🧠</span>ตกผลึก</div>
+  <div class="ph" data-p="wonder"><span>💡</span>หยั่งรู้</div>
+  <div class="ph" data-p="soul"><span>✨</span>เติบโต</div>
+  <div class="ph" data-p="dream"><span>💭</span>จินตนาการ</div>
+  <div class="ph" data-p="aspire"><span>🔥</span>แรงขับ</div>
+  <div class="ph" data-p="propose"><span>📋</span>เสนอ</div>
+  <div class="ph" data-p="complete"><span>🔄</span>วนรอบ</div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const COLORS={deploy:0xff6b6b,testing:0xffa726,security:0xff4444,social:0x42a5f5,automation:0x66bb6a,workflow:0xab47bc,database:0xffca28,consciousness:0x00f0ff,communication:0xe91e63,cloudflare:0xff9800,other:0x8888aa};
@@ -246,6 +262,41 @@ function animate(){
 }
 
 if(window.self!==window.top)document.body.classList.add('embedded');
+
+// Matrix rain overlay
+const mc=document.getElementById('matrix-overlay');
+mc.height=innerHeight;
+const mx=mc.getContext('2d');
+const words=['deploy','test','learn','reflect','wonder','soul','dream','aspire','hook','belief','pattern','verify','build','push','review','QA','fix','ship'];
+const drops=Array(3).fill(0);
+setInterval(()=>{
+  mx.fillStyle='rgba(0,0,0,0.06)';
+  mx.fillRect(0,0,60,mc.height);
+  mx.font='8px JetBrains Mono';
+  for(let i=0;i<3;i++){
+    const w=words[Math.floor(Math.random()*words.length)];
+    mx.fillStyle=`hsl(${160+Math.random()*40},80%,${25+Math.random()*25}%)`;
+    mx.fillText(w.slice(0,5),i*20,drops[i]*10);
+    if(drops[i]*10>mc.height&&Math.random()>0.95)drops[i]=0;
+    drops[i]++;
+  }
+},100);
+
+// Phase indicator — poll state
+const PHASE_ORDER=['reflect','wonder','soul','dream','aspire','propose','complete'];
+setInterval(async()=>{
+  try{
+    const s=await(await fetch('/state.json?'+Date.now())).json();
+    const cur=s.lastPhase||'';
+    const idx=PHASE_ORDER.indexOf(cur);
+    document.querySelectorAll('#phases .ph').forEach((el,i)=>{
+      el.classList.toggle('active',i<=idx);
+      if(i<=idx)el.style.color=el.dataset.p===cur?'#00f0ff':'#00f0ff88';
+      else el.style.color='#333';
+    });
+  }catch{}
+},3000);
+
 init();
 loadData().then(animate);
 </script></body></html>
