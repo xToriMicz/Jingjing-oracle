@@ -9,6 +9,9 @@ export default defineConfig({
     proxy: {
       '/state.json': { target: 'http://localhost:3458', changeOrigin: true },
       '/api': { target: 'http://localhost:3458', changeOrigin: true },
+      '/stars': { target: 'http://localhost:3458', changeOrigin: true },
+      '/stars-data': { target: 'http://localhost:3458', changeOrigin: true },
+      '/graph.json': { target: 'http://localhost:3458', changeOrigin: true },
     },
   },
 })

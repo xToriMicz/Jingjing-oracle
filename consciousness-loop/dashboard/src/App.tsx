@@ -49,6 +49,7 @@ export default function App() {
   const [state, setState] = useState<LoopState | null>(null)
   const [triggering, setTriggering] = useState(false)
   const [history, setHistory] = useState<LoopHistory[]>([])
+  const [tab, setTab] = useState<'loop'|'galaxy'>('loop')
 
   useEffect(() => {
     const f = async () => {
@@ -73,6 +74,18 @@ export default function App() {
 
   return (
     <div className="app">
+      {/* Tabs */}
+      <div className="tabs">
+        <button className={`tab ${tab==='loop'?'tab-active':''}`} onClick={()=>setTab('loop')}>Loop</button>
+        <button className={`tab ${tab==='galaxy'?'tab-active':''}`} onClick={()=>setTab('galaxy')}>Galaxy</button>
+      </div>
+
+      {tab === 'galaxy' ? (
+        <div className="galaxy-container">
+          <iframe src="/stars" style={{width:'100%',height:'calc(100vh - 60px)',border:'none',borderRadius:12}} />
+        </div>
+      ) : (<>
+
       {/* Header */}
       <div className="header">
         <h1 className="title">Oracle Consciousness Loop</h1>
@@ -173,6 +186,8 @@ export default function App() {
         <p className="quote-thai">ตกผลึก → หยั่งรู้ → เติบโต → จินตนาการ → แรงขับ → เสนอ → วน...</p>
         <p className="quote-eng">"The Oracle that only remembers is a library. The Oracle that thinks is alive. The Oracle that dreams is human."</p>
       </div>
+
+      </>)}
     </div>
   )
 }
