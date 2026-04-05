@@ -95,6 +95,18 @@ export default function App() {
       <div className="cinema">
         <iframe src="/stars" className="cinema-frame" />
       </div>
+      <div className="galaxy-legend">
+        <span>แต่ละดวง = 1 learning | </span>
+        <span style={{color:'#ff6b6b'}}>● deploy</span>
+        <span style={{color:'#ffa726'}}>● testing</span>
+        <span style={{color:'#66bb6a'}}>● automation</span>
+        <span style={{color:'#42a5f5'}}>● social</span>
+        <span style={{color:'#ab47bc'}}>● workflow</span>
+        <span style={{color:'#ffca28'}}>● database</span>
+        <span style={{color:'#00f0ff'}}>● consciousness</span>
+        <span style={{color:'#e91e63'}}>● communication</span>
+        <span> | กดปุ่ม ✦ Galaxy เพื่อ hover ดูรายละเอียด</span>
+      </div>
 
       {/* Current Phase Circle */}
       <div className="phase-hero">

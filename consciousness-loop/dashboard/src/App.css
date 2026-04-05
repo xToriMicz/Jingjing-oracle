@@ -32,6 +32,15 @@ body {
   display: block;
 }
 
+.galaxy-legend {
+  text-align: center;
+  font-size: 0.55rem;
+  color: #444;
+  margin-top: 0.4rem;
+  margin-bottom: 1rem;
+}
+.galaxy-legend span { margin: 0 0.3rem; }
+
 .badge-galaxy {
   background: #1a1a2e;
   color: #ffca28;
