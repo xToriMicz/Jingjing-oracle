@@ -1,217 +1,205 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<title>Oracle Knowledge Galaxy</title>
+<html><head><meta charset="UTF-8"><title>Oracle Knowledge Galaxy</title>
 <style>
-  * { margin: 0; padding: 0; }
-  body { background: #000; overflow: hidden; font-family: 'JetBrains Mono', monospace; }
-  canvas { display: block; }
-  #info {
-    position: fixed; top: 20px; left: 20px; color: #00f0ff;
-    font-size: 14px; text-shadow: 0 0 10px rgba(0,240,255,0.5);
-  }
-  #info h1 { font-size: 20px; margin-bottom: 5px; }
-  #info .stats { color: #555; font-size: 11px; }
-  #tooltip {
-    position: fixed; display: none; background: rgba(10,14,23,0.95);
-    border: 1px solid #00f0ff; border-radius: 8px; padding: 10px 14px;
-    color: #e0e0e0; font-size: 11px; max-width: 300px;
-    box-shadow: 0 0 20px rgba(0,240,255,0.2); pointer-events: none;
-  }
-  #tooltip .title { color: #00f0ff; font-weight: 700; margin-bottom: 4px; }
-  #tooltip .cat { color: #888; font-size: 10px; }
-  #tooltip .tags { color: #666; font-size: 10px; margin-top: 4px; }
-  #legend {
-    position: fixed; bottom: 20px; left: 20px; color: #555; font-size: 10px;
-  }
-  #legend span { margin-right: 12px; }
-  #legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
-</style>
-</head>
-<body>
-<div id="info">
-  <h1>Oracle Knowledge Galaxy</h1>
-  <div class="stats" id="stats">Loading...</div>
-</div>
-<div id="tooltip"><div class="title"></div><div class="cat"></div><div class="tags"></div></div>
-<div id="legend"></div>
+*{margin:0;padding:0}body{background:#000;overflow:hidden;font-family:'JetBrains Mono',monospace}
+canvas{display:block}
+#info{position:fixed;top:20px;left:20px;color:#00f0ff;font-size:14px;text-shadow:0 0 10px rgba(0,240,255,0.5);z-index:10}
+#info h1{font-size:20px;margin-bottom:5px}
+#info .stats{color:#555;font-size:11px}
+#tooltip{position:fixed;display:none;background:rgba(10,14,23,0.95);border:1px solid #00f0ff;border-radius:8px;padding:10px 14px;color:#e0e0e0;font-size:11px;max-width:300px;box-shadow:0 0 20px rgba(0,240,255,0.2);pointer-events:none;z-index:20}
+#tooltip .t{color:#00f0ff;font-weight:700;margin-bottom:4px}
+#tooltip .c{color:#888;font-size:10px}
+</style></head><body>
+<div id="info"><h1>Oracle Knowledge Galaxy</h1><div class="stats" id="stats">Loading...</div></div>
+<div id="tooltip"><div class="t"></div><div class="c"></div></div>
 <canvas id="c"></canvas>
-
 <script>
-const COLORS = {
-  deploy: '#ff6b6b', testing: '#ffa726', security: '#ff4444',
-  social: '#42a5f5', automation: '#66bb6a', workflow: '#ab47bc',
-  database: '#ffca28', consciousness: '#00f0ff', communication: '#e91e63',
-  cloudflare: '#ff9800', other: '#555'
-};
+const COLORS={deploy:'#ff6b6b',testing:'#ffa726',security:'#ff4444',social:'#42a5f5',automation:'#66bb6a',workflow:'#ab47bc',database:'#ffca28',consciousness:'#00f0ff',communication:'#e91e63',cloudflare:'#ff9800',other:'#8888aa'};
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+let W,H,stars=[],dust=[],nebulas=[],labels=[],mouse={x:-999,y:-999},hovered=null,angle=0;
 
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-let W, H, nodes = [], edges = [], mouse = {x: -999, y: -999}, hovered = null;
-let angle = 0, zoom = 1;
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+resize();addEventListener('resize',resize);
+addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
 
-function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
-resize(); addEventListener('resize', resize);
+async function load(){
+  const res=await fetch('/stars-data').catch(()=>fetch('/graph.json'));
+  const data=await res.json();
+  const nodes=data.nodes;
 
-addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-addEventListener('wheel', e => { zoom = Math.max(0.3, Math.min(3, zoom - e.deltaY * 0.001)); });
-
-async function load() {
-  const res = await fetch('/stars-data');
-  let data;
-  try { data = await res.json(); } catch {
-    const res2 = await fetch('/graph.json');
-    data = await res2.json();
-  }
-
-  nodes = data.nodes.map((n, i) => {
-    // Spiral galaxy layout — fill screen
-    const arm = i % 3; // 3 spiral arms
-    const a = i * 0.8 + arm * (Math.PI * 2 / 3) + Math.random() * 0.4;
-    const r = 80 + Math.sqrt(i) * 35 + Math.random() * 80;
-    return {
-      ...n,
-      x: Math.cos(a) * r + (Math.random() - 0.5) * 60,
-      y: Math.sin(a) * r * 0.55 + (Math.random() - 0.5) * 40,
-      z: (Math.random() - 0.5) * 80,
-      vx: 0, vy: 0,
-      baseSize: 3 + Math.min(n.tags?.length || 0, 5) * 1.2,
-      color: COLORS[n.category] || COLORS.other,
-      pulse: Math.random() * Math.PI * 2,
-    };
+  // Category clusters — position each category in a circle
+  const cats=[...new Set(nodes.map(n=>n.category))];
+  const catPos={};
+  cats.forEach((c,i)=>{
+    const a=i/cats.length*Math.PI*2-Math.PI/2;
+    const r=Math.min(W,H)*0.28;
+    catPos[c]={x:Math.cos(a)*r,y:Math.sin(a)*r,color:COLORS[c]||'#888'};
   });
-  edges = data.edges;
 
-  // Legend
-  const cats = [...new Set(nodes.map(n => n.category))].sort();
-  document.getElementById('legend').innerHTML = cats.map(c =>
-    `<span><span class="dot" style="background:${COLORS[c]||'#555'}"></span>${c}</span>`
-  ).join('');
-  document.getElementById('stats').textContent =
-    `${nodes.length} learnings · ${edges.length} connections · ${cats.length} domains`;
+  // Main stars (149 learnings)
+  nodes.forEach((n,i)=>{
+    const cp=catPos[n.category]||{x:0,y:0,color:'#888'};
+    const spread=80+Math.random()*60;
+    const a=Math.random()*Math.PI*2;
+    stars.push({
+      x:cp.x+Math.cos(a)*spread*(0.5+Math.random()),
+      y:cp.y+Math.sin(a)*spread*(0.5+Math.random()),
+      z:(Math.random()-0.5)*100,
+      size:3+Math.random()*4+(n.tags?.length||0)*0.8,
+      color:COLORS[n.category]||'#888',
+      pulse:Math.random()*Math.PI*2,
+      name:n.name,
+      category:n.category,
+      tags:n.tags||[],
+    });
+  });
 
-  // Simple force simulation
-  for (let iter = 0; iter < 100; iter++) {
-    for (const e of edges) {
-      const s = nodes[e.source], t = nodes[e.target];
-      if (!s || !t) continue;
-      const dx = t.x - s.x, dy = t.y - s.y;
-      const d = Math.sqrt(dx*dx + dy*dy) || 1;
-      const f = (d - 200) * 0.0005;
-      s.vx += dx/d * f; s.vy += dy/d * f;
-      t.vx -= dx/d * f; t.vy -= dy/d * f;
-    }
-    for (const n of nodes) {
-      n.x += n.vx; n.y += n.vy;
-      n.vx *= 0.9; n.vy *= 0.9;
-    }
+  // Dust particles (3000+ tiny stars around clusters)
+  for(let i=0;i<3000;i++){
+    const cat=cats[Math.floor(Math.random()*cats.length)];
+    const cp=catPos[cat];
+    const a=Math.random()*Math.PI*2;
+    const r=Math.random()*180;
+    dust.push({
+      x:cp.x+Math.cos(a)*r,
+      y:cp.y+Math.sin(a)*r,
+      z:(Math.random()-0.5)*60,
+      size:0.3+Math.random()*1.2,
+      color:cp.color,
+      alpha:0.2+Math.random()*0.6,
+    });
   }
+
+  // Background dust (scattered)
+  for(let i=0;i<500;i++){
+    dust.push({
+      x:(Math.random()-0.5)*W*1.5,
+      y:(Math.random()-0.5)*H*1.5,
+      z:(Math.random()-0.5)*200,
+      size:0.2+Math.random()*0.5,
+      color:'#ffffff',
+      alpha:0.1+Math.random()*0.3,
+    });
+  }
+
+  // Nebula clouds (large colored circles)
+  cats.forEach(c=>{
+    const cp=catPos[c];
+    for(let i=0;i<5;i++){
+      nebulas.push({
+        x:cp.x+(Math.random()-0.5)*120,
+        y:cp.y+(Math.random()-0.5)*120,
+        r:60+Math.random()*100,
+        color:cp.color,
+        alpha:0.03+Math.random()*0.04,
+      });
+    }
+  });
+
+  // Labels
+  cats.forEach(c=>{
+    const cp=catPos[c];
+    labels.push({x:cp.x,y:cp.y+10,text:c.toUpperCase(),color:cp.color});
+  });
+
+  document.getElementById('stats').textContent=`${stars.length} learnings · ${dust.length} particles · ${cats.length} domains`;
 }
 
-function draw() {
-  ctx.fillStyle = 'rgba(0,0,0,0.05)';
-  ctx.fillRect(0, 0, W, H);
+function project(x,y,z){
+  const cos=Math.cos(angle),sin=Math.sin(angle);
+  const rx=x*cos-z*sin;
+  const rz=x*sin+z*cos;
+  const scale=800/(800+rz);
+  return{sx:W/2+rx*scale,sy:H/2+y*scale,scale};
+}
 
-  angle += 0.001;
-  const cos = Math.cos(angle), sin = Math.sin(angle);
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  angle+=0.0008;
 
-  // Project 3D → 2D with rotation
-  const projected = nodes.map(n => {
-    const rx = n.x * cos - n.z * sin;
-    const rz = n.x * sin + n.z * cos;
-    const scale = 600 / (600 + rz) * zoom;
-    return {
-      sx: W/2 + rx * scale,
-      sy: H/2 + n.y * scale,
-      scale,
-      node: n,
-    };
+  // Nebula clouds
+  for(const n of nebulas){
+    const p=project(n.x,n.y,0);
+    const grad=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,n.r*p.scale);
+    grad.addColorStop(0,n.color+Math.floor(n.alpha*255).toString(16).padStart(2,'0'));
+    grad.addColorStop(1,'transparent');
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    ctx.arc(p.sx,p.sy,n.r*p.scale,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  // Dust
+  for(const d of dust){
+    const p=project(d.x,d.y,d.z);
+    const s=d.size*p.scale;
+    ctx.globalAlpha=d.alpha*p.scale;
+    ctx.fillStyle=d.color;
+    ctx.fillRect(p.sx,p.sy,s,s);
+  }
+  ctx.globalAlpha=1;
+
+  // Stars
+  hovered=null;
+  let minDist=25;
+  const projected=stars.map(s=>{
+    const p=project(s.x,s.y,s.z);
+    return{...p,star:s};
   });
 
-  // Draw edges
-  ctx.lineWidth = 0.3;
-  for (const e of edges) {
-    const s = projected[e.source], t = projected[e.target];
-    if (!s || !t) continue;
-    if (Math.random() > 0.3) continue; // show only 30% of edges
-    ctx.strokeStyle = `rgba(255,255,255,0.03)`;
-    ctx.beginPath();
-    ctx.moveTo(s.sx, s.sy);
-    ctx.lineTo(t.sx, t.sy);
-    ctx.stroke();
+  // Check hover
+  for(const p of projected){
+    const dx=mouse.x-p.sx,dy=mouse.y-p.sy;
+    const d=Math.sqrt(dx*dx+dy*dy);
+    if(d<minDist){minDist=d;hovered=p;}
   }
 
-  // Find hovered
-  hovered = null;
-  let minDist = 20;
-  for (const p of projected) {
-    const dx = mouse.x - p.sx, dy = mouse.y - p.sy;
-    const d = Math.sqrt(dx*dx + dy*dy);
-    if (d < minDist) { minDist = d; hovered = p; }
-  }
-
-  // Draw nodes (stars)
-  for (const p of projected) {
-    const n = p.node;
-    n.pulse += 0.02;
-    const pulse = 1 + Math.sin(n.pulse) * 0.3;
-    const size = n.baseSize * p.scale * pulse;
-    const isHovered = hovered === p;
+  for(const p of projected){
+    const s=p.star;
+    s.pulse+=0.015;
+    const pulse=1+Math.sin(s.pulse)*0.3;
+    const r=s.size*p.scale*pulse;
+    const isH=hovered===p;
 
     // Glow
-    // Always show glow
-    {
-      const grad = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, size * (isHovered ? 8 : 4));
-      grad.addColorStop(0, n.color + (isHovered ? 'cc' : '60'));
-      grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(p.sx, p.sy, size * (isHovered ? 12 : 6), 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Star
-    ctx.fillStyle = isHovered ? '#fff' : n.color;
+    ctx.save();
+    ctx.shadowColor=s.color;
+    ctx.shadowBlur=isH?50:25;
+    ctx.fillStyle=s.color;
     ctx.beginPath();
-    ctx.arc(p.sx, p.sy, isHovered ? size * 2 : size, 0, Math.PI * 2);
+    ctx.arc(p.sx,p.sy,isH?r*2:r,0,Math.PI*2);
     ctx.fill();
+    ctx.restore();
 
-    // Connected edges glow on hover
-    if (isHovered) {
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = n.color + '60';
-      for (const e of edges) {
-        if (e.source === n.id || e.target === n.id) {
-          const other = projected[e.source === n.id ? e.target : e.source];
-          if (!other) continue;
-          ctx.beginPath();
-          ctx.moveTo(p.sx, p.sy);
-          ctx.lineTo(other.sx, other.sy);
-          ctx.stroke();
-        }
-      }
-    }
+    // Bright core
+    ctx.fillStyle='#fff';
+    ctx.beginPath();
+    ctx.arc(p.sx,p.sy,(isH?r*0.8:r*0.35),0,Math.PI*2);
+    ctx.fill();
+  }
+
+  // Labels
+  ctx.font='11px JetBrains Mono,monospace';
+  ctx.textAlign='center';
+  for(const l of labels){
+    const p=project(l.x,l.y,0);
+    ctx.fillStyle=l.color+'60';
+    ctx.fillText(l.text,p.sx,p.sy);
   }
 
   // Tooltip
-  const tip = document.getElementById('tooltip');
-  if (hovered) {
-    const n = hovered.node;
-    tip.style.display = 'block';
-    tip.style.left = (mouse.x + 15) + 'px';
-    tip.style.top = (mouse.y - 10) + 'px';
-    tip.querySelector('.title').textContent = n.name;
-    tip.querySelector('.cat').textContent = n.category;
-    tip.querySelector('.tags').textContent = (n.tags || []).join(', ');
-  } else {
-    tip.style.display = 'none';
-  }
+  const tip=document.getElementById('tooltip');
+  if(hovered){
+    const s=hovered.star;
+    tip.style.display='block';
+    tip.style.left=(mouse.x+15)+'px';
+    tip.style.top=(mouse.y-10)+'px';
+    tip.querySelector('.t').textContent=s.name;
+    tip.querySelector('.c').textContent=s.category+' · '+(s.tags||[]).join(', ');
+  }else{tip.style.display='none';}
 
   requestAnimationFrame(draw);
 }
 
-load().then(() => { draw(); });
-</script>
-</body>
-</html>
+load().then(draw);
+</script></body></html>
