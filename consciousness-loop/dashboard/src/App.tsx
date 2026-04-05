@@ -143,12 +143,20 @@ export default function App() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats Row 1 */}
       <div className="stats">
         <div className="stat"><div className="stat-val">{state?.totalLoops || 0}</div><div className="stat-lbl">Total Loops</div></div>
         <div className="stat"><div className="stat-val">{timeSince(state?.lastLoop||'')}</div><div className="stat-lbl">Since Last Loop</div></div>
         <div className="stat"><div className="stat-val">{(state?.failures||0)===0 ? timeSince(state?.lastLoop||'') : '--'}</div><div className="stat-lbl">Last Success</div></div>
         <div className="stat"><div className="stat-val">{state?.failures || 0}</div><div className="stat-lbl">Failures</div></div>
+      </div>
+
+      {/* Stats Row 2 — Oracle Stats */}
+      <div className="stats">
+        <div className="stat"><div className="stat-val" style={{color:'#66bb6a'}}>149</div><div className="stat-lbl">Learnings</div></div>
+        <div className="stat"><div className="stat-val" style={{color:'#00f0ff'}}>23</div><div className="stat-lbl">Beliefs</div></div>
+        <div className="stat"><div className="stat-val" style={{color:'#ffa726'}}>5</div><div className="stat-lbl">Oracles</div></div>
+        <div className="stat"><div className="stat-val" style={{color:'#ab47bc'}}>3</div><div className="stat-lbl">Goals</div></div>
       </div>
 
       {/* Loop History */}
