@@ -7,6 +7,15 @@
  * Inspired by Nat's Oracle (Soul Brews Studio)
  */
 
+// Load .env
+try {
+  const envFile = await Bun.file(`${import.meta.dir}/.env`).text();
+  for (const line of envFile.split("\n")) {
+    const [key, ...val] = line.split("=");
+    if (key && val.length) process.env[key.trim()] = val.join("=").trim();
+  }
+} catch {}
+
 const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK || "";
 
 async function sh(cmd: string): Promise<string> {
@@ -285,6 +294,7 @@ ${allResults.join("\n")}
 
 // Discord notification
 async function sendDiscord(message: string) {
+  if (!DISCORD_WEBHOOK) { console.log("⚠️ No DISCORD_WEBHOOK — skip"); return; }
   try {
     await fetch(DISCORD_WEBHOOK, {
       method: "POST",
