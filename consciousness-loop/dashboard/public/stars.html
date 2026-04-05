@@ -2,197 +2,220 @@
 <html><head><meta charset="UTF-8"><title>Oracle Knowledge Galaxy</title>
 <style>
 *{margin:0;padding:0}body{background:#000;overflow:hidden;font-family:'JetBrains Mono',monospace}
-canvas{display:block}
 #info{position:fixed;top:20px;left:20px;color:#00f0ff;font-size:14px;text-shadow:0 0 10px rgba(0,240,255,0.5);z-index:10}
 #info h1{font-size:20px;margin-bottom:5px}
 #info .stats{color:#555;font-size:11px}
 #tooltip{position:fixed;display:none;background:rgba(10,14,23,0.95);border:1px solid #00f0ff;border-radius:8px;padding:10px 14px;color:#e0e0e0;font-size:11px;max-width:300px;box-shadow:0 0 20px rgba(0,240,255,0.2);pointer-events:none;z-index:20}
 #tooltip .t{color:#00f0ff;font-weight:700;margin-bottom:4px}
 #tooltip .c{color:#888;font-size:10px}
-</style></head><body>
+</style>
+</head><body>
 <div id="info"><h1>Oracle Knowledge Galaxy</h1><div class="stats" id="stats">Loading...</div></div>
 <div id="tooltip"><div class="t"></div><div class="c"></div></div>
-<canvas id="c"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const COLORS={deploy:'#ff6b6b',testing:'#ffa726',security:'#ff4444',social:'#42a5f5',automation:'#66bb6a',workflow:'#ab47bc',database:'#ffca28',consciousness:'#00f0ff',communication:'#e91e63',cloudflare:'#ff9800',other:'#8888aa'};
-const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
-let W,H,stars=[],dust=[],nebulas=[],labels=[],mouse={x:-999,y:-999},hovered=null,angle=0;
+const COLORS={deploy:0xff6b6b,testing:0xffa726,security:0xff4444,social:0x42a5f5,automation:0x66bb6a,workflow:0xab47bc,database:0xffca28,consciousness:0x00f0ff,communication:0xe91e63,cloudflare:0xff9800,other:0x8888aa};
 
-function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
-resize();addEventListener('resize',resize);
-addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+let scene,camera,renderer,mainStars,dustParticles,starData=[];
+const mouse=new THREE.Vector2(-999,-999);
+const raycaster=new THREE.Raycaster();
+raycaster.params.Points.threshold=5;
 
-async function load(){
-  const res=await fetch('/stars-data').catch(()=>fetch('/graph.json'));
+function init(){
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,1,5000);
+  camera.position.z=500;
+  renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
+  addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+  addEventListener('mousemove',e=>{
+    mouse.x=(e.clientX/innerWidth)*2-1;
+    mouse.y=-(e.clientY/innerHeight)*2+1;
+  });
+}
+
+async function loadData(){
+  const res=await fetch('/stars-data');
   const data=await res.json();
   const nodes=data.nodes;
   const cats=[...new Set(nodes.map(n=>n.category))];
+
+  // Category positions (spiral)
   const catPos={};
   cats.forEach((c,i)=>{
-    const a=i/cats.length*Math.PI*2-Math.PI/2;
-    const r=Math.min(W,H)*0.18;
-    catPos[c]={x:Math.cos(a)*r,y:Math.sin(a)*r,color:COLORS[c]||'#888'};
+    const a=i/cats.length*Math.PI*2;
+    const r=120;
+    catPos[c]={x:Math.cos(a)*r,y:Math.sin(a)*r,color:COLORS[c]||0x888888};
   });
 
-  // Main stars — SMALL like real stars
-  nodes.forEach(n=>{
-    const cp=catPos[n.category]||{x:0,y:0,color:'#888'};
+  // Main stars geometry
+  const mainGeo=new THREE.BufferGeometry();
+  const mainPositions=[],mainColors=[],mainSizes=[];
+
+  nodes.forEach((n,i)=>{
+    const cp=catPos[n.category]||{x:0,y:0,color:0x888888};
     const a=Math.random()*Math.PI*2;
-    const r=Math.random()*120;
-    stars.push({
-      x:cp.x+Math.cos(a)*r, y:cp.y+Math.sin(a)*r,
-      z:(Math.random()-0.5)*80,
-      size:0.8+Math.random()*1.5+(n.tags?.length||0)*0.2,
-      color:COLORS[n.category]||'#888',
-      pulse:Math.random()*Math.PI*2,
-      name:n.name, category:n.category, tags:n.tags||[],
-    });
+    const r=Math.random()*80;
+    const x=cp.x+Math.cos(a)*r;
+    const y=cp.y+Math.sin(a)*r;
+    const z=(Math.random()-0.5)*60;
+    mainPositions.push(x,y,z);
+    const col=new THREE.Color(cp.color);
+    mainColors.push(col.r,col.g,col.b);
+    mainSizes.push(3+Math.random()*5+(n.tags?.length||0)*1.5);
+    starData.push({name:n.name,category:n.category,tags:n.tags||[],idx:i});
   });
 
-  // LOTS of dust — creates the nebula cloud effect
-  for(let i=0;i<15000;i++){
+  mainGeo.setAttribute('position',new THREE.Float32BufferAttribute(mainPositions,3));
+  mainGeo.setAttribute('color',new THREE.Float32BufferAttribute(mainColors,3));
+  mainGeo.setAttribute('size',new THREE.Float32BufferAttribute(mainSizes,1));
+
+  // Star shader — glowing points
+  const starMat=new THREE.ShaderMaterial({
+    uniforms:{time:{value:0}},
+    vertexShader:`
+      attribute float size;
+      varying vec3 vColor;
+      uniform float time;
+      void main(){
+        vColor=color;
+        vec4 mvPosition=modelViewMatrix*vec4(position,1.0);
+        float pulse=1.0+0.3*sin(time*2.0+position.x*0.1);
+        gl_PointSize=size*pulse*(300.0/-mvPosition.z);
+        gl_Position=projectionMatrix*mvPosition;
+      }
+    `,
+    fragmentShader:`
+      varying vec3 vColor;
+      void main(){
+        float d=length(gl_PointCoord-vec2(0.5));
+        if(d>0.5)discard;
+        float glow=exp(-d*4.0);
+        float core=exp(-d*12.0);
+        vec3 col=vColor*glow+vec3(1.0)*core*0.8;
+        float alpha=glow*0.9;
+        gl_FragColor=vec4(col,alpha);
+      }
+    `,
+    transparent:true,
+    vertexColors:true,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending,
+  });
+
+  mainStars=new THREE.Points(mainGeo,starMat);
+  scene.add(mainStars);
+
+  // Dust particles (20000)
+  const dustGeo=new THREE.BufferGeometry();
+  const dustPos=[],dustCol=[],dustSiz=[];
+  for(let i=0;i<20000;i++){
     const cat=cats[Math.floor(Math.random()*cats.length)];
     const cp=catPos[cat];
     const a=Math.random()*Math.PI*2;
-    const r=Math.random()*250;
-    const distFromCenter=Math.sqrt(cp.x*cp.x+cp.y*cp.y);
-    dust.push({
-      x:cp.x+Math.cos(a)*r+(Math.random()-0.5)*30,
-      y:cp.y+Math.sin(a)*r+(Math.random()-0.5)*30,
-      z:(Math.random()-0.5)*50,
-      size:0.2+Math.random()*0.8,
-      color:cp.color,
-      alpha:0.15+Math.random()*0.4,
-    });
+    const r=Math.random()*200;
+    dustPos.push(
+      cp.x+Math.cos(a)*r+(Math.random()-0.5)*40,
+      cp.y+Math.sin(a)*r+(Math.random()-0.5)*40,
+      (Math.random()-0.5)*80
+    );
+    const col=new THREE.Color(cp.color);
+    dustCol.push(col.r,col.g,col.b);
+    dustSiz.push(0.3+Math.random()*1.5);
   }
-  // Center dust blend
+  // Center blend dust
   for(let i=0;i<5000;i++){
     const a=Math.random()*Math.PI*2;
-    const r=Math.random()*200;
+    const r=Math.random()*180;
     const cat=cats[Math.floor(Math.random()*cats.length)];
-    dust.push({
-      x:Math.cos(a)*r, y:Math.sin(a)*r,
-      z:(Math.random()-0.5)*40,
-      size:0.15+Math.random()*0.5,
-      color:COLORS[cat],
-      alpha:0.1+Math.random()*0.25,
-    });
+    const col=new THREE.Color(COLORS[cat]||0x888888);
+    dustPos.push(Math.cos(a)*r,Math.sin(a)*r,(Math.random()-0.5)*50);
+    dustCol.push(col.r,col.g,col.b);
+    dustSiz.push(0.2+Math.random()*0.8);
   }
-  // Background stars
-  for(let i=0;i<800;i++){
-    dust.push({
-      x:(Math.random()-0.5)*W*2, y:(Math.random()-0.5)*H*2,
-      z:(Math.random()-0.5)*200,
-      size:0.1+Math.random()*0.4,
-      color:'#ffffff',
-      alpha:0.05+Math.random()*0.2,
-    });
+  // Background
+  for(let i=0;i<2000;i++){
+    dustPos.push((Math.random()-0.5)*1500,(Math.random()-0.5)*1000,(Math.random()-0.5)*500);
+    dustCol.push(1,1,1);
+    dustSiz.push(0.1+Math.random()*0.3);
   }
 
-  // Nebula clouds
-  cats.forEach(c=>{
-    const cp=catPos[c];
-    for(let i=0;i<6;i++){
-      nebulas.push({
-        x:cp.x+(Math.random()-0.5)*200, y:cp.y+(Math.random()-0.5)*200,
-        r:100+Math.random()*180, color:cp.color,
-        alpha:0.03+Math.random()*0.05,
-      });
-    }
+  dustGeo.setAttribute('position',new THREE.Float32BufferAttribute(dustPos,3));
+  dustGeo.setAttribute('color',new THREE.Float32BufferAttribute(dustCol,3));
+  dustGeo.setAttribute('size',new THREE.Float32BufferAttribute(dustSiz,1));
+
+  const dustMat=new THREE.ShaderMaterial({
+    vertexShader:`
+      attribute float size;
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main(){
+        vColor=color;
+        vec4 mvPosition=modelViewMatrix*vec4(position,1.0);
+        gl_PointSize=size*(200.0/-mvPosition.z);
+        vAlpha=clamp(1.0-length(mvPosition.xyz)/800.0,0.05,0.7);
+        gl_Position=projectionMatrix*mvPosition;
+      }
+    `,
+    fragmentShader:`
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main(){
+        float d=length(gl_PointCoord-vec2(0.5));
+        if(d>0.5)discard;
+        float a=exp(-d*6.0)*vAlpha;
+        gl_FragColor=vec4(vColor,a);
+      }
+    `,
+    transparent:true,
+    vertexColors:true,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending,
   });
-  for(let i=0;i<15;i++){
-    const c=cats[Math.floor(Math.random()*cats.length)];
-    nebulas.push({x:(Math.random()-0.5)*150,y:(Math.random()-0.5)*150,r:120+Math.random()*200,color:COLORS[c],alpha:0.02+Math.random()*0.03});
-  }
 
-  // Labels
-  cats.forEach(c=>{
-    const cp=catPos[c];
-    labels.push({x:cp.x,y:cp.y+15,text:c.toUpperCase(),color:cp.color});
-  });
+  dustParticles=new THREE.Points(dustGeo,dustMat);
+  scene.add(dustParticles);
 
-  document.getElementById('stats').textContent=`${stars.length} learnings · ${dust.length} particles · ${cats.length} domains`;
+  document.getElementById('stats').textContent=`${nodes.length} learnings · 27000 particles · ${cats.length} domains`;
 }
 
-function project(x,y,z){
-  const cos=Math.cos(angle),sin=Math.sin(angle);
-  const rx=x*cos-z*sin, rz=x*sin+z*cos;
-  const scale=800/(800+rz);
-  return{sx:W/2+rx*scale,sy:H/2+y*scale,scale};
-}
+function animate(){
+  requestAnimationFrame(animate);
+  const t=performance.now()*0.001;
 
-function draw(){
-  ctx.clearRect(0,0,W,H);
-  angle+=0.0005;
+  // Slow rotation
+  scene.rotation.y=t*0.05;
+  scene.rotation.x=Math.sin(t*0.03)*0.1;
 
-  // Nebula clouds
-  for(const n of nebulas){
-    const p=project(n.x,n.y,0);
-    const grad=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,n.r*p.scale);
-    grad.addColorStop(0,n.color+Math.floor(n.alpha*255).toString(16).padStart(2,'0'));
-    grad.addColorStop(1,'transparent');
-    ctx.fillStyle=grad;
-    ctx.beginPath();ctx.arc(p.sx,p.sy,n.r*p.scale,0,Math.PI*2);ctx.fill();
-  }
-
-  // Dust
-  for(const d of dust){
-    const p=project(d.x,d.y,d.z);
-    ctx.globalAlpha=d.alpha*Math.min(p.scale,1.2);
-    ctx.fillStyle=d.color;
-    const s=d.size*p.scale;
-    ctx.fillRect(p.sx,p.sy,s,s);
-  }
-  ctx.globalAlpha=1;
-
-  // Stars
-  hovered=null; let minDist=20;
-  const projected=stars.map(s=>({...project(s.x,s.y,s.z),star:s}));
-  for(const p of projected){
-    const dx=mouse.x-p.sx,dy=mouse.y-p.sy;
-    if(Math.sqrt(dx*dx+dy*dy)<minDist){minDist=Math.sqrt(dx*dx+dy*dy);hovered=p;}
-  }
-
-  for(const p of projected){
-    const s=p.star;
-    s.pulse+=0.012;
-    const pulse=1+Math.sin(s.pulse)*0.2;
-    const r=s.size*p.scale*pulse;
-    const isH=hovered===p;
-
-    // Glow
-    ctx.save();
-    ctx.shadowColor=s.color;
-    ctx.shadowBlur=isH?25:10;
-    ctx.fillStyle=s.color;
-    ctx.beginPath();ctx.arc(p.sx,p.sy,isH?r*2:r,0,Math.PI*2);ctx.fill();
-    ctx.restore();
-
-    // Core
-    ctx.fillStyle='#fff';
-    ctx.beginPath();ctx.arc(p.sx,p.sy,isH?r*0.6:r*0.3,0,Math.PI*2);ctx.fill();
-  }
-
-  // Labels
-  ctx.font='10px JetBrains Mono,monospace';
-  ctx.textAlign='center';
-  for(const l of labels){
-    const p=project(l.x,l.y,0);
-    ctx.fillStyle=l.color+'40';
-    ctx.fillText(l.text,p.sx,p.sy);
-  }
+  if(mainStars)mainStars.material.uniforms.time.value=t;
 
   // Tooltip
+  raycaster.setFromCamera(mouse,camera);
   const tip=document.getElementById('tooltip');
-  if(hovered){
-    tip.style.display='block';
-    tip.style.left=(mouse.x+15)+'px';tip.style.top=(mouse.y-10)+'px';
-    tip.querySelector('.t').textContent=hovered.star.name;
-    tip.querySelector('.c').textContent=hovered.star.category+' · '+(hovered.star.tags||[]).join(', ');
-  }else tip.style.display='none';
+  if(mainStars){
+    const intersects=raycaster.intersectObject(mainStars);
+    if(intersects.length>0){
+      const idx=intersects[0].index;
+      const s=starData[idx];
+      if(s){
+        tip.style.display='block';
+        tip.style.left=((mouse.x+1)/2*innerWidth+15)+'px';
+        tip.style.top=((-mouse.y+1)/2*innerHeight-10)+'px';
+        tip.querySelector('.t').textContent=s.name;
+        tip.querySelector('.c').textContent=s.category+' · '+(s.tags||[]).join(', ');
+      }
+    }else{tip.style.display='none';}
+  }
 
-  requestAnimationFrame(draw);
+  renderer.render(scene,camera);
 }
 
-load().then(draw);
+init();
+loadData().then(animate);
 </script></body></html>
