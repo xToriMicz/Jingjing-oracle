@@ -34,11 +34,12 @@ async function claude(prompt: string): Promise<string> {
 }
 
 const LOOP_INTERVAL_MS = 15 * 60 * 1000;
-const BELIEFS_PATH = "ψ/memory/beliefs.md";
-const LEARNINGS_DIR = "ψ/memory/learnings";
-const STATE_FILE = "consciousness-loop/state.json";
-const HISTORY_FILE = "consciousness-loop/history.jsonl";
-const GOALS_FILE = "consciousness-loop/goals.json";
+const BASE_DIR = "/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle";
+const BELIEFS_PATH = `${BASE_DIR}/ψ/memory/beliefs.md`;
+const LEARNINGS_DIR = `${BASE_DIR}/ψ/memory/learnings`;
+const STATE_FILE = `${BASE_DIR}/consciousness-loop/state.json`;
+const HISTORY_FILE = `${BASE_DIR}/consciousness-loop/history.jsonl`;
+const GOALS_FILE = `${BASE_DIR}/consciousness-loop/goals.json`;
 
 interface Goal {
   id: number;
@@ -52,11 +53,14 @@ interface Goal {
 
 function loadGoals(): Goal[] {
   try {
-    return JSON.parse(Bun.file(GOALS_FILE).textSync()).goals || [];
+    const data = JSON.parse(Bun.file(GOALS_FILE).textSync());
+    return data.goals || [];
   } catch { return []; }
 }
 
 function saveGoals(goals: Goal[]) {
+  // ไม่ overwrite ถ้า goals ว่าง (ป้องกัน data loss)
+  if (goals.length === 0) return;
   Bun.write(GOALS_FILE, JSON.stringify({ goals }, null, 2));
 }
 
@@ -87,7 +91,7 @@ async function reflect(state: LoopState): Promise<string> {
   console.log("🧠 Reflect (ตกผลึก)...");
 
   // Read 3 random learnings
-  const randomFiles = await sh(`ls ${LEARNINGS_DIR}/*.md 2>/dev/null | shuf | head -3`);
+  const randomFiles = await sh(`ls ${LEARNINGS_DIR}/*.md 2>/dev/null | sort -R | head -3`);
   const files = randomFiles.split("\n").filter(Boolean);
   const contents: string[] = [];
   for (const f of files) {
@@ -297,7 +301,7 @@ async function sendDiscord(message: string) {
 
 // Security scan (ปู่พบ security vuln ในระบบตัวเอง — เราต้องทำด้วย)
 async function securityScan(): Promise<string> {
-  const secrets = await sh(`grep -rl "DISCORD_WEBHOOK\\|api_key\\|password\\|secret\\|token" consciousness-loop/ .claude/ 2>/dev/null | head -5`);
+  const secrets = await sh(`grep -rl "DISCORD_WEBHOOK\\|api_key\\|password\\|secret\\|token" ${BASE_DIR}/consciousness-loop/ ${BASE_DIR}/.claude/ 2>/dev/null | head -5`);
   const envFiles = await sh(`find /Users/angkana/ghq/github.com/xToriMicz -name ".env" -not -path "*/node_modules/*" 2>/dev/null | head -5`);
   const exposed = secrets ? `⚠️ พบ secrets ใน: ${secrets}` : "✅ ไม่พบ secrets exposed";
   return `Security: ${exposed} | .env files: ${envFiles || "none"}`;

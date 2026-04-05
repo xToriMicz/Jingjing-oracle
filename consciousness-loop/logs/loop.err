@@ -1,0 +1,92 @@
+❌ Loop failed: 83 |   );
+84 | 
+85 |   // Fallback: ถ้า claude ไม่ตอบ ใช้ grep analysis
+86 |   if (!insight) {
+87 |     const topics = files.map(f => f.split("/").pop()?.replace(/\.md$/, '').replace(/^[\d_-]+/, '') || '').filter(Boolean);
+88 |     insight = `Cross-check: ${topics.join(' + ')} — ${count} learnings, ${rulesCount} rules ยังไม่เป็น hooks`;
+                                                          ^
+ReferenceError: count is not defined
+      at reflect (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:88:54)
+      at async runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:269:33)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:360:19)
+
+❌ Loop failed: 83 |   );
+84 | 
+85 |   // Fallback: ถ้า claude ไม่ตอบ ใช้ grep analysis
+86 |   if (!insight) {
+87 |     const topics = files.map(f => f.split("/").pop()?.replace(/\.md$/, '').replace(/^[\d_-]+/, '') || '').filter(Boolean);
+88 |     insight = `Cross-check: ${topics.join(' + ')} — ${count} learnings, ${rulesCount} rules ยังไม่เป็น hooks`;
+                                                          ^
+ReferenceError: count is not defined
+      at reflect (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:88:54)
+      at async runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:269:33)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:360:19)
+
+❌ Loop failed: 83 |   );
+84 | 
+85 |   // Fallback: ถ้า claude ไม่ตอบ ใช้ grep analysis
+86 |   if (!insight) {
+87 |     const topics = files.map(f => f.split("/").pop()?.replace(/\.md$/, '').replace(/^[\d_-]+/, '') || '').filter(Boolean);
+88 |     insight = `Cross-check: ${topics.join(' + ')} — ${count} learnings, ${rulesCount} rules ยังไม่เป็น hooks`;
+                                                          ^
+ReferenceError: count is not defined
+      at reflect (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:88:54)
+      at async runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:269:33)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:360:19)
+
+Discord send failed: 280 | }
+281 | 
+282 | // Discord notification
+283 | async function sendDiscord(message: string) {
+284 |   try {
+285 |     await fetch(DISCORD_WEBHOOK, {
+                ^
+TypeError: fetch() URL must not be a blank string.
+ code: "ERR_INVALID_URL"
+
+      at sendDiscord (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:285:11)
+      at runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:387:11)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:407:19)
+
+Discord send failed: 280 | }
+281 | 
+282 | // Discord notification
+283 | async function sendDiscord(message: string) {
+284 |   try {
+285 |     await fetch(DISCORD_WEBHOOK, {
+                ^
+TypeError: fetch() URL must not be a blank string.
+ code: "ERR_INVALID_URL"
+
+      at sendDiscord (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:285:11)
+      at runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:387:11)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:407:19)
+
+Discord send failed: 280 | }
+281 | 
+282 | // Discord notification
+283 | async function sendDiscord(message: string) {
+284 |   try {
+285 |     await fetch(DISCORD_WEBHOOK, {
+                ^
+TypeError: fetch() URL must not be a blank string.
+ code: "ERR_INVALID_URL"
+
+      at sendDiscord (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:285:11)
+      at runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:387:11)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:407:19)
+
+Discord send failed: 280 | }
+281 | 
+282 | // Discord notification
+283 | async function sendDiscord(message: string) {
+284 |   try {
+285 |     await fetch(DISCORD_WEBHOOK, {
+                ^
+TypeError: fetch() URL must not be a blank string.
+ code: "ERR_INVALID_URL"
+
+      at sendDiscord (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:285:11)
+      at runLoop (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:387:11)
+      at async main (/Users/angkana/ghq/github.com/xToriMicz/Jingjing-oracle/consciousness-loop/loop.ts:407:19)
+

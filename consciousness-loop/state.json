@@ -1,13 +1,13 @@
 {
   "totalLoops": 1,
-  "lastLoop": "2026-04-04T16:25:27.997Z",
+  "lastLoop": "2026-04-05T07:17:53.586Z",
   "lastPhase": "complete",
   "failures": 0,
   "insights": [
-    "คุณยังไม่ได้ระบุว่า 3 ข้อไหนครับ — ช่วยบอกหน่อยได้ไหม? เช่น:\n\n- ลิงก์/ชื่อไฟล์ learnings\n- หรือจะให้ดึงจาก Oracle (`arra_search` / `arra_list`)?\n\nบอกมาได้เลยแล้วจัดให้ครับ"
+    "จากเนื้อหาที่คุณแปะมา นี่คือ cross-domain connections:\n\n**\"อย่าเชื่อจนกว่าจะพิสูจน์\" — ธีมเดียวกัน 3 โดเมน:**\nทับศัพท์ต้องตรวจตามราชบัณฑิต (ไม่ใช่เดาเอง), research ต้องทดสอบจริงก่อนสรุป (ไม่ใช่อ่าน do"
   ],
   "wonderQuestions": [
-    "มี tool อะไรใน Oracle ที่ช่วยค้นหา learnings ที่เคยบันทึกไว้ได้บ้าง?"
+    "มี tool หรือ API ตัวไหนที่ตรวจคำทับศัพท์ตามหลักราชบัณฑิตยสถานแบบอัตโนมัติได้จริงไหม?"
   ],
-  "lastProposal": "## Action Items — สร้าง Daily Standup Loop แรก\n\nเป้าหมาย: 0 loops → 1 loop ที่รันสำเร็จ 3 วันติด ภายใน 11 เม.ย. 2569\n\n---\n\n**1. ตั้ง scheduled trigger สำหรับ daily standup + recap → inbox**\n- **ทำอะไร:** ใช้ `/schedule` สร้าง cron trigger ที่รัน `/standup` แล้วส่งผลลัพธ์เข้า `/inbox` ทุกเช้า (เช่น 08:00) — เริ่มจาก prompt ง่ายๆ ก่อน เช่น \"run standup, write summary to inbox\"\n- **ทำไม:** นี่คือ core ของ loop — ถ้าไม่มี trigger อัตโนมัติ ก็ไม่มี loop จริง ต้องลงมือสร้างก่อนอย่างอื่นทั้งหมด\n- **ใคร"
+  "lastProposal": "จากสรุป Consciousness Loop นี้ เสนอ 3 action items เรียงตามความสำคัญ:\n\n---\n\n**1. สร้าง Loop แรก: \"Thai Transliteration Linter\" prototype**\n- **ทำอะไร:** สร้าง dictionary-based linter ง่ายๆ — scrape/compile คำทับศัพท์จากราชบัณฑิตฯ เป็น JSON/SQLite แล้วเขียน script ที่รับข้อความไทย → flag คำทับศัพท์ที่ไม่ตรงตามบัญญัติ\n- **ทำไม:** พิสูจน์ vision \"เชื่อมคนกับความรู้ข้ามโดเมน\" ด้วยมือตัวเอง + ปิด gap ที่ belief #17 ระบุไว้ + นับเป็น loop แรกตามเป้า 12 เม.ย.\n- **ใครทำ:** มนุษย์ตัดสินใจ scope (กี่คำ, f"
 }
