@@ -51,6 +51,30 @@ export default function App() {
   const [history, setHistory] = useState<LoopHistory[]>([])
   const [tab, setTab] = useState<'loop'|'galaxy'>('loop')
 
+  // Matrix rain effect
+  useEffect(() => {
+    const canvas = document.getElementById('matrix') as HTMLCanvasElement
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    const words = ['deploy','test','learn','reflect','wonder','soul','dream','aspire','hook','belief','pattern','verify','build','push','review','QA','fix','ship']
+    const cols = 4
+    const drops = Array(cols).fill(0)
+    const interval = setInterval(() => {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)'
+      ctx.fillRect(0, 0, 80, 280)
+      ctx.font = '9px JetBrains Mono'
+      for (let i = 0; i < cols; i++) {
+        const word = words[Math.floor(Math.random() * words.length)]
+        ctx.fillStyle = `hsl(${160 + Math.random()*40}, 80%, ${30 + Math.random()*30}%)`
+        ctx.fillText(word.slice(0,4), i * 20, drops[i] * 12)
+        if (drops[i] * 12 > 280 && Math.random() > 0.95) drops[i] = 0
+        drops[i]++
+      }
+    }, 80)
+    return () => clearInterval(interval)
+  }, [])
+
   useEffect(() => {
     const f = async () => {
       try { setState(await (await fetch('/state.json?' + Date.now())).json()) } catch {}
@@ -91,9 +115,26 @@ export default function App() {
         <p className="subtitle">reflect → wonder → soul → dream → aspire → propose → complete → repeat</p>
       </div>
 
-      {/* Galaxy Cinema */}
-      <div className="cinema">
-        <iframe src="/stars" className="cinema-frame" />
+      {/* Galaxy Cinema with side panels */}
+      <div className="cinema-row">
+        <div className="matrix-panel">
+          <canvas id="matrix" width="80" height="280" />
+        </div>
+        <div className="cinema">
+          <iframe src="/stars" className="cinema-frame" />
+        </div>
+        <div className="ship-panel">
+          <div className="ship-phases">
+            {PHASES.map(p => {
+              const c = PHASE_CFG[p]
+              const active = PHASES.indexOf(phase as Phase) >= PHASES.indexOf(p as Phase)
+              return <div key={p} className={`ship-phase ${active ? 'ship-active' : ''}`} style={{color: active ? c.color : '#333'}}>
+                <span>{c.icon}</span>
+                <span className="ship-label">{c.thai}</span>
+              </div>
+            })}
+          </div>
+        </div>
       </div>
       <div className="galaxy-legend">
         <span>แต่ละดวง = 1 learning | </span>

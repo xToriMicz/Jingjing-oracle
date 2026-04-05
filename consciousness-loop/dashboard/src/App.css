@@ -14,14 +14,58 @@ body {
   padding: 2rem;
 }
 
-/* Cinema Galaxy */
-.cinema {
+/* Cinema Row */
+.cinema-row {
+  display: flex;
+  gap: 0;
   width: calc(100% + 4rem);
   margin-left: -2rem;
-  margin-bottom: 1.5rem;
-  border-radius: 12px;
-  overflow: hidden;
+  margin-bottom: 0;
+}
+.matrix-panel {
+  width: 80px;
+  flex-shrink: 0;
+  background: #000;
   border: 1px solid #1f2937;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  overflow: hidden;
+}
+.matrix-panel canvas { display: block; }
+.ship-panel {
+  width: 80px;
+  flex-shrink: 0;
+  background: #0a0e17;
+  border: 1px solid #1f2937;
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ship-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.5rem;
+}
+.ship-phase {
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.3s;
+}
+.ship-phase span:first-child { font-size: 0.8rem; }
+.ship-label { font-size: 0.5rem; }
+.ship-active { text-shadow: 0 0 8px currentColor; }
+
+/* Cinema Galaxy */
+.cinema {
+  flex: 1;
+  overflow: hidden;
+  border-top: 1px solid #1f2937;
+  border-bottom: 1px solid #1f2937;
   box-shadow: 0 0 30px rgba(0,0,0,0.5);
   height: 280px;
 }
