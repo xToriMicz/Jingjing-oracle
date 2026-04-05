@@ -6,7 +6,12 @@
       "created": "2026-04-04",
       "deadline": "2026-05-04",
       "metric": "ไม่มี pattern เดิมเกิดซ้ำ",
-      "progress": [],
+      "progress": [
+        {
+          "date": "2026-04-05",
+          "note": "hooks=3, beliefs=23, learnings=148"
+        }
+      ],
       "status": "active"
     },
     {
@@ -15,7 +20,12 @@
       "created": "2026-04-04",
       "deadline": "2026-04-28",
       "metric": "ทำครบ 4 สัปดาห์ติด",
-      "progress": [],
+      "progress": [
+        {
+          "date": "2026-04-05",
+          "note": "hooks=3, beliefs=23, learnings=148"
+        }
+      ],
       "status": "active"
     },
     {
@@ -24,7 +34,12 @@
       "created": "2026-04-04",
       "deadline": "2026-04-30",
       "metric": "บันทึก question + answer ทุก session",
-      "progress": [],
+      "progress": [
+        {
+          "date": "2026-04-05",
+          "note": "hooks=3, beliefs=23, learnings=148"
+        }
+      ],
       "status": "active"
     }
   ]

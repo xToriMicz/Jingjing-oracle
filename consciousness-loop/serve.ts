@@ -38,6 +38,20 @@ Bun.serve({
       }
     }
 
+    // Serve stars page
+    if (url.pathname === "/stars") {
+      return new Response(Bun.file(`${BASE}/dashboard/public/stars.html`), {
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+
+    // Serve graph data for stars
+    if (url.pathname === "/stars-data" || url.pathname === "/graph.json") {
+      return new Response(Bun.file(`${BASE}/dashboard/public/graph.json`), {
+        headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" },
+      });
+    }
+
     // Serve state.json
     if (url.pathname === "/state.json" || url.pathname.endsWith("/state.json")) {
       const file = Bun.file(`${BASE}/state.json`);
